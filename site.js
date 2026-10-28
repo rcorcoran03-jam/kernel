@@ -5,7 +5,7 @@
    While it is empty, forms open the visitor's email app with their
    note prefilled to CONTACT_EMAIL, so no message is ever lost. */
 var FORM_ENDPOINT = "";
-var CONTACT_EMAIL = "hello@kernelcollaborative.com";
+var CONTACT_EMAIL = "hello@kernel-collective.com";
 
 (function () {
   // ── Forms ──
