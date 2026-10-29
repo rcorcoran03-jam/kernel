@@ -330,6 +330,172 @@
         <div id="brief-rest"></div>
         <p class="brief-close" id="brief-close">Seven opportunities, not ten. A real brief only lists what is worth your time.</p>
       </div>
+      <div id="examples" class="examples" aria-labelledby="ex-title">
+      <header class="sec-head on-green ex-head">
+        <div>
+          <p class="eyebrow">Example builds &middot; what a brief can lead to</p>
+          <h3 id="ex-title" class="ex-title">Start with tools that already exist. Build the missing piece.</h3>
+        </div>
+        <p>Most small businesses don&rsquo;t need new software. They need the tools they already have connected, and one custom layer that does the thinking. Here&rsquo;s how that looks for three kinds of owners.</p>
+      </header>
+
+      <p class="ex-note" role="note"><span class="sample-tag">Example scenarios</span> Fictional businesses. The tools named are real; features and plans change, so we confirm fit during discovery.</p>
+
+      <div class="ex-tabs" role="tablist" aria-label="Example scenarios">
+        <button type="button" role="tab" id="tab-store" aria-controls="panel-store" aria-selected="true">Artist with a storefront</button>
+        <button type="button" role="tab" id="tab-handy" aria-controls="panel-handy" aria-selected="false" tabindex="-1">Handyperson</button>
+        <button type="button" role="tab" id="tab-gig" aria-controls="panel-gig" aria-selected="false" tabindex="-1">Billable gig worker</button>
+      </div>
+
+      <!-- STOREFRONT -->
+      <div class="ex-panel" role="tabpanel" id="panel-store" aria-labelledby="tab-store" tabindex="0">
+        <div class="ex-intro">
+          <h3>Mara sells ceramics on her own Shopify store and on Etsy.</h3>
+          <p>Orders arrive in two places, one-of-a-kind pieces can sell twice, commissions live in her texts, and every month her bookkeeper asks for the same reports.</p>
+        </div>
+        <ol class="flow" aria-label="How the pieces connect">
+          <li><span class="flow-k">Sales channels</span>Shopify store &middot; Etsy shop</li>
+          <li><span class="flow-k">System of record</span>Shopify admin</li>
+          <li class="flow-kernel"><span class="flow-k">Kernel layer</span>Monday review</li>
+          <li><span class="flow-k">You</span>Approve, ship, follow up</li>
+        </ol>
+        <div class="ex-grid">
+          <div>
+            <h4 class="ex-h">Ready-made tools to plug in</h4>
+            <ul class="stack">
+              <li><b>Shopify Marketplace Connect</b><span>Shopify&rsquo;s own app for selling on Etsy. Syncs listings, inventory, and orders so Etsy sales show up in the Shopify admin and a sold piece comes off both shops.</span><em>Native app</em></li>
+              <li><b>Shopify Flow</b><span>Free trigger-condition-action automation. Sidekick, Shopify&rsquo;s AI assistant, can build a Flow from a plain-English request.</span><em>Native app</em></li>
+              <li><b>Klaviyo or Shopify Email</b><span>Customer lists, collector segments, and new-work announcements, using the customer records Shopify already keeps.</span><em>Shopify app</em></li>
+              <li><b>QuickBooks Online or Xero</b><span>Accounting, connected through a sync app from the Shopify App Store so sales, fees, and payouts post automatically.</span><em>App sync</em></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="ex-h">What Kernel builds on top</h4>
+            <div class="builds">
+              <article class="build build-feature">
+                <p class="build-cat">Admin &amp; Operations &middot; recommended first</p>
+                <h5>The Monday review</h5>
+                <p>One page every Monday morning, assembled from the Shopify Admin API and order webhooks. Mara works down it and approves each action.</p>
+                <div class="monday" aria-label="Sample Monday review">
+                  <p class="monday-h">Monday, Nov 2 &middot; <span>sample</span></p>
+                  <ul>
+                    <li><span class="dot d1"></span>Last week: 14 orders, 9 Shopify and 5 Etsy</li>
+                    <li><span class="dot d2"></span>3 orders to ship, 1 overdue on Etsy</li>
+                    <li><span class="dot d3"></span>2 one-of-a-kind pieces sold; listings removed on both shops</li>
+                    <li><span class="dot d2"></span>Commission for a returning collector: deposit paid, glaze photos due</li>
+                    <li><span class="dot d4"></span>4 messages waiting more than 2 days</li>
+                    <li><span class="dot d1"></span>Payouts to match: 2 Shopify, 1 Etsy</li>
+                  </ul>
+                </div>
+              </article>
+              <article class="build">
+                <p class="build-cat">Programs &amp; Workflows</p>
+                <h5>Commissions and collectors</h5>
+                <p>Commissions become Shopify draft orders with a deposit link. A Flow tags repeat buyers as collectors, so new-work emails go to the right people first.</p>
+              </article>
+              <article class="build">
+                <p class="build-cat">Admin &amp; Operations</p>
+                <h5>The bookkeeper packet</h5>
+                <p>A monthly export with sales and fees by channel, payouts, and sales tax collected, matched to the accounting sync and ready for review.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HANDYPERSON -->
+      <div class="ex-panel" role="tabpanel" id="panel-handy" aria-labelledby="tab-handy" tabindex="0" hidden>
+        <div class="ex-intro">
+          <h3>Dev runs a one-truck handyperson business on Jobber.</h3>
+          <p>Jobber handles quotes, scheduling, and invoices. The gap is the truck: materials, extra time, and photos from the job never quite make it onto the invoice.</p>
+        </div>
+        <ol class="flow" aria-label="How the pieces connect">
+          <li><span class="flow-k">On the job</span>Voice note &middot; photos &middot; receipts</li>
+          <li class="flow-kernel"><span class="flow-k">Kernel layer</span>End-of-day capture</li>
+          <li><span class="flow-k">System of record</span>Jobber</li>
+          <li><span class="flow-k">You</span>Approve and send</li>
+        </ol>
+        <div class="ex-grid">
+          <div>
+            <h4 class="ex-h">Ready-made tools to plug in</h4>
+            <ul class="stack">
+              <li><b>Jobber</b><span>Quotes, scheduling, invoicing, client hub, and payments. The system of record everything else connects to.</span><em>Core</em></li>
+              <li><b>QuickBooks Online</b><span>Jobber&rsquo;s built-in sync sends invoices, payments, and payouts to the books without re-entry.</span><em>Native sync</em></li>
+              <li><b>CompanyCam</b><span>Job photos taken on site sync into the Jobber job, as before-and-after proof for the customer.</span><em>Marketplace app</em></li>
+              <li><b>Thumbtack and Wisetack</b><span>Leads flow into Jobber as new clients, and customers can apply for financing on bigger jobs.</span><em>Marketplace apps</em></li>
+              <li><b>Jobber AI Receptionist</b><span>An add-on that answers calls and texts and books visits when Dev is on a ladder.</span><em>Add-on</em></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="ex-h">What Kernel builds on top</h4>
+            <div class="builds">
+              <article class="build build-feature">
+                <p class="build-cat">Programs &amp; Workflows &middot; recommended first</p>
+                <h5>End-of-day capture</h5>
+                <p>Dev records a 60-second voice note from the truck. It becomes draft line items, materials, and extra time on the right Jobber job, through Jobber&rsquo;s GraphQL API. Nothing is sent until he approves it.</p>
+              </article>
+              <article class="build">
+                <p class="build-cat">Products &amp; Offerings</p>
+                <h5>Quote follow-up rhythm</h5>
+                <p>Open quotes get a friendly nudge on day 3 and day 10, drafted in Dev&rsquo;s voice, with a review request after every paid job.</p>
+              </article>
+              <article class="build">
+                <p class="build-cat">Admin &amp; Operations</p>
+                <h5>Job profitability snapshot</h5>
+                <p>Quoted versus actual hours and materials for each finished job, so pricing gets sharper every month.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GIG WORKER -->
+      <div class="ex-panel" role="tabpanel" id="panel-gig" aria-labelledby="tab-gig" tabindex="0" hidden>
+        <div class="ex-intro">
+          <h3>Priya is a freelance designer billing four clients by the hour.</h3>
+          <p>She loses billable time between meetings and Slack threads, and writing invoice descriptions on the last Friday of the month is the task she dreads most.</p>
+        </div>
+        <ol class="flow" aria-label="How the pieces connect">
+          <li><span class="flow-k">Where work happens</span>Calendar &middot; email &middot; design files</li>
+          <li><span class="flow-k">Capture</span>Timely</li>
+          <li class="flow-kernel"><span class="flow-k">Kernel layer</span>Invoice narratives</li>
+          <li><span class="flow-k">You</span>Review, then invoice in QuickBooks</li>
+        </ol>
+        <div class="ex-grid">
+          <div>
+            <h4 class="ex-h">Ready-made tools to plug in</h4>
+            <ul class="stack">
+              <li><b>Timely</b><span>Automatic time tracking. Its Memory tracker records what she works on in the background, so there are no timers to remember.</span><em>Core</em></li>
+              <li><b>Calendar and email integrations</b><span>Google Calendar, Office 365, Gmail, and Outlook feed meetings and email time into Timely, along with Zoom and Teams calls.</span><em>Native integrations</em></li>
+              <li><b>QuickBooks Online</b><span>Timely sends billable hours to QuickBooks Online for invoicing.</span><em>Native integration</em></li>
+              <li><b>Zapier and the Timely API</b><span>Connects Timely to forms, sheets, and project tools when a native integration doesn&rsquo;t exist.</span><em>Automation</em></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="ex-h">What Kernel builds on top</h4>
+            <div class="builds">
+              <article class="build build-feature">
+                <p class="build-cat">Admin &amp; Operations &middot; recommended first</p>
+                <h5>Invoice narratives in her voice</h5>
+                <p>Each Friday, the week&rsquo;s Timely entries become client-ready descriptions, written to each client&rsquo;s preferences. Priya edits, approves, and they flow to QuickBooks invoices. Her edits teach the next draft.</p>
+              </article>
+              <article class="build">
+                <p class="build-cat">Programs &amp; Workflows</p>
+                <h5>Retainer watch</h5>
+                <p>When a client nears its monthly hours, Priya gets a heads-up and a drafted scope note to send before the overage, not after.</p>
+              </article>
+              <article class="build">
+                <p class="build-cat">Products &amp; Offerings</p>
+                <h5>Rate and package review</h5>
+                <p>A quarterly look at where her hours actually go, by client and type of work, to decide what to package, re-price, or stop offering.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="ex-foot">The same loop, every time: capture from tools you already use, assign it to the right client or job, draft the entry or update, <strong>you review</strong>, then it lands in your system of record. Nothing is sent without your approval.</p>
+      </div>
     </div>
   </section>
 
