@@ -29,7 +29,7 @@
 .intro{padding:88px 40px 96px}
 .intro-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,0.9fr);gap:72px;align-items:center}
 .wordmark{width:290px;max-width:80%;height:auto;display:block;margin-bottom:30px}
-.intro h1{font-family:'Bitter',serif;font-weight:400;font-size:50px;line-height:1.12;letter-spacing:-0.02em;color:#F7F1E8;text-wrap:balance;margin-bottom:22px}
+.intro h1{font-family:'Bitter',serif;font-weight:400;font-size:44px;line-height:1.14;letter-spacing:-0.02em;color:#F7F1E8;text-wrap:balance;margin-bottom:22px}
 .lede{font-size:16.5px;line-height:1.8;color:rgba(239,234,219,0.82);max-width:540px;text-wrap:pretty;margin-bottom:30px}
 .actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px}
 .fineprint{font-size:13px;line-height:1.6;color:var(--sage);max-width:520px}
