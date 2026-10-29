@@ -5,7 +5,7 @@ pages_build_output_dir = "./deploy"
 compatibility_date = "2026-10-01"
 
 [vars]
-SCAN_ENABLED = "false"          # set to "true" when ready to go live
+SCAN_ENABLED = "true"           # set to "false" to switch the scan off
 HUMAN_REVIEW = "true"           # briefs go to Kernel first; set "false" to show them instantly
 SCAN_MODEL = "claude-sonnet-5-5"
 MAX_SCANS_PER_IP_PER_DAY = "3"

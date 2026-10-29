@@ -10,7 +10,7 @@
    2. Set SCAN_ENDPOINT below to "/api/scan".
    3. Paste your Turnstile site key (public, safe to include) below.
    API keys stay on the server. Never place them in this file. */
-var SCAN_ENDPOINT = "";       // "" = sample only. "/api/scan" = live.
+var SCAN_ENDPOINT = "/api/scan";       // "" = sample only. "/api/scan" = live.
 var TURNSTILE_SITE_KEY = "0x4AAAAAAFrykI24AUmOXZml";  // public Cloudflare Turnstile site key
 
 var SAMPLE_BRIEF = {
