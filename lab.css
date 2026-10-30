@@ -357,3 +357,56 @@
 .examples .ex-foot strong{color:var(--brass-t)}
 @media (max-width:720px){.ex-title{font-size:27px !important}}
 .examples .ex-note .sample-tag{color:var(--brass-t);background:rgba(210,170,90,0.14);border-color:rgba(210,170,90,0.45)}
+
+/* ---------- Lab nav: hidden over the hero, slides in once you scroll past it ---------- */
+.labnav{position:fixed;top:0;left:0;right:0;z-index:60;background:rgba(39,53,45,0.94);-webkit-backdrop-filter:blur(12px) saturate(1.15);backdrop-filter:blur(12px) saturate(1.15);border-bottom:1px solid rgba(210,170,90,0.3);box-shadow:0 10px 30px -18px rgba(0,0,0,0.55);transform:translateY(-100%);opacity:0;visibility:hidden;transition:transform .35s ease,opacity .35s ease,visibility 0s linear .35s}
+.labnav.is-on{transform:none;opacity:1;visibility:visible;transition:transform .35s ease,opacity .35s ease,visibility 0s}
+.labnav .labnav-in{max-width:1180px;margin:0 auto;padding:11px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:nowrap}
+.labnav-brand{display:block;flex:none}
+.labnav-brand img{height:36px;width:auto;display:block}
+.labnav .labnav-links{display:flex;align-items:center;gap:2px;flex-wrap:nowrap}
+.labnav .labnav-links a{padding:9px 13px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:11.5px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:#DCD6C4;white-space:nowrap;transition:color .2s ease,background .2s ease}
+.labnav .labnav-links a:hover{color:#E2BD72}
+.labnav .labnav-links a.is-here{color:#E2BD72;background:rgba(210,170,90,0.12)}
+.labnav-div{width:1px;height:18px;background:rgba(210,170,90,0.35);margin:0 8px;flex:none}
+.labnav .labnav-links a.labnav-cta{margin-left:10px;padding:10px 20px;background:#D2AA5A;color:#2F3F36}
+.labnav .labnav-links a.labnav-cta:hover{background:#E2BD72;color:#23302A}
+.labnav a:focus-visible{outline:2px solid #D2AA5A;outline-offset:2px}
+.lab section{scroll-margin-top:72px}
+@media (max-width:1020px){.labnav .sec,.labnav-div{display:none !important}}
+@media (max-width:640px){
+  .labnav .labnav-in{padding:9px 18px !important;gap:12px !important}
+  .labnav .labnav-links a.site{display:none !important}
+  .labnav .labnav-links a.labnav-cta{margin-left:0 !important;padding:9px 16px !important;font-size:11px !important;letter-spacing:0.08em !important}
+  .labnav-brand img{height:30px}
+}
+
+/* ---------- Lab hero ---------- */
+.lab .intro{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:96px 40px 64px;border-top:none}
+.intro-rings{position:absolute;left:50%;top:clamp(150px,24vh,250px);width:1100px;height:1100px;transform:translate(-50%,-50%);background:repeating-radial-gradient(closest-side,rgba(210,170,90,0.11) 0 1px,rgba(210,170,90,0) 1px 26px);-webkit-mask-image:radial-gradient(closest-side,#000 12%,transparent 72%);mask-image:radial-gradient(closest-side,#000 12%,transparent 72%);pointer-events:none}
+.intro-rings::after{content:"";position:absolute;left:50%;top:50%;width:520px;height:520px;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(47,63,54,0.9) 35%,rgba(47,63,54,0))}
+.intro-home{position:absolute;top:26px;left:40px;z-index:2;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:#C9D1BC;padding:6px 0}
+.intro-home:hover{color:#E2BD72}
+.intro-stage{display:flex;flex-direction:column;align-items:center;text-align:center;width:100%}
+.intro-mark{width:min(460px,78vw);height:auto;display:block;margin:0 auto 44px}
+.lab .intro h1{max-width:860px;margin:0 auto 22px;font-size:42px;line-height:1.18;color:#FFFFFF}
+.lab .intro h1 span{display:block;color:#F0C76E}
+.lab .intro .lede{max-width:640px;margin:0 auto 30px}
+.lab .intro .actions{justify-content:center}
+.lab .intro .fineprint{margin:0 auto}
+.intro .sodot{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;margin-top:64px;text-align:left;border-top:1px solid var(--brass-rule)}
+.intro .sodot li{grid-template-columns:auto 1fr;gap:14px;padding:26px 28px 0 0;border-bottom:none}
+.intro .sodot li+li{padding-left:28px;border-left:1px solid var(--brass-rule)}
+.intro .sodot-title{font-size:27px !important}
+@media (max-width:860px){
+  .intro .sodot{grid-template-columns:1fr;margin-top:48px}
+  .intro .sodot li,.intro .sodot li+li{padding:20px 0;border-left:none;border-bottom:1px solid var(--brass-rule)}
+}
+@media (max-width:720px){
+  .lab .intro{padding:88px 22px 56px !important}
+  .lab .intro h1{font-size:32px !important}
+  .intro-home{left:22px;top:22px}
+  .intro-mark{margin-bottom:34px}
+  .intro-rings{width:760px;height:760px}
+}
+@media (prefers-reduced-motion:reduce){.labnav,.labnav.is-on{transition:none}}
