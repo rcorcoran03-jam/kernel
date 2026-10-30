@@ -2,3 +2,10 @@
 node_modules/
 .wrangler/
 .DS_Store
+
+# Working folders that live beside the site but aren't deployed
+archive/
+brand-assets/
+drafts/
+print/
+refresh-*/
