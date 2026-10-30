@@ -33,16 +33,18 @@
 <body>
 
 <div style="background:#F7F1E8;min-height:100vh">
-  <header style="position:sticky;top:0;z-index:50;background:rgba(253,249,243,0.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(58,42,34,0.09)">
-    <div style="max-width:1180px;margin:0 auto;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;gap:32px">
-      <a href="index.html" style="display:flex;align-items:center;gap:12px;color:#3A2A22" aria-label="Kernel Collective home">
-        <img src="assets/kernel-seed.png" alt="" style="width:40px;height:40px;object-fit:contain;display:block">
-        <span style="font-family:'Bitter',serif;font-weight:300;font-size:25px;letter-spacing:-0.01em;line-height:1">kernel</span>
-      </a>
-      <nav style="display:flex;align-items:center;gap:4px" aria-label="Main">
-        <a class="kh9fef70" href="About.html" style="padding:10px 16px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:#7a6355">About</a>
-        <a class="kh9fef70" href="Services.html" style="padding:10px 16px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:#7a6355">Services</a>
-        <a href="index.html#contact" class="nav-contact khb38602" style="margin-left:12px;padding:11px 22px;border-radius:100px;background:#9B2C2C;color:#FDF9F3;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;font-weight:500">Contact</a>
+  <header id="labnav" class="labnav" inert>
+    <div class="labnav-in">
+      <a href="#intro" class="labnav-brand" aria-label="Kernel Lab, back to top"><img src="assets/kernel-lab-wordmark-brass.svg" alt="" width="1360" height="456"></a>
+      <nav class="labnav-links" aria-label="Main">
+        <a class="sec" href="#work">Work</a>
+        <a class="sec" href="#scan">Scan</a>
+        <a class="sec" href="#partnership">Partnership</a>
+        <a class="sec" href="#faq">FAQ</a>
+        <span class="labnav-div" aria-hidden="true"></span>
+        <a class="site" href="About.html">About</a>
+        <a class="site" href="Services.html">Services</a>
+        <a class="labnav-cta" href="#inquiry">Start a conversation</a>
       </nav>
     </div>
   </header>
@@ -51,18 +53,17 @@
 
   <!-- ============ 1. INTRODUCTION ============ -->
   <section id="intro" class="g-band intro" aria-labelledby="intro-title">
-    <div class="rings" aria-hidden="true"></div>
-    <div class="wrap intro-grid">
-      <div>
-        <img src="assets/kernel-lab-wordmark.png" alt="Kernel Lab" class="wordmark" width="900" height="295">
-        <h1 id="intro-title">AI tools and workflows that free up more than time. They untangle ideas and unlock creativity.</h1>
-        <p class="lede">For founders and small businesses ready to wade into AI, with a guide beside them in the deep end. Over a 12-week partnership, we build alongside you, then switch seats so you can steer.</p>
-        <div class="actions">
-          <a class="btn btn-brass" href="#scan">Try the Opportunity Scan</a>
-          <a class="btn btn-ghost" href="#inquiry">Start a conversation</a>
-        </div>
-        <p class="fineprint">It starts with a free conversation. If we&rsquo;re a fit, week-one discovery asks for about 8 hours of your time.</p>
+    <div class="intro-rings" aria-hidden="true"></div>
+    <a class="intro-home" href="index.html"><span aria-hidden="true">&larr;</span> Kernel Collective</a>
+    <div class="wrap intro-stage">
+      <img src="assets/kernel-lab-wordmark-brass.svg" alt="Kernel Lab" class="intro-mark" width="1360" height="456">
+      <h1 id="intro-title">AI tools and workflows that free up more than time. <span>They untangle ideas and unlock creativity.</span></h1>
+      <p class="lede">For founders and small businesses ready to wade into AI, with a guide beside them in the deep end. Over a 12-week partnership, we build alongside you, then switch seats so you can steer.</p>
+      <div class="actions">
+        <a class="btn btn-brass" href="#scan">Try the Opportunity Scan</a>
+        <a class="btn btn-ghost" href="#inquiry">Start a conversation</a>
       </div>
+      <p class="fineprint">It starts with a free conversation. If we&rsquo;re a fit, week-one discovery asks for about 8 hours of your time.</p>
 
       <ol class="sodot" aria-label="How Kernel Lab works: see one, do one, teach one">
         <li>
