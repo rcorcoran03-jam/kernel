@@ -1,0 +1,26 @@
+# Cloudflare Pages config for the Kernel Collective site.
+# The static site is served from ./deploy; ./functions holds the scan API.
+name = "kernel"
+pages_build_output_dir = "./deploy"
+compatibility_date = "2026-10-01"
+
+[vars]
+SCAN_ENABLED = "true"           # set to "false" to switch the scan off
+HUMAN_REVIEW = "true"           # briefs go to Kernel first; set "false" to show them instantly
+SCAN_MODEL = "claude-sonnet-5-5"
+MAX_SCANS_PER_IP_PER_DAY = "3"
+MAX_SCANS_PER_DAY = "25"
+ALLOWED_ORIGIN = "https://kernel-collective.com,https://www.kernel-collective.com,https://kernel.ryan-corcoran.com"   # comma-separated
+NOTIFY_EMAIL = "hello@kernel-collective.com"
+FROM_EMAIL = "Kernel Scan <scan@notify.kernel-collective.com>"   # must match the domain verified in Resend
+
+# Create once with:  npx wrangler kv namespace create SCAN_KV
+# then paste the id here.
+[[kv_namespaces]]
+binding = "SCAN_KV"
+id = "ae453b60a438495e95feeabfbda265d7"
+
+# Secrets are NOT stored here. Add them with:
+#   npx wrangler pages secret put ANTHROPIC_API_KEY
+#   npx wrangler pages secret put TURNSTILE_SECRET
+#   npx wrangler pages secret put RESEND_API_KEY

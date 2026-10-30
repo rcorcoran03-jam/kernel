@@ -1,0 +1,11 @@
+# Copy to .dev.vars for local testing with `npm run dev`. Never commit .dev.vars.
+ANTHROPIC_API_KEY=sk-ant-...
+SCAN_ENABLED=true
+HUMAN_REVIEW=false
+ALLOW_UNGUARDED=true
+ALLOWED_ORIGIN=
+
+# Optional: email briefs to Kernel (see scan/README.md, "Email with Resend")
+RESEND_API_KEY=re_...
+NOTIFY_EMAIL=hello@kernel-collective.com
+FROM_EMAIL=Kernel Scan <scan@notify.kernel-collective.com>
