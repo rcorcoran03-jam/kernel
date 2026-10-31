@@ -432,3 +432,24 @@
 @media (max-width:1020px){.principles{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:720px){.principles{grid-template-columns:1fr}.pr{padding:22px 20px 20px}}
 .faq:has(> .faq-group:first-child){border-top:none}
+
+/* example outcomes (moved from Services) */
+.outcomes{margin-top:56px;padding-top:40px;border-top:1px solid var(--brass-rule)}
+.outcomes-head{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:baseline;margin-bottom:24px}
+.outcomes-head .eyebrow{margin:0;color:var(--brass-t)}
+.outcomes-head p:not(.eyebrow){font-size:14.5px;line-height:1.7;color:rgba(239,234,219,0.78);max-width:640px}
+.outcome-grid{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.outcome-grid li{padding:22px 22px 24px;border:1px solid var(--brass-rule);border-radius:10px;background:rgba(35,48,42,0.35)}
+.outcome-grid h3{font-size:19px;color:#F7F1E8;margin-bottom:8px}
+.outcome-grid p{font-size:13.5px;line-height:1.65;color:rgba(239,234,219,0.8)}
+.outcome-grid li.is-payoff{background:var(--ivory);border-color:var(--ivory)}
+.outcome-grid li.is-payoff h3{color:var(--g2)}
+.outcome-grid li.is-payoff p{color:var(--ink2)}
+.outcome-grid .payoff{display:block;font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--brass-ink);margin-bottom:6px}
+.outcomes-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 32px;margin-top:20px}
+.outcomes-foot p{font-size:13.5px;line-height:1.7;color:rgba(239,234,219,0.72);max-width:620px}
+.outcomes-foot .motto{font-family:'Bitter',serif;font-style:italic;font-size:15px;color:var(--brass-t)}
+.also-avail{margin-top:28px;font-size:14px;color:var(--ink2)}
+.also-avail span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--brass-ink);margin-right:10px}
+@media (max-width:1020px){.outcome-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.outcomes-head{grid-template-columns:1fr;gap:10px}}
+@media (max-width:640px){.outcome-grid{grid-template-columns:1fr}}

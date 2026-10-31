@@ -51,7 +51,7 @@ var CONTACT_EMAIL = "hello@kernel-collective.com";
     });
   });
 
-  // ── Kernel Core inquiry toggle (Services page) ──
+  // ── Kernel Core inquiry toggle (old Services page; no-op unless #inquiry-toggle exists) ──
   var toggle = document.getElementById("inquiry-toggle");
   var panel = document.getElementById("core-inquiry");
   if (toggle && panel) {
@@ -65,7 +65,7 @@ var CONTACT_EMAIL = "hello@kernel-collective.com";
     if (location.hash === "#core-inquiry") toggle.click();
   }
 
-  // ── Scale the Kernel Cycle diagram to fit (Services page) ──
+  // ── Scale the Kernel Cycle diagram to fit (archived Services page; no-op elsewhere) ──
   function fitCycle() {
     var frame = document.getElementById("kernel-cycle-frame");
     var inner = document.getElementById("kernel-cycle");
