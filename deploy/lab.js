@@ -15,111 +15,214 @@ var TURNSTILE_SITE_KEY = "0x4AAAAAAFrykI24AUmOXZml";  // public Cloudflare Turns
 
 var SAMPLE_BRIEF = {
   sample: true,
-  business: "Juniper & Clay (fictional)",
-  opportunities: [
+  "business": "Wren & Ink Studio (fictional)",
+  "opportunities": [
     {
-      id: "intake", top: true, category: "Programs & Workflows",
-      title: "Turn class and party inquiries into one intake and follow-up path",
-      why: "Inquiries are the start of every sale. When they arrive in three places, some go unanswered and the rest cost time to track.",
-      prompted: [
-        ["site", "The contact page offers email, an Instagram DM link, and a separate party form."],
-        ["told", "Class questions arrive by email and get lost between sessions."]
+      "id": "rules",
+      "top": true,
+      "category": "Admin & Operations",
+      "title": "Sort the useful from the worrying: one page of studio AI ground rules",
+      "why": "Unease about what AI means for your work can quietly stall every experiment. Writing down where AI is welcome and where it is not turns a background worry into a decision you control.",
+      "prompted": [
+        [
+          "told",
+          "You want to know where AI actually helps without giving your work away."
+        ],
+        [
+          "told",
+          "AI is used today only to make promotional images."
+        ],
+        [
+          "hyp",
+          "Some image and design tools may use uploaded artwork to train their systems, depending on settings."
+        ]
       ],
-      build: "A single inquiry form that feeds one simple tracker, sends an immediate acknowledgment, and reminds the studio to follow up.",
-      experiment: "For two weeks, point every contact link at one form and note how long replies take.",
-      effort: ["Low to medium", "Uses tools a studio like this usually already has."],
-      value: ["High", "Touches every new customer, and the founder named it directly."],
-      sources: ["Sample site: juniperandclay.example/contact (fictional)"],
-      validate: ["How many inquiries arrive each week", "Which channel customers actually prefer"]
+      "build": "A plain-language studio policy: AI is fine for admin, drafts, and research; it never makes or imitates the artwork. Plus a checklist of the privacy and training settings to switch off in the tools you already use.",
+      "experiment": "In one sitting, list every tool that touches your images and check its training and privacy settings.",
+      "effort": [
+        "Low",
+        "An afternoon of reading settings and writing one page."
+      ],
+      "value": [
+        "High",
+        "Removes the worry that keeps you from trying anything, and protects the work itself."
+      ],
+      "sources": [
+        "Sample answers (fictional)"
+      ],
+      "validate": [
+        "Which tools hold your images today",
+        "What each tool's current terms and settings say"
+      ]
     },
     {
-      id: "choose", top: true, category: "Products & Offerings",
-      title: "Help visitors choose the right class before they email",
-      why: "If the same questions repeat, the site is not yet answering them. A clear comparison can turn a question into a booking.",
-      prompted: [
-        ["site", "The classes page lists six class types with no guidance on level, time commitment, or who each suits."],
-        ["told", "The founder answers the same class questions again and again."]
+      "id": "site",
+      "top": true,
+      "category": "Products & Offerings",
+      "title": "Finish the website by deciding the three jobs it must do",
+      "why": "A half-finished site usually keeps growing in scope. Naming its few jobs (sell the current edition, take commission requests, fill the workshop) gives you a finish line.",
+      "prompted": [
+        [
+          "site",
+          "The shop page says the new edition is coming soon, and the about page is a placeholder."
+        ],
+        [
+          "told",
+          "Finishing the website keeps slipping behind making the work."
+        ]
       ],
-      build: "A short guide or quiz, written from real customer questions, that points each visitor to the class that fits.",
-      experiment: "Turn the five most-asked questions into a comparison table on the classes page.",
-      effort: ["Low", "Mostly writing and page structure; no new tools required."],
-      value: ["High", "Reduces repeat email and could lift bookings."],
-      sources: ["Sample site: juniperandclay.example/classes (fictional)"],
-      validate: ["Which questions come up most often", "Whether visitors drop off on the classes page"]
+      "build": "We finish it with you in co-working sessions. AI drafts edition descriptions and image alt text from your own notes, you edit every word, and you leave able to update it yourself.",
+      "experiment": "Write the site's three jobs on one page, then cut every planned section that doesn't serve them.",
+      "effort": [
+        "Medium",
+        "Two or three working sessions, mostly writing and decisions."
+      ],
+      "value": [
+        "High",
+        "Every sale, commission, and workshop sign-up passes through it."
+      ],
+      "sources": [
+        "Sample site: wrenandink.example/shop and /about (fictional)"
+      ],
+      "validate": [
+        "Which website platform you're on",
+        "Where sales come from today"
+      ]
     },
     {
-      id: "deposit", top: true, category: "Programs & Workflows",
-      title: "Collect party deposits when the booking is made, not after",
-      why: "Chasing payments is time and goodwill spent on the least creative part of the job. This is a process fix first; no AI required.",
-      prompted: [
-        ["site", "The private parties page says to email to book, with no deposit step."],
-        ["told", "Chasing party deposits is a recurring drain."]
+      "id": "commission",
+      "top": true,
+      "category": "Programs & Workflows",
+      "title": "Turn commission emails into a short intake form and a reply you approve",
+      "why": "Commissions arrive as open-ended emails, so each one starts with the same back-and-forth before any real work begins.",
+      "prompted": [
+        [
+          "site",
+          "The commissions page says to email to discuss, with no details requested."
+        ],
+        [
+          "told",
+          "Keeping up with commission emails is one of the things that slips."
+        ]
       ],
-      build: "A booking request that includes a deposit link and a confirmation template with the policy spelled out.",
-      experiment: "Add a deposit link to the next five party confirmations and compare how quickly they are paid.",
-      effort: ["Low", "A payment link and a template."],
-      value: ["Medium to high", "Saves follow-up time and reduces late cancellations."],
-      sources: ["Sample site: juniperandclay.example/parties (fictional)"],
-      validate: ["Current payment tool", "Cancellation and refund policy"]
+      "build": "A short request form (subject, size, deadline, budget range) and a reply template in your own voice that AI fills in from the request. Nothing is sent until you read and approve it.",
+      "experiment": "Send your next five commission requests through a simple form and note what you'd still ask them.",
+      "effort": [
+        "Low",
+        "A form and one template."
+      ],
+      "value": [
+        "High",
+        "Saves time on every commission and sets expectations before you quote."
+      ],
+      "sources": [
+        "Sample site: wrenandink.example/commissions (fictional)"
+      ],
+      "validate": [
+        "How many commission requests arrive a month",
+        "Which details you always need before quoting"
+      ]
     },
     {
-      id: "connect", category: "Programs & Workflows",
-      title: "Connect registration, reminders, and class-day prep",
-      why: "Entering the same details in several places is where errors creep in.",
-      prompted: [
-        ["hyp", "Registrations may be copied by hand into a roster and a materials list."]
+      "id": "drop",
+      "category": "Products & Offerings",
+      "title": "Use AI to plan an edition launch, not to make the art",
+      "why": "You already use AI for promotional images. The bigger help may be the planning and writing around a launch, built from your own process photos and notes.",
+      "prompted": [
+        [
+          "site",
+          "Both admired printmakers announce limited editions to an email list before posting them anywhere else."
+        ],
+        [
+          "told",
+          "AI is used today only to make promotional images."
+        ],
+        [
+          "hyp",
+          "The mailing list may exist but rarely be used."
+        ]
       ],
-      build: "Registration that feeds the roster automatically, sends reminders, and produces a prep checklist for each class.",
-      experiment: "Map one class from sign-up to clean-up and mark every place information is typed twice.",
-      effort: ["Medium", "Depends on how the current booking tool connects."],
-      value: ["Medium", "Fewer errors and less evening admin."],
-      sources: [],
-      validate: ["Whether re-entry actually happens", "Which booking tool is in use"]
+      "build": "A reusable launch kit: a short email sequence, captions, and a timeline, drafted with AI from your own words and photos, then edited by you.",
+      "experiment": "Plan the next edition launch end to end in one session, using only your own process photos.",
+      "effort": [
+        "Low to medium",
+        "One planning session, then reuse for every edition."
+      ],
+      "value": [
+        "Medium",
+        "Depends on the size of your list and how often you release work."
+      ],
+      "sources": [
+        "Sample admired printmakers (fictional)"
+      ],
+      "validate": [
+        "Whether a mailing list exists and how big it is",
+        "How often new editions come out"
+      ]
     },
     {
-      id: "promo", category: "Products & Offerings",
-      title: "Plan the busy season as a promotion calendar",
-      why: "Planned promotions take less effort than last-minute ones and protect time for making.",
-      prompted: [
-        ["site", "Both admired studios run seasonal gift-card promotions."],
-        ["told", "The founder wants more room for creative work."],
-        ["hyp", "Promotions here may currently be ad hoc."]
+      "id": "workshop",
+      "category": "Programs & Workflows",
+      "title": "Package the monthly workshop so it runs without rebuilding it each time",
+      "why": "Teaching is part of the business, but each session gets re-planned from scratch: sign-ups, materials, reminders, and the handout.",
+      "prompted": [
+        [
+          "site",
+          "The workshop is listed monthly, with sign-ups taken by direct message."
+        ],
+        [
+          "hyp",
+          "Materials lists and reminders may be rewritten for every session."
+        ]
       ],
-      build: "A twelve-month promotion calendar with drafted posts and emails in the studio's own voice.",
-      experiment: "In one session, plan the November to December gift-card push end to end.",
-      effort: ["Low to medium", "One planning session, then light upkeep."],
-      value: ["Medium", "Depends on seasonal demand."],
-      sources: ["Sample admired studios (fictional)"],
-      validate: ["Sales by month last year", "Whether gift cards are already offered"]
+      "build": "A workshop kit: one sign-up page, automatic reminders, a materials checklist, and a handout template you refine each time.",
+      "experiment": "After the next workshop, write down every task it took and mark the ones you've done before.",
+      "effort": [
+        "Medium",
+        "Depends on how sign-ups and payment work today."
+      ],
+      "value": [
+        "Medium",
+        "Frees a day a month, and makes the workshop easier to grow."
+      ],
+      "sources": [
+        "Sample site: wrenandink.example/workshops (fictional)"
+      ],
+      "validate": [
+        "How sign-ups and payment work now",
+        "Whether you want to run it more often"
+      ]
     },
     {
-      id: "brief", category: "Admin & Operations",
-      title: "A Monday brief of commitments, deposits due, and stock to reorder",
-      why: "Restocking and follow-ups slip when they live only in the founder's head.",
-      prompted: [
-        ["told", "Remembering to restock the shop keeps slipping."],
-        ["hyp", "Commitments are spread across inbox, booking tool, and shop."]
+      "id": "sunday",
+      "category": "Admin & Operations",
+      "title": "A Sunday studio sheet: orders to ship, commission deadlines, workshop sign-ups",
+      "why": "When the week's commitments live in your inbox and your head, studio time gets interrupted by remembering.",
+      "prompted": [
+        [
+          "told",
+          "You don't have time to finish your own work, let alone experiment."
+        ],
+        [
+          "hyp",
+          "Orders, commissions, and sign-ups live in three different places."
+        ]
       ],
-      build: "A short weekly brief assembled from the inbox, bookings, and shop inventory, listing decisions, commitments, and neglected follow-ups.",
-      experiment: "Keep the brief by hand for four Mondays to learn what belongs in it before automating.",
-      effort: ["Medium", "Needs access to three systems."],
-      value: ["Medium", "Fewer dropped balls; calmer weeks."],
-      sources: [],
-      validate: ["Which systems hold the information", "What the founder checks each week today"]
-    },
-    {
-      id: "answers", category: "Admin & Operations",
-      title: "Turn recurring customer questions into a reusable answer library",
-      why: "Good answers written once can be reused in email, on the site, and later by an assistant.",
-      prompted: [
-        ["told", "The same class questions repeat."]
+      "build": "A one-page weekly summary pulled from your shop, inbox, and workshop sign-ups, so Monday starts with a plan instead of a search.",
+      "experiment": "Keep the sheet by hand for four Sundays to learn what belongs on it before automating anything.",
+      "effort": [
+        "Medium",
+        "Needs access to two or three tools."
       ],
-      build: "A saved-reply library and an FAQ page, which could later train a simple assistant on the studio's own material.",
-      experiment: "Collect the last twenty customer questions and group them into themes.",
-      effort: ["Low", "Pairs naturally with the class guide above."],
-      value: ["Medium", "Overlaps with helping visitors choose; best done together."],
-      sources: [],
-      validate: ["Overlap with the class guide", "Tone the founder wants in replies"]
+      "value": [
+        "Medium",
+        "Protects making time; fewer dropped commitments."
+      ],
+      "sources": [],
+      "validate": [
+        "Which tools hold orders and sign-ups",
+        "What you check each week today"
+      ]
     }
   ]
 };
@@ -226,7 +329,24 @@ var SAMPLE_BRIEF = {
     status.textContent = "Saved. Your answers are added to the conversation form at the bottom of this page. They have not been analyzed.";
   });
 
-  document.getElementById("show-sample").addEventListener("click", function () { showBrief(SAMPLE_BRIEF); });
+  function hideBrief() {
+    var b = document.getElementById("brief"); b.hidden = true;
+    var ss = document.getElementById("show-sample"); ss.setAttribute("aria-expanded", "false"); ss.textContent = "See the sample brief";
+  }
+  document.getElementById("show-sample").addEventListener("click", function () {
+    var b = document.getElementById("brief");
+    if (!b.hidden && brief && brief.sample) { hideBrief(); this.focus(); return; }
+    showBrief(SAMPLE_BRIEF);
+  });
+  document.getElementById("close-brief").addEventListener("click", function () {
+    hideBrief(); var ss = document.getElementById("show-sample");
+    ss.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" }); ss.focus({ preventScroll: true });
+  });
+  document.getElementById("more-toggle").addEventListener("click", function () {
+    var rest = document.getElementById("brief-rest"), open = rest.hidden; rest.hidden = !open;
+    this.setAttribute("aria-expanded", String(open)); this.classList.toggle("is-open", open);
+    var n = this.dataset.n; this.querySelector(".exp-label").textContent = open ? "Hide the other " + (n === "1" ? "possibility" : n + " possibilities") : "Show " + n + " more " + (n === "1" ? "possibility" : "possibilities");
+  });
 
   /* ---------- brief rendering ---------- */
   function rating(label, pair) {
@@ -240,7 +360,7 @@ var SAMPLE_BRIEF = {
     var k = el("div", "opp-kicker");
     k.appendChild(el("span", null, o.category));
     if (o.top) k.appendChild(el("span", null, "· Strongest three"));
-    o.prompted.forEach(function (p) { var t = EV[p[0]]; k.appendChild(el("span", "ev " + t[0], t[1])); });
+    var seenEv = {}; o.prompted.forEach(function (p) { if (seenEv[p[0]]) return; seenEv[p[0]] = 1; var t = EV[p[0]]; k.appendChild(el("span", "ev " + t[0], t[1])); });
     left.appendChild(k);
     var h = el("h6", null, o.title); h.id = "opp-t-" + o.id; left.appendChild(h);
     left.appendChild(el("p", "opp-why", o.why));
@@ -251,7 +371,7 @@ var SAMPLE_BRIEF = {
     var sel = el("button", "tgl tgl-sel", "This resonates"); sel.type = "button"; sel.setAttribute("aria-pressed", "false"); sel.setAttribute("aria-describedby", h.id);
     var doing = el("button", "tgl", "Already doing this"); doing.type = "button"; doing.setAttribute("aria-pressed", "false"); doing.setAttribute("aria-describedby", h.id);
     var nr = el("button", "tgl", "Not relevant"); nr.type = "button"; nr.setAttribute("aria-pressed", "false"); nr.setAttribute("aria-describedby", h.id);
-    var exp = el("button", "tgl tgl-exp", "Show the thinking"); exp.type = "button"; exp.setAttribute("aria-expanded", "false"); exp.setAttribute("aria-controls", "opp-d-" + o.id); exp.setAttribute("aria-describedby", h.id);
+    var exp = el("button", "tgl tgl-exp"); exp.innerHTML = '<span class="exp-label">Show the thinking</span><svg class="chev" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'; exp.type = "button"; exp.setAttribute("aria-expanded", "false"); exp.setAttribute("aria-controls", "opp-d-" + o.id); exp.setAttribute("aria-describedby", h.id);
     [sel, doing, nr, exp].forEach(function (b) { c.appendChild(b); });
     main.appendChild(c);
     card.appendChild(main);
@@ -268,7 +388,7 @@ var SAMPLE_BRIEF = {
     var s = el("div"); s.appendChild(el("span", "dh", "Sources")); s.appendChild(el("p", "src", o.sources.length ? o.sources.join("; ") : "None. This one rests on the founder's answers and our hypothesis.")); d.appendChild(s);
     card.appendChild(d);
 
-    exp.addEventListener("click", function () { var open = d.hidden; d.hidden = !open; exp.setAttribute("aria-expanded", String(open)); exp.textContent = open ? "Hide the thinking" : "Show the thinking"; });
+    exp.addEventListener("click", function () { var open = d.hidden; d.hidden = !open; exp.setAttribute("aria-expanded", String(open)); exp.querySelector(".exp-label").textContent = open ? "Hide the thinking" : "Show the thinking"; card.classList.toggle("is-open", open); });
     function sync() {
       var st = state[o.id];
       sel.setAttribute("aria-pressed", String(st.selected));
@@ -316,7 +436,12 @@ var SAMPLE_BRIEF = {
       var g = el("div", "cat-group"); g.appendChild(el("h5", null, cat));
       var l = el("div", "opp-list"); list.forEach(function (o) { l.appendChild(renderOpp(o)); }); g.appendChild(l); rest.appendChild(g);
     });
+    var restCount = opps.filter(function (o) { return !o.top; }).length;
+    var mb = document.getElementById("more-toggle");
+    rest.hidden = true; mb.hidden = !restCount; mb.setAttribute("aria-expanded", "false");
+    mb.dataset.n = restCount; mb.querySelector(".exp-label").textContent = "Show " + restCount + " more " + (restCount === 1 ? "possibility" : "possibilities");
     var b = document.getElementById("brief"); b.hidden = false; b.focus({ preventScroll: true });
+    var ss = document.getElementById("show-sample"); ss.setAttribute("aria-expanded", "true"); ss.textContent = data.sample ? "Hide the sample brief" : "See the sample brief";
     b.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
     updateCount();
   }
@@ -377,7 +502,7 @@ var SAMPLE_BRIEF = {
     document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
   });
   document.getElementById("print-brief").addEventListener("click", function () {
-    var closed = Array.prototype.slice.call(document.querySelectorAll(".opp-detail[hidden]"));
+    var closed = Array.prototype.slice.call(document.querySelectorAll(".opp-detail[hidden], #brief-rest[hidden]"));
     closed.forEach(function (d) { d.hidden = false; });
     window.print();
     closed.forEach(function (d) { d.hidden = true; });

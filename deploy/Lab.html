@@ -307,7 +307,7 @@
 
           <div class="scan-actions">
             <button type="submit" class="btn btn-brass" id="scan-submit">Save my answers for the conversation</button>
-            <button type="button" class="btn btn-ghost" id="show-sample" aria-controls="brief">See the sample brief</button>
+            <button type="button" class="btn btn-ghost" id="show-sample" aria-controls="brief" aria-expanded="false">See the sample brief</button>
           </div>
           <p class="form-note" id="scan-status" aria-live="polite"></p>
         </form>
@@ -332,17 +332,20 @@
 
       <!-- Brief -->
       <div id="brief" class="brief" role="region" hidden tabindex="-1" aria-labelledby="brief-title">
+        <div class="brief-bar">
+          <p class="sample-tag" id="brief-tag">Sample brief &middot; fictional business</p>
+          <button type="button" class="brief-close-btn" id="close-brief" aria-controls="brief">Close brief<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
         <div class="brief-head">
           <div>
-            <p class="sample-tag" id="brief-tag">Sample brief &middot; fictional business</p>
-            <h3 id="brief-title">Opportunity brief: Juniper &amp; Clay</h3>
-            <p class="brief-intro" id="brief-intro">A fictional two-person ceramics studio offering classes, private parties, and a small online shop. Nothing here describes a real business or analyzes your answers.</p>
+            <h3 id="brief-title">Opportunity brief: Wren &amp; Ink Studio</h3>
+            <p class="brief-intro" id="brief-intro">A fictional printmaker who sells limited-edition prints, takes commissions, and teaches a monthly workshop. Curious about AI, wary of what it means for artists, technical enough to figure it out, and short on time. Nothing here describes a real business or analyzes your answers.</p>
           </div>
           <dl class="brief-inputs" id="brief-inputs">
-            <div><dt>Website (fictional)</dt><dd>juniperandclay.example</dd></div>
-            <div><dt>More room for</dt><dd>Creative work</dd></div>
-            <div><dt>Keeps slipping</dt><dd>&ldquo;Answering the same class questions by email, chasing party deposits, and remembering to restock the shop.&rdquo;</dd></div>
-            <div><dt>Admires</dt><dd>Two fictional studios with seasonal gift-card pushes</dd></div>
+            <div><dt>Website (fictional)</dt><dd>wrenandink.example</dd></div>
+            <div><dt>More room for</dt><dd>Making new work</dd></div>
+            <div><dt>Keeps slipping</dt><dd>&ldquo;Finishing my website, keeping up with commission emails, and figuring out where AI actually helps without giving my work away. Right now I only use it for promo images.&rdquo;</dd></div>
+            <div><dt>Admires</dt><dd>Two fictional printmakers who launch each edition to their email list first</dd></div>
           </dl>
         </div>
 
@@ -355,9 +358,9 @@
 
         <h4 class="brief-sub">Where we&rsquo;d start</h4>
         <div id="brief-top" class="opp-list"></div>
-        <h4 class="brief-sub">More possibilities, by where they live</h4>
-        <div id="brief-rest"></div>
-        <p class="brief-close" id="brief-close">Seven opportunities, not ten. A real brief only lists what is worth your time.</p>
+                <button type="button" class="more-toggle" id="more-toggle" aria-expanded="false" aria-controls="brief-rest"><span class="exp-label">Show more possibilities</span><svg class="chev" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div id="brief-rest" hidden></div>
+        <p class="brief-close" id="brief-close">Six opportunities, not ten. A real brief only lists what is worth your time.</p>
       </div>
       <div id="examples" class="examples" aria-labelledby="ex-title">
       <header class="sec-head on-green ex-head">
