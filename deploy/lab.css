@@ -453,3 +453,23 @@
 .also-avail span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--brass-ink);margin-right:10px}
 @media (max-width:1020px){.outcome-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.outcomes-head{grid-template-columns:1fr;gap:10px}}
 @media (max-width:640px){.outcome-grid{grid-template-columns:1fr}}
+
+/* ============ labyrinth echoes ============
+   Small pieces of the hero labyrinth carried into later sections, one corner
+   or edge at a time, alternating down the page. Purely decorative. */
+.has-echo{position:relative;overflow:hidden}
+.has-echo>.wrap{position:relative;z-index:1}
+.echo{position:absolute;z-index:0;width:980px;height:980px;pointer-events:none;background:url(assets/lab-labyrinth.svg) center/100% 100% no-repeat;
+  -webkit-mask-image:radial-gradient(closest-side,transparent 0 10%,rgba(0,0,0,0.6) 26%,#000 46%,rgba(0,0,0,0.5) 66%,transparent 84%);
+          mask-image:radial-gradient(closest-side,transparent 0 10%,rgba(0,0,0,0.6) 26%,#000 46%,rgba(0,0,0,0.5) 66%,transparent 84%)}
+.g-band .echo{opacity:0.3}
+.i-band .echo{opacity:0.36;filter:saturate(0.85) brightness(0.55)}
+.echo-tr{top:0;right:0;transform:translate(40%,-40%) rotate(8deg)}
+.echo-tl{top:0;left:0;transform:translate(-40%,-40%) rotate(-12deg)}
+.echo-br{bottom:0;right:0;transform:translate(40%,40%) rotate(20deg)}
+.echo-bl{bottom:0;left:0;transform:translate(-40%,40%) rotate(-6deg)}
+.echo-bottom{bottom:0;left:50%;width:1300px;height:1300px;transform:translate(-50%,56%)}
+@media (max-width:720px){
+  .echo{width:560px;height:560px}
+  .echo-bottom{width:760px;height:760px}
+}
