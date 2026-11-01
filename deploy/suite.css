@@ -190,3 +190,24 @@
   .suitenav-brand img{height:30px}
 }
 @media (prefers-reduced-motion:reduce){.suitenav,.suitenav.is-on{transition:none}}
+
+/* ============ hero, small screens: editorial left-aligned layout ============
+   Instead of three centred blocks: eyebrow + brass rule, a headline, the second
+   line set as an italic pull-quote on a brass rule, then body, full-width
+   buttons, and the fine print under a hairline. */
+.intro-eyebrow{display:none}
+@media (max-width:640px){
+  .suite .intro{justify-content:flex-start;padding:84px 24px 52px}
+  .suite .intro-stage{align-items:flex-start;text-align:left}
+  .suite .intro-stage::before{left:40%;top:46%;width:130vw;height:90%}
+  .suite .intro-mark{width:236px;margin:6px 0 46px}
+  .intro-eyebrow{display:flex;align-items:center;gap:12px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--brass-t);margin-bottom:16px}
+  .intro-eyebrow::before{content:"";width:28px;height:1px;background:var(--brass);flex:none}
+  .suite .intro h1{font-size:30px;line-height:1.2;margin:0 0 22px;text-wrap:pretty}
+  .suite .intro h1 span{font-style:italic;font-weight:300;font-size:21px;line-height:1.5;margin-top:20px;padding-left:16px;border-left:2px solid rgba(210,170,90,0.6);text-wrap:pretty}
+  .suite .lede{font-size:15.5px;line-height:1.75;margin:0 0 28px;text-wrap:pretty}
+  .suite .actions{flex-direction:column;align-items:stretch;width:100%;gap:10px;margin-bottom:24px}
+  .suite .actions .btn{text-align:center}
+  .suite .fineprint{margin:0;padding-top:16px;border-top:1px solid var(--brass-rule);font-size:12.5px;text-wrap:pretty;opacity:0.9}
+  .tiers{margin-top:44px}
+}
