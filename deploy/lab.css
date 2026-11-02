@@ -691,11 +691,11 @@
    narrows to the right, so the upright phone sits beside its "Lunisa Arts" wordmark. */
 #work .media-lunisa{justify-content:flex-start}
 #work .media-lunisa .m-row{display:flex;align-items:flex-end;gap:18px;margin-top:22px}
-#work .media-lunisa .m-reg{flex:0 0 23%;margin:0}
+#work .media-lunisa .m-reg{flex:0 0 20%;margin:0}
 #work .media-lunisa .m-over{flex:1 1 auto;width:auto;margin:0}
 #work .media-lunisa .m-reg .phone{width:100%}
-#work .media-lunisa .m-reg .phone img{display:block;width:100%;aspect-ratio:0.6;object-fit:cover;object-position:left top}
+#work .media-lunisa .m-reg .phone img{display:block;width:100%;aspect-ratio:540/1060;object-fit:cover;object-position:left top}
 @media (max-width:860px){
   #work .media-lunisa .m-row{gap:12px;margin-top:14px}
-  #work .media-lunisa .m-reg{flex-basis:22%}
+  #work .media-lunisa .m-reg{flex-basis:19%}
 }
