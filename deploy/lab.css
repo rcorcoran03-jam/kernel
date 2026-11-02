@@ -410,7 +410,11 @@
   .lab .intro h1{font-size:32px !important}
   .intro-home{left:22px;top:22px}
   .intro-mark{margin-bottom:34px}
-  .intro-rings{top:300px;width:660px;height:660px;opacity:0.62;-webkit-mask-image:none;mask-image:none}
+  /* mobile: push the labyrinth outward so the circle and angles frame the edges
+     and corners, and the busy inner rings sit hidden behind the copy */
+  .intro-rings{top:340px;width:860px;height:860px;opacity:1;
+    -webkit-mask-image:radial-gradient(closest-side,transparent 0 44%,rgba(0,0,0,0.35) 52%,#000 62%,#000 88%,transparent 100%);
+            mask-image:radial-gradient(closest-side,transparent 0 44%,rgba(0,0,0,0.35) 52%,#000 62%,#000 88%,transparent 100%)}
   .intro-rings::after{width:250px;height:250px;background:radial-gradient(closest-side,rgba(47,63,54,0.8) 30%,rgba(47,63,54,0))}
   .lab .intro::after{height:42%}
   .intro-stage::before{width:100vw;background:radial-gradient(closest-side,rgba(47,63,54,0.82) 55%,rgba(47,63,54,0.45) 80%,rgba(47,63,54,0))}
