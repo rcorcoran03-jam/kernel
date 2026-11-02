@@ -100,3 +100,57 @@
   .compare>div{padding:12px 12px 12px 0;font-size:13px}
   .team{grid-template-columns:1fr}
 }
+
+/* ============ home hero (Nov 2026 refresh) ============
+   Left-aligned on cream, in contrast to the centered Lab and Suite heroes.
+   Suite's terrain contours, recolored maroon, ring the pomegranate mark on the
+   right; small fragments of the Lab labyrinth sit in two corners. */
+.home-hero{position:relative;overflow:hidden;background:#FBF6EE;min-height:640px;isolation:isolate}
+.hh-wash{position:absolute;inset:0;z-index:-3;background:
+  radial-gradient(70% 80% at 104% 0%, rgba(185,195,174,0.42) 0%, rgba(185,195,174,0) 60%),
+  radial-gradient(70% 70% at 30% 125%, rgba(222,140,97,0.30) 0%, rgba(222,140,97,0) 70%),
+  linear-gradient(150deg,#FCF8F1 0%,#F8F0E4 55%,#F4EEE3 100%)}
+.hh-terrain{position:absolute;z-index:-2;top:50%;left:73%;width:2700px;height:1688px;
+  transform-origin:52.08% 35.33%;transform:translate(-52.08%,-35.33%) rotate(-4deg);
+  background:url(assets/home-terrain.svg) center/100% 100% no-repeat;opacity:0.55;
+  -webkit-mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 8%, #000 34%, rgba(0,0,0,0) 62%);
+          mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 8%, #000 34%, rgba(0,0,0,0) 62%)}
+.home-hero::after{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;
+  background:linear-gradient(96deg,#FBF6EE 0%,rgba(251,246,238,0.92) 30%,rgba(251,246,238,0.35) 50%,rgba(251,246,238,0) 62%)}
+.hh-lab{position:absolute;z-index:-1;width:1100px;height:1100px;pointer-events:none;opacity:0.2;
+  background:url(assets/home-labyrinth.svg) center/100% 100% no-repeat}
+.hh-lab-tr{top:-170px;right:-170px;opacity:0.9;
+  -webkit-mask-image:radial-gradient(circle at 84.5% 15.5%, #000 0, rgba(0,0,0,0.6) 200px, rgba(0,0,0,0) 440px);
+          mask-image:radial-gradient(circle at 84.5% 15.5%, #000 0, rgba(0,0,0,0.6) 200px, rgba(0,0,0,0) 440px)}
+.hh-lab-bl{bottom:-170px;left:-170px;opacity:0.7;
+  -webkit-mask-image:radial-gradient(circle at 15.5% 84.5%, #000 0, rgba(0,0,0,0.55) 170px, rgba(0,0,0,0) 380px);
+          mask-image:radial-gradient(circle at 15.5% 84.5%, #000 0, rgba(0,0,0,0.55) 170px, rgba(0,0,0,0) 380px)}
+.hh-emblem{position:absolute;z-index:0;top:50%;left:73%;width:74px;transform:translate(-50%,-58%)}
+.hh-emblem img{display:block;width:100%;height:auto;opacity:0.9;
+  /* letterpress imprint: light catch below, faint shade above */
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,0.9)) drop-shadow(0 -1px 0.5px rgba(110,52,40,0.22)) drop-shadow(0 0 6px rgba(110,52,40,0.06))}
+.hh-inner{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:104px 40px 108px}
+.hh-copy{max-width:600px}
+.hh-eyebrow{font-size:11.5px;letter-spacing:0.26em;text-transform:uppercase;color:#C0603A;font-weight:500;margin-bottom:26px}
+.hh-title{font-family:'Bitter',serif;font-weight:400;font-size:62px;line-height:1.14;letter-spacing:-0.02em;color:#9B2C2C;text-wrap:pretty;margin-bottom:28px}
+.hh-rule{width:56px;height:1px;background:#C97B5A;margin-bottom:28px}
+.hh-lede{font-family:'Bitter',serif;font-weight:400;font-size:21px;line-height:1.5;color:#3A2A22;max-width:500px;text-wrap:pretty;margin-bottom:18px}
+.hh-body{font-size:16.5px;line-height:1.8;color:#5b453a;max-width:470px;text-wrap:pretty;margin-bottom:40px}
+.hh-actions{display:flex;gap:14px;flex-wrap:wrap}
+.hh-btn{padding:15px 30px;border-radius:100px;background:#9B2C2C;color:#FDF9F3;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500}
+@media (max-width:1020px){
+  .hh-terrain,.hh-emblem{left:84%}
+  .hh-terrain{opacity:0.4}
+}
+@media (max-width:720px){
+  .home-hero{min-height:0}
+  .hh-inner{padding:72px 22px 260px}
+  .hh-title{font-size:44px}
+  .home-hero::after{background:linear-gradient(180deg,#FBF6EE 0%,rgba(251,246,238,0.9) 55%,rgba(251,246,238,0) 78%)}
+  .hh-terrain{top:auto;bottom:130px;left:50%;width:1800px;height:1125px;opacity:0.75;transform-origin:52.08% 35.33%;transform:translate(-52.08%,64.67%) rotate(-4deg);
+    -webkit-mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 8%, rgba(0,0,0,0) 40%);
+            mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 8%, rgba(0,0,0,0) 40%)}
+  .hh-emblem{top:auto;bottom:130px;left:50%;width:60px;transform:translate(-50%,42%)}
+  .hh-lab-bl{display:none}
+  .hh-lab-tr{width:700px;height:700px;opacity:0.4}
+}
