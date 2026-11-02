@@ -477,7 +477,7 @@
 /* inverted: the top of the labyrinth, so the frame's corners sit along the top
    edge and the circle arches down like a dome over the section */
 .echo-top{top:0;left:50%;width:1500px;height:1500px;transform:translate(-50%,-8%)}
-.g-band .echo-top{opacity:0.5;
+.g-band .echo-top{opacity:0.4;
   -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 22%,rgba(0,0,0,0.55) 32%,transparent 46%),radial-gradient(closest-side,transparent 0 30%,#000 44%);
   -webkit-mask-composite:source-in;
           mask-image:linear-gradient(to bottom,#000 0%,#000 22%,rgba(0,0,0,0.55) 32%,transparent 46%),radial-gradient(closest-side,transparent 0 30%,#000 44%);
