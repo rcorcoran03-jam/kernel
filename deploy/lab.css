@@ -699,3 +699,49 @@
   #work .media-lunisa .m-row{gap:12px;margin-top:14px}
   #work .media-lunisa .m-reg{flex-basis:19%}
 }
+
+/* ============ condensed: What we build + How we use AI ============ */
+#build,#principles{padding-top:76px;padding-bottom:72px}
+#build .sec-head,#principles .sec-head{margin-bottom:32px}
+/* what we build: icon beside the title, tight lists */
+.cat{display:grid;grid-template-columns:40px 1fr;column-gap:14px;row-gap:8px;padding:20px 22px 18px;align-content:start}
+.cat-ico{width:40px;height:40px;grid-row:span 1}
+.cat-ico svg{width:24px;height:24px}
+.cat h3{align-self:center;font-size:19px;line-height:1.25}
+.cat>p{grid-column:1/-1;font-size:13.5px;line-height:1.6;padding-bottom:10px}
+.cat .ticks{grid-column:1/-1;gap:5px}
+.cat .ticks li{font-size:13px;line-height:1.5}
+#build .also-avail{margin-top:18px}
+/* how we use AI: two-column list, no boxes */
+.principles{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 44px;border-top:1px solid var(--rule)}
+.pr{padding:18px 0 16px;gap:6px;background:none;border:none;border-radius:0;border-bottom:1px solid var(--rule)}
+.pr h3{display:flex;align-items:baseline;gap:12px;font-size:18px}
+.pr h3 .pr-num{flex:none;font-size:10px}
+.pr p{font-size:13.5px;line-height:1.6;padding-left:30px}
+.pr .pr-guard{margin-top:2px;padding-top:0;border-top:none;font-size:13px;color:var(--ink)}
+.pr-guard-label{display:inline-flex;vertical-align:baseline;margin:0 8px 0 0;font-size:9px}
+@media (max-width:1020px){.principles{grid-template-columns:1fr}}
+@media (max-width:720px){
+  #build,#principles{padding-top:60px !important;padding-bottom:56px !important}
+  .cats{gap:10px}
+  .cat{padding:16px 16px 14px}
+  .cat>p{padding-bottom:8px}
+  .cat .ticks{display:block}
+  .cat .ticks li{display:inline;padding:0;font-size:12.5px;color:var(--ink2)}
+  .cat .ticks li::before{display:none}
+  .cat .ticks li+li::before{content:" \00B7  ";display:inline;position:static;width:auto;height:auto;background:none;box-shadow:none;color:var(--brass-ink)}
+  .pr{padding:14px 0 12px !important}
+  .pr p{padding-left:0}
+  .pr h3{font-size:17px}
+}
+.cat .ticks li,.cat>p{text-wrap:pretty}
+.pr-d summary{list-style:none}
+.pr-d summary::-webkit-details-marker{display:none}
+.pr-d[open] summary{margin-bottom:6px}
+@media (min-width:721px){ .pr-d summary{pointer-events:none} }
+@media (max-width:720px){
+  .pr-d summary{cursor:pointer;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .pr-d summary::after{content:"+";font-family:'DM Sans',sans-serif;font-size:18px;line-height:1;color:var(--brass-ink)}
+  .pr-d[open] summary::after{content:"\2212"}
+  .pr .pr-guard{margin-top:6px}
+}

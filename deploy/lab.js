@@ -540,3 +540,13 @@ var SAMPLE_BRIEF = {
   sync();
   if (mq.addEventListener) mq.addEventListener("change", sync); else if (mq.addListener) mq.addListener(sync);
 })();
+
+/* ---------- How we use AI: explanations open on wide screens, tucked away on phones ---------- */
+(function () {
+  var ds = Array.prototype.slice.call(document.querySelectorAll("#principles details[data-desktop-open]"));
+  if (!ds.length) return;
+  var mq = window.matchMedia("(min-width: 721px)");
+  function sync() { ds.forEach(function (d) { d.open = mq.matches; }); }
+  sync();
+  if (mq.addEventListener) mq.addEventListener("change", sync); else if (mq.addListener) mq.addListener(sync);
+})();
