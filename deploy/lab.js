@@ -148,7 +148,7 @@ var SAMPLE_BRIEF = {
   if (LIVE) {
     document.querySelectorAll(".live-only").forEach(function (n) { n.hidden = false; });
     var bt = document.getElementById("banner-text");
-    if (bt) bt.innerHTML = "<strong>Your scan reads only your public website and the businesses you name.</strong> It can&rsquo;t see how your business runs inside, so every point is labeled by where it came from, and guesses are marked as hypotheses. The sample brief shows what you&rsquo;ll get.";
+    if (bt) bt.innerHTML = "<strong>Your scan reads your public website and the businesses and category you name.</strong> It can&rsquo;t see how your business runs inside, so every point is labeled by where it came from, and anything we&rsquo;re guessing is labeled a hypothesis. <a href=\"#examples\">Review the examples below</a> to see what the scan can produce.";
     if (submitBtn) submitBtn.textContent = "Run my scan";
     if (TURNSTILE_SITE_KEY) {
       var ts = document.createElement("script");
@@ -160,10 +160,10 @@ var SAMPLE_BRIEF = {
   }
 
   if (noSite) noSite.addEventListener("change", function () {
-    describeField.hidden = !noSite.checked;
-    siteField.style.opacity = noSite.checked ? "0.5" : "";
-    document.getElementById("scan-site").disabled = noSite.checked;
-    if (noSite.checked) document.getElementById("scan-describe").focus();
+    var site = document.getElementById("scan-site");
+    siteField.classList.toggle("is-off", noSite.checked);
+    site.disabled = noSite.checked;
+    if (noSite.checked) { site.value = ""; document.getElementById("scan-describe").focus(); }
   });
   if (form) form.addEventListener("change", function (e) {
     if (e.target.name === "room") roomOther.hidden = e.target.value !== "Other";
@@ -173,8 +173,9 @@ var SAMPLE_BRIEF = {
     if (!form) return [];
     var f = form.elements, out = [];
     var site = f.website.value.trim();
-    if (noSite.checked) out.push("No website yet" + (f.describe.value.trim() ? ": " + f.describe.value.trim() : ""));
+    if (noSite.checked) out.push("No website yet");
     else if (site) out.push("Website: " + site);
+    if (f.describe.value.trim()) out.push("In their words: " + f.describe.value.trim());
     var room = form.querySelector("input[name=room]:checked");
     if (room) out.push("More room for: " + (room.value === "Other" ? (f.room_other.value.trim() || "Something else") : room.value));
     if (f.stuck.value.trim()) out.push("Keeps slipping: " + f.stuck.value.trim());
@@ -226,7 +227,56 @@ var SAMPLE_BRIEF = {
     status.textContent = "Saved. Your answers are added to the conversation form at the bottom of this page. They have not been analyzed.";
   });
 
-  document.getElementById("show-sample").addEventListener("click", function () { showBrief(SAMPLE_BRIEF); });
+  var showSample = document.getElementById("show-sample");
+  if (showSample) showSample.addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.kernelExampleTab) window.kernelExampleTab("tab-sample");
+    var ex = document.getElementById("examples");
+    if (ex) ex.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  });
+
+  /* ---------- sample brief: condensed, read-only (lives in the Examples tabs) ---------- */
+  function thinking(o) {
+    var d = el("div", "sb-thinking");
+    var p1 = el("div", "full"); p1.appendChild(el("span", "dh", "What prompted it"));
+    var ul = el("ul"); o.prompted.forEach(function (p) { var li = el("li"); var t = EV[p[0]]; li.appendChild(el("span", "ev " + t[0], t[1])); li.appendChild(document.createTextNode(p[1])); ul.appendChild(li); });
+    p1.appendChild(ul); d.appendChild(p1);
+    [["What Kernel could help build", o.build], ["A first experiment", o.experiment]].forEach(function (x) {
+      var b = el("div"); b.appendChild(el("span", "dh", x[0])); b.appendChild(el("p", null, x[1])); d.appendChild(b);
+    });
+    var v = el("div", "full"); v.appendChild(el("span", "dh", "Still to validate")); v.appendChild(el("p", null, o.validate.join(" · "))); d.appendChild(v);
+    return d;
+  }
+  function labels(o) { var w = el("span", "sb-labels"); o.prompted.forEach(function (p) { var t = EV[p[0]]; w.appendChild(el("span", "ev " + t[0], t[1])); }); return w; }
+  function rate(o) { var r = el("span", "sb-rate"); r.appendChild(el("span", null, "Effort ")); r.appendChild(el("b", null, o.effort[0])); r.appendChild(el("span", null, " · Value ")); r.appendChild(el("b", null, o.value[0])); return r; }
+  function renderSample() {
+    var top = document.getElementById("sb-top"), rest = document.getElementById("sb-rest");
+    if (!top || !rest) return;
+    var opps = SAMPLE_BRIEF.opportunities;
+    opps.filter(function (o) { return o.top; }).forEach(function (o, i) {
+      var c = el("article", "sb-card");
+      c.appendChild(el("span", "sb-n", "0" + (i + 1)));
+      c.appendChild(el("span", "sb-cat", o.category));
+      c.appendChild(el("h5", null, o.title));
+      c.appendChild(el("p", "sb-why", o.why));
+      c.appendChild(labels(o));
+      c.appendChild(rate(o));
+      var dt = el("details", "sb-more"); dt.appendChild(el("summary", null, "Show the thinking")); dt.appendChild(thinking(o)); c.appendChild(dt);
+      top.appendChild(c);
+    });
+    opps.filter(function (o) { return !o.top; }).forEach(function (o) {
+      var row = el("details", "sb-row");
+      var sm = el("summary");
+      sm.appendChild(el("span", "sb-cat", o.category));
+      sm.appendChild(el("span", "sb-title", o.title));
+      sm.appendChild(labels(o));
+      sm.appendChild(rate(o));
+      row.appendChild(sm);
+      var body = el("div", "sb-row-body"); body.appendChild(el("p", "sb-why", o.why)); body.appendChild(thinking(o)); row.appendChild(body);
+      rest.appendChild(row);
+    });
+  }
+  renderSample();
 
   /* ---------- brief rendering ---------- */
   function rating(label, pair) {
@@ -294,6 +344,7 @@ var SAMPLE_BRIEF = {
     var rows = [];
     if (payload) {
       if (payload.website) rows.push(["Website", payload.website]);
+      if (payload.describe) rows.push(["In your words", payload.describe]);
       if (payload.room) rows.push(["More room for", payload.room === "Other" ? payload.room_other || "Something else" : payload.room]);
       if (payload.stuck) rows.push(["Keeps slipping", payload.stuck]);
       if (payload.admire) rows.push(["Admires", payload.admire]);
@@ -401,8 +452,11 @@ var SAMPLE_BRIEF = {
       x.tabIndex = on ? 0 : -1;
       document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
     });
+    var ex = document.getElementById('examples'); if (ex) ex.setAttribute('data-tab', t.id);
     if (focus) t.focus();
   }
+  window.kernelExampleTab = function (id) { var t = document.getElementById(id); if (t) select(t); };
+  select(tabs.filter(function (x) { return x.getAttribute('aria-selected') === 'true'; })[0] || tabs[0]);
   tabs.forEach(function (t, i) {
     t.addEventListener('click', function () { select(t); });
     t.addEventListener('keydown', function (e) {

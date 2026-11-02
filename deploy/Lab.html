@@ -229,12 +229,12 @@
           <p class="eyebrow">Kernel Opportunity Scan</p>
           <h2 id="scan-title">Where could your business make more room?</h2>
         </div>
-        <p>Tell us a little about how your business runs. Then explore a sample brief to see the kind of thinking a Kernel working session starts with.</p>
+        <p>Tell us a little about the basics of how your business runs (operations, product, and marketing mix) and where you believe the pain points are. Then explore a sample brief or scenario to see the kind of thinking a Kernel working session starts with.</p>
       </header>
 
       <div class="sample-banner" role="note">
         <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8" fill="none" stroke="currentColor"/><path d="M9 5v5M9 12.5v.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        <p id="banner-text"><strong>The live scan is still in development.</strong> Your answers are not analyzed on this page. They travel with your inquiry, so our first conversation starts from your business. The brief below is a sample built for a fictional studio.</p>
+        <p id="banner-text"><strong>The live scan is still in development.</strong> Your answers are not analyzed on this page. They travel with your inquiry, so our first conversation starts from your business. The examples below show a sample brief built for a fictional studio.</p>
       </div>
 
       <div class="scan-grid">
@@ -246,12 +246,12 @@
             <input id="scan-site" name="website" type="url" inputmode="url" placeholder="https://yourbusiness.com" autocomplete="url">
           </div>
           <div class="check">
-            <input id="scan-nosite" type="checkbox" aria-controls="field-describe">
+            <input id="scan-nosite" type="checkbox" aria-controls="scan-site">
             <label for="scan-nosite">I don&rsquo;t have a website yet</label>
           </div>
-          <div class="field" id="field-describe" hidden>
+          <div class="field" id="field-describe">
             <label for="scan-describe">Describe your business in a sentence or two</label>
-            <textarea id="scan-describe" name="describe" rows="2" placeholder="What you offer, and who it&rsquo;s for"></textarea>
+            <textarea id="scan-describe" name="describe" rows="2" placeholder="What you offer, who it&rsquo;s for, and how people buy from you"></textarea>
           </div>
 
           <fieldset class="field">
@@ -305,14 +305,13 @@
             </div>
             <div class="check check-consent">
               <input id="scan-consent" name="consent" type="checkbox">
-              <label for="scan-consent">Kernel may read my public website and research the businesses I named to prepare this brief.</label>
+              <label for="scan-consent">Kernel Opportunity Scan may review my public website and research the businesses I named to prepare this brief.</label>
             </div>
             <div id="scan-turnstile"></div>
           </div>
 
           <div class="scan-actions">
             <button type="submit" class="btn btn-brass" id="scan-submit">Save my answers for the conversation</button>
-            <button type="button" class="btn btn-ghost" id="show-sample" aria-controls="brief">See the sample brief</button>
           </div>
           <p class="form-note" id="scan-status" aria-live="polite"></p>
         </form>
@@ -332,10 +331,11 @@
             <p class="live-only" hidden><span class="ev ev-peer">Peer research</span> seen at a comparable business</p>
             <p><span class="ev ev-hyp">Hypothesis</span> our best guess, still to validate</p>
           </div>
+          <a class="arc-sample" id="show-sample" href="#examples">See a sample brief <span aria-hidden="true">&darr;</span></a>
         </aside>
       </div>
 
-      <!-- Brief -->
+      <!-- Your brief (live scan results render here; the sample lives in Examples below) -->
       <div id="brief" class="brief" role="region" hidden tabindex="-1" aria-labelledby="brief-title">
         <div class="brief-head">
           <div>
@@ -367,22 +367,45 @@
       <div id="examples" class="examples" aria-labelledby="ex-title">
       <header class="sec-head on-green ex-head">
         <div>
-          <p class="eyebrow">Example builds &middot; what a brief can lead to</p>
-          <h3 id="ex-title" class="ex-title">Start with tools that already exist. Build the missing piece.</h3>
+          <p class="eyebrow">Examples &middot; what a scan can produce</p>
+          <h3 id="ex-title" class="ex-title">A sample brief, and the builds it can lead to.</h3>
         </div>
-        <p>Most small businesses don&rsquo;t need new software. They need the tools they already have connected, and one custom layer that does the thinking. Here&rsquo;s how that looks for three kinds of owners.</p>
+        <p>Start with the brief a scan produces, then see three example builds. Most small businesses don&rsquo;t need new software. They need the tools they already have connected, and one custom layer that does the thinking.</p>
       </header>
 
-      <p class="ex-note" role="note"><span class="sample-tag">Example scenarios</span> Fictional businesses. The tools named are real; features and plans change, so we confirm fit during discovery.</p>
+      <p class="ex-note" role="note"><span class="sample-tag">All fictional</span> Every business here is invented. The tools named are real; features and plans change, so we confirm fit during discovery.</p>
 
-      <div class="ex-tabs" role="tablist" aria-label="Example scenarios">
-        <button type="button" role="tab" id="tab-store" aria-controls="panel-store" aria-selected="true">Artist with a storefront</button>
-        <button type="button" role="tab" id="tab-handy" aria-controls="panel-handy" aria-selected="false" tabindex="-1">Handyperson</button>
-        <button type="button" role="tab" id="tab-gig" aria-controls="panel-gig" aria-selected="false" tabindex="-1">Billable gig worker</button>
+      <div class="ex-tabs" role="tablist" aria-label="Sample brief and example scenarios">
+        <button type="button" role="tab" class="tab-brief" id="tab-sample" aria-controls="panel-sample" aria-selected="true"><span class="tk">Sample brief</span><span class="tn">Juniper &amp; Clay</span></button>
+        <span class="ex-tabs-div" aria-hidden="true"></span>
+        <button type="button" role="tab" id="tab-store" aria-controls="panel-store" aria-selected="false" tabindex="-1"><span class="tk">Scenario 1</span><span class="tn">Artist with a storefront</span></button>
+        <button type="button" role="tab" id="tab-handy" aria-controls="panel-handy" aria-selected="false" tabindex="-1"><span class="tk">Scenario 2</span><span class="tn">Handyperson</span></button>
+        <button type="button" role="tab" id="tab-gig" aria-controls="panel-gig" aria-selected="false" tabindex="-1"><span class="tk">Scenario 3</span><span class="tn">Billable gig worker</span></button>
+      </div>
+
+      <!-- SAMPLE BRIEF (read-only, condensed; cards rendered by lab.js from SAMPLE_BRIEF) -->
+      <div class="ex-panel sb" role="tabpanel" id="panel-sample" aria-labelledby="tab-sample" tabindex="0">
+        <div class="sb-head">
+          <div>
+            <p class="sample-tag">Sample brief &middot; fictional business</p>
+            <h3>Opportunity brief: Juniper &amp; Clay</h3>
+            <p class="sb-intro">A fictional two-person ceramics studio with classes, private parties, and a small online shop. It shows the shape of a brief; it doesn&rsquo;t analyze your answers.</p>
+          </div>
+          <dl class="sb-inputs">
+            <div><dt>Website</dt><dd>juniperandclay.example</dd></div>
+            <div><dt>More room for</dt><dd>Creative work</dd></div>
+            <div class="wide"><dt>Keeps slipping</dt><dd>&ldquo;Answering the same class questions, chasing party deposits, remembering to restock the shop.&rdquo;</dd></div>
+          </dl>
+        </div>
+        <h4 class="brief-sub">Where we&rsquo;d start &middot; the strongest three</h4>
+        <div class="sb-top" id="sb-top"></div>
+        <h4 class="brief-sub">More possibilities &middot; by where they live</h4>
+        <div class="sb-rest" id="sb-rest"></div>
+        <p class="sb-close">Seven opportunities, not ten. A real brief only lists what is worth your time. <a href="#scan-form">Run your own scan <span aria-hidden="true">&uarr;</span></a></p>
       </div>
 
       <!-- STOREFRONT -->
-      <div class="ex-panel" role="tabpanel" id="panel-store" aria-labelledby="tab-store" tabindex="0">
+      <div class="ex-panel" role="tabpanel" id="panel-store" aria-labelledby="tab-store" tabindex="0" hidden>
         <div class="ex-intro">
           <h3>Mara sells ceramics on her own Shopify store and on Etsy.</h3>
           <p>Orders arrive in two places, one-of-a-kind pieces can sell twice, commissions live in her texts, and every month her bookkeeper asks for the same reports.</p>
