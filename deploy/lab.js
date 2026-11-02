@@ -447,3 +447,42 @@ var SAMPLE_BRIEF = {
   }, { rootMargin: "-45% 0px -50% 0px" });
   Object.keys(links).forEach(function (id) { var s = document.getElementById(id); if (s) io.observe(s); });
 })();
+
+/* ---------- Selected work: case-study tabs + collapsible detail ---------- */
+(function () {
+  var sec = document.getElementById("work");
+  if (!sec) return;
+  var list = sec.querySelector(".work-tabs");
+  var tabs = list ? Array.prototype.slice.call(list.querySelectorAll("[role=tab]")) : [];
+  if (tabs.length) {
+    list.hidden = false;
+    document.documentElement.classList.add("js-work");
+    function select(t, focus) {
+      tabs.forEach(function (x) {
+        var on = x === t, p = document.getElementById(x.getAttribute("aria-controls"));
+        x.setAttribute("aria-selected", on ? "true" : "false");
+        x.tabIndex = on ? 0 : -1;
+        if (p) p.hidden = !on;
+      });
+      if (focus) t.focus();
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener("click", function () { select(t); });
+      t.addEventListener("keydown", function (e) {
+        var n = null, k = e.key;
+        if (k === "ArrowRight") n = tabs[(i + 1) % tabs.length];
+        else if (k === "ArrowLeft") n = tabs[(i - 1 + tabs.length) % tabs.length];
+        else if (k === "Home") n = tabs[0];
+        else if (k === "End") n = tabs[tabs.length - 1];
+        if (n) { e.preventDefault(); select(n, true); }
+      });
+    });
+    select(tabs[0]);
+  }
+  // detail is open on wide screens, collapsed on small ones
+  var mq = window.matchMedia("(min-width: 861px)");
+  var more = Array.prototype.slice.call(sec.querySelectorAll("details[data-desktop-open]"));
+  function sync() { more.forEach(function (d) { d.open = mq.matches; }); }
+  sync();
+  if (mq.addEventListener) mq.addEventListener("change", sync); else if (mq.addListener) mq.addListener(sync);
+})();

@@ -479,3 +479,88 @@
   .echo-bottom{width:760px;height:760px}
   .echo-top{width:900px;height:900px;transform:translate(-50%,-58%)}
 }
+
+/* ============ Selected work v2: tabbed, condensed case studies ============
+   Tabs show one case at a time (all cases stack if JS is off). Desktop: media
+   collage left, story right, "How it works" as a band underneath. Small
+   screens: "What we built" and "How it works" collapse. */
+.work-tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:16px}
+.work-tabs[hidden]{display:none}
+.work-tabs button{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:baseline;text-align:left;padding:15px 20px 14px;border:1px solid var(--rule);border-radius:10px;background:transparent;cursor:pointer;font:inherit;color:var(--ink2);transition:border-color 200ms ease,background 200ms ease,box-shadow 200ms ease}
+.work-tabs button:hover{border-color:rgba(201,161,90,0.6)}
+.work-tabs button[aria-selected="true"]{background:#FFFDF7;border-color:rgba(201,161,90,0.85);box-shadow:0 8px 22px -14px rgba(35,48,42,0.35);color:var(--ink)}
+.work-tabs button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.wt-num{grid-row:span 2;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:0.16em;color:var(--brass-ink)}
+.wt-name{font-family:'Bitter',serif;font-size:19px;line-height:1.25}
+.wt-kind{font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink2);opacity:0.8;margin-top:3px}
+.case[hidden]{display:none}
+
+#work .case{display:grid;grid-template-columns:minmax(0,0.95fr) minmax(0,1.05fr);grid-template-areas:"media body" "how how";margin-bottom:0}
+#work .case + .case{margin-top:20px}
+.js-work #work .case + .case{margin-top:0}
+#work .case-media{grid-area:media;display:block;position:relative;padding:28px 26px 22px;border-bottom:none;border-right:1px solid var(--rule)}
+#work .case-media figure{padding:0}
+#work .case-media .m-cap{margin-top:14px;font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink2)}
+#work .media-lunisa .m-over{position:relative;width:80%;margin:-12% 0 0 auto;z-index:1}
+#work .media-lunisa .m-over img{box-shadow:0 14px 30px -10px rgba(35,48,42,0.35)}
+#work .media-fd{padding-bottom:22px}
+#work .media-fd .fd-app{position:absolute;right:14px;top:46%;padding:0;z-index:1}
+#work .fd-app .phones{gap:10px;padding:0}
+#work .phone{flex:0 0 104px;padding:4px;border-radius:18px;box-shadow:0 0 0 1px rgba(255,255,255,0.05) inset,0 14px 28px rgba(35,48,42,0.28)}
+#work .phone::before{top:7px;width:26px;height:7px;border-radius:5px}
+#work .phone::after{right:-2px;top:52px;width:2px;height:22px}
+#work .case-media .phone img{border-radius:14px}
+#work .case-body{grid-area:body;padding:30px 34px 22px;gap:12px}
+#work .case-body h4,#work .case-how h4{font-family:'DM Mono',monospace;font-weight:400;font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--brass-ink);margin:0}
+.case-block{padding-top:14px;border-top:1px solid var(--rule)}
+.case-block h4{margin-bottom:8px !important}
+.case-block p,.case-how p{font-size:14px;line-height:1.7;color:var(--ink2);text-wrap:pretty}
+.case-more summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.case-more summary::-webkit-details-marker{display:none}
+.case-more[open] summary{margin-bottom:10px}
+#work .case-body .case-more{padding-top:14px;border-top:1px solid var(--rule)}
+#work .ticks li{font-size:13.5px}
+.case-how{grid-area:how;border-top:1px solid var(--rule);padding:20px 34px 22px;background:linear-gradient(180deg,rgba(210,170,90,0.06),rgba(210,170,90,0))}
+.case-how .case-more p{max-width:900px}
+.case-how .case-foot{margin-top:16px;padding-top:14px}
+@media (min-width:861px){
+  .case-more summary{pointer-events:none}
+}
+@media (max-width:860px){
+  #work .case{grid-template-columns:1fr;grid-template-areas:"media" "body" "how"}
+  #work .case-media{border-right:none;border-bottom:1px solid var(--rule);padding:18px 16px 14px}
+  #work .media-lunisa .m-over{width:72%;margin-top:-16%}
+  #work .media-fd .fd-app{right:10px;top:30%}
+  #work .phone{flex-basis:70px;padding:3px;border-radius:13px}
+  #work .phone::before{top:5px;width:18px;height:5px}
+  #work .phone::after{display:none}
+  #work .case-media .phone img{border-radius:10px}
+  #work .fd-app .phones{gap:7px}
+  #work .case-body{padding:22px 20px 12px !important}
+  .case-how{padding:4px 20px 18px;background:none;border-top:none}
+  .case-more{border-top:1px solid var(--rule)}
+  #work .case-body .case-more{padding-top:0}
+  .case-more summary{cursor:pointer;padding:13px 0}
+  .case-more[open] summary{margin-bottom:2px}
+  .case-more summary::after{content:"+";font-family:'DM Sans',sans-serif;font-size:18px;line-height:1;color:var(--brass-ink)}
+  .case-more[open] summary::after{content:"\2212"}
+  .case-more>:not(summary){padding-bottom:14px}
+  .work-tabs button{padding:12px 14px 11px}
+  .wt-name{font-size:17px}
+}
+@media (max-width:520px){
+  .work-tabs{grid-template-columns:1fr 1fr;gap:8px}
+  .wt-kind{display:none}
+  .wt-num{grid-row:auto}
+}
+/* Selected work v2: fine-tuning */
+#work .media-lunisa{display:flex;flex-direction:column;justify-content:center}
+#work .media-fd .m-cap{max-width:52%;line-height:1.9}
+#work .ticks li{text-wrap:pretty}
+@media (max-width:860px){
+  #work .case-body{padding-bottom:0 !important}
+  .case-how{padding-top:0}
+  .case-how .case-foot{margin-top:0;padding-top:16px}
+  #work .media-fd .m-cap{max-width:none}
+  #work .phone{flex-basis:64px}
+}

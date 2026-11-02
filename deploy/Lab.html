@@ -130,10 +130,16 @@
         <p>Two small businesses, two very different shapes. In both, the work started with how the founder actually runs the business.</p>
       </header>
 
-      <article class="case" aria-labelledby="case1-title">
+      <div class="work-tabs" role="tablist" aria-label="Case studies" hidden>
+        <button type="button" role="tab" id="tab-lunisa" aria-controls="case-lunisa" aria-selected="true"><span class="wt-num">01</span><span class="wt-name">Lunisa Arts</span><span class="wt-kind">Operations + digital build</span></button>
+        <button type="button" role="tab" id="tab-fd" aria-controls="case-fd" aria-selected="false" tabindex="-1"><span class="wt-num">02</span><span class="wt-name">French Detours</span><span class="wt-kind">Product + app prototype</span></button>
+      </div>
+
+      <article class="case" id="case-lunisa" role="tabpanel" aria-labelledby="case1-title">
         <div class="case-media media-lunisa">
-          <figure><img src="assets/work/lunisa-art-lab-philosophy.jpg" width="1400" height="570" loading="lazy" alt="Lunisa Arts Summer Art Labs page, Art Lab Philosophy section, with the founder at work"><figcaption>Summer Art Labs page</figcaption></figure>
-          <figure><img src="assets/work/lunisa-mission-footer.jpg" width="1400" height="589" loading="lazy" alt="Lunisa Arts mission statement over a photo of crayons in a child's hands, above the site footer and newsletter sign-up"><figcaption>Mission and footer</figcaption></figure>
+          <figure class="m-main"><img src="assets/work/lunisa-art-lab-philosophy.jpg" width="1400" height="570" loading="lazy" alt="Lunisa Arts Summer Art Labs page, Art Lab Philosophy section, with the founder at work"></figure>
+          <figure class="m-over"><img src="assets/work/lunisa-mission-footer.jpg" width="1400" height="589" loading="lazy" alt="Lunisa Arts mission statement over a photo of crayons in a child's hands, above the site footer and newsletter sign-up"></figure>
+          <p class="m-cap">Summer Art Labs page &middot; mission and footer</p>
         </div>
         <div class="case-body">
           <div class="case-meta">
@@ -142,45 +148,42 @@
           </div>
           <h3 id="case1-title">Lunisa Arts Summer Art Camp</h3>
           <p class="case-sub">A founder-led summer art camp in Minneapolis, given its operating structure and digital home from the ground up.</p>
-          <div class="case-cols">
-            <div>
-              <h4>The challenge</h4>
-              <p>A new camp with a clear creative vision needed the business underneath it: defined offerings and prices, a rhythm of events beyond summer, and one place for families to learn and register.</p>
-            </div>
-            <div>
-              <h4>What we built</h4>
-              <ul class="ticks">
-                <li>Offering structure and pricing for small-group lessons, birthday parties, and private parties</li>
-                <li>A recurring events framework, from First Friday Date Night to seasonal holiday workshops <span class="note">(designed; rollout planned)</span></li>
-                <li>Website structure, content, and registration flow on Squarespace</li>
-                <li>A shareable digital flyer page that replaced printed postcards</li>
-              </ul>
-            </div>
-            <div>
-              <h4>How it works</h4>
-              <p>Families find the weekly Summer Art Labs sessions and other offerings in one place and register online. The flyer page travels by link, so outreach no longer depends on a print run.</p>
-            </div>
+          <div class="case-block">
+            <h4>The challenge</h4>
+            <p>A new camp with a clear creative vision needed the business foundation: defined offerings and prices, a rhythm of events beyond summer, promotion strategies, and one place for families to learn and register.</p>
           </div>
+          <details class="case-more" data-desktop-open>
+            <summary><h4>What we built</h4></summary>
+            <ul class="ticks">
+              <li>Offering structure and pricing for camp, small-group lessons, birthday parties, and private parties</li>
+              <li>A recurring events framework, from First Friday Date Night to seasonal holiday workshops <span class="note">(designed; rollout planned)</span></li>
+              <li>A digital front door on Squarespace: site structure and content, plus the enrollment process behind it, from first visit to registered family</li>
+              <li>A social media presence, with earned and paid campaigns for digital and print promotion</li>
+            </ul>
+          </details>
+        </div>
+        <div class="case-how">
+          <details class="case-more" data-desktop-open>
+            <summary><h4>How it works</h4></summary>
+            <p>Families find the weekly Summer Art Labs sessions and every other offering in one place, and registration has moved out of a manual inbox and online. The structure underneath keeps things consistent, builds loyalty, and leaves room to focus on evangelizing the joy of&nbsp;art.</p>
+          </details>
           <div class="case-foot">
-            <div class="chips"><span>Operations design</span><span>Pricing</span><span>Squarespace</span><span>Content</span></div>
+            <div class="chips"><span>Operations design</span><span>Pricing</span><span>Digital presence</span><span>Content</span></div>
             <a class="textlink" href="https://lunisaarts.com" target="_blank" rel="noopener">Visit lunisaarts.com <span aria-hidden="true">&rarr;</span><span class="sr-only"> (opens in a new tab)</span></a>
           </div>
         </div>
       </article>
 
-      <article class="case" aria-labelledby="case2-title">
+      <article class="case" id="case-fd" role="tabpanel" aria-labelledby="case2-title">
         <div class="case-media media-fd">
-          <div class="fd-site">
-            <figure class="f-after"><img src="assets/work/french-detours-new-site.jpg" width="1400" height="818" loading="lazy" alt="New French Detours site concept: France inspires a different way of moving through the world, small-group and private journeys"><figcaption>New site concept</figcaption></figure>
-
-          </div>
+          <figure class="m-main"><img src="assets/work/french-detours-new-site.jpg" width="1400" height="818" loading="lazy" alt="New French Detours site concept: France inspires a different way of moving through the world, small-group and private journeys"></figure>
           <figure class="fd-app">
             <div class="phones">
               <div class="phone"><img src="assets/work/french-detours-app.jpg" width="540" height="1060" loading="lazy" alt="Companion app home screen: Bonjour, Claire, your journey to Nice begins in 12 days, with a getting-ready checklist and destination ideas"></div>
               <div class="phone"><img src="assets/work/french-detours-app-today.jpg" width="540" height="1060" loading="lazy" alt="Companion app Today screen: the day's theme, weather, an hour-by-hour plan, and a French phrase card with pronunciation and a play button"></div>
             </div>
-            <figcaption><span class="tag-proto">Prototype</span> Companion app: home, and the day at a glance with pronunciation</figcaption>
           </figure>
+          <p class="m-cap">New site concept &middot; <span class="tag-proto">Prototype</span> companion app</p>
         </div>
         <div class="case-body">
           <div class="case-meta">
@@ -188,26 +191,26 @@
             <span class="status-row"><span class="status status-proto">New site: concept delivered</span><span class="status status-proto">App: prototype</span></span>
           </div>
           <h3 id="case2-title">French Detours</h3>
-          <p class="case-sub">An independent France travel planner, shaped into a clear product, a new website concept, and a companion app prototype.</p>
-          <div class="case-cols">
-            <div>
-              <h4>The challenge</h4>
-              <p>Custom planning, small-group tours, and self-guided itineraries are very different things to buy. The business needed them presented as one clear product, and a way to manage every inquiry and client in one place.</p>
-            </div>
-            <div>
-              <h4>What we built</h4>
-              <ul class="ticks">
-                <li>Positioning and product structure around small-group and private journeys</li>
-                <li>A new website concept with a built-in CRM for inquiries and clients</li>
-                <li>Audio pronunciation for French words and phrases, on the site and in the app</li>
-                <li>A companion app concept for travelers <span class="note">(prototype)</span></li>
-              </ul>
-            </div>
-            <div>
-              <h4>How it works</h4>
-              <p>The new site leads with the journeys and invites travelers to begin a conversation, with inquiries designed to flow into the built-in CRM. The app concept follows a traveler from countdown to trip day. Both are delivered concepts, not yet live at frenchdetours.com.</p>
-            </div>
+          <p class="case-sub">An independent custom travel planner to France, shaped into a clear product definition, a new website concept, and a companion app prototype.</p>
+          <div class="case-block">
+            <h4>The challenge</h4>
+            <p>Custom planning, small-group tours, and self-guided itineraries are very different things to buy. The business needed them presented as one clear product, and a way to manage every inquiry and client in one place.</p>
           </div>
+          <details class="case-more" data-desktop-open>
+            <summary><h4>What we built</h4></summary>
+            <ul class="ticks">
+              <li>Positioning and product structure around small-group and private journeys</li>
+              <li>A new website concept with a built-in CRM for inquiries and clients</li>
+              <li>Built-in audio pronunciation for French words and phrases, on the site and in the app</li>
+              <li>A companion app concept for travelers <span class="note">(prototype)</span></li>
+            </ul>
+          </details>
+        </div>
+        <div class="case-how">
+          <details class="case-more" data-desktop-open>
+            <summary><h4>How it works</h4></summary>
+            <p>The new site leads with the journeys and connects travelers to what moves them, through the artisan stories and &ldquo;keepers of place&rdquo; who make these trips distinct. Inquiries flow into the built-in CRM instead of getting trapped in the inbox. The app concept follows a traveler from countdown through every trip day. Both are delivered concepts, not yet live at frenchdetours.com.</p>
+          </details>
           <div class="case-foot">
             <div class="chips"><span>Positioning</span><span>Product design</span><span>Website + CRM</span><span>App prototype</span></div>
             <a class="textlink" href="https://frenchdetours-web.ryan-corcoran.com" target="_blank" rel="noopener">See the new site concept <span aria-hidden="true">&rarr;</span><span class="sr-only"> (opens in a new tab)</span></a>
