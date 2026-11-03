@@ -144,13 +144,16 @@
 }
 @media (max-width:720px){
   .home-hero{min-height:0}
-  .hh-inner{padding:72px 22px 260px}
+  .hh-inner{padding:150px 22px 72px}
   .hh-title{font-size:44px}
-  .home-hero::after{background:linear-gradient(180deg,#FBF6EE 0%,rgba(251,246,238,0.9) 55%,rgba(251,246,238,0) 78%)}
-  .hh-terrain{top:auto;bottom:130px;left:50%;width:1800px;height:1125px;opacity:0.75;transform-origin:52.08% 35.33%;transform:translate(-52.08%,64.67%) rotate(-4deg);
-    -webkit-mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 8%, rgba(0,0,0,0) 40%);
-            mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 8%, rgba(0,0,0,0) 40%)}
-  .hh-emblem{top:auto;bottom:130px;left:50%;width:72px;transform:translate(calc(-50% - 7px),calc(42% + 3px))}
+  /* mobile: the pomegranate sits in the open top-right corner and the contours
+     radiate out from it, fading before they reach the copy */
+  .home-hero::after{background:linear-gradient(200deg,rgba(251,246,238,0) 0%,rgba(251,246,238,0) 22%,rgba(251,246,238,0.75) 42%,#FBF6EE 62%)}
+  .hh-terrain{top:96px;left:auto;right:4px;width:1500px;height:938px;opacity:0.8;
+    transform-origin:52.08% 35.33%;transform:translate(47.92%,-35.33%) rotate(-4deg);
+    -webkit-mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 6%, rgba(0,0,0,0.6) 22%, rgba(0,0,0,0) 46%);
+            mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 6%, rgba(0,0,0,0.6) 22%, rgba(0,0,0,0) 46%)}
+  .hh-emblem{top:96px;left:auto;right:56px;width:58px;transform:translate(50%,-58%)}
   .hh-lab-bl{display:none}
   .hh-lab-tr{width:700px;height:700px;opacity:0.4}
 }
