@@ -1,0 +1,66 @@
+/* About page (Nov 2026 refresh): home-style hero, shorter portraits, focus tags,
+   and a light living-systems band so only the contact section is dark. */
+.ab-hero{position:relative;overflow:hidden;isolation:isolate;background:#FBF6EE;padding:104px 40px 72px;border-bottom:1px solid rgba(58,42,34,0.1)}
+.ab-wash{position:absolute;inset:0;z-index:-3;background:
+  radial-gradient(60% 90% at 104% 0%, rgba(185,195,174,0.38) 0%, rgba(185,195,174,0) 60%),
+  radial-gradient(60% 80% at 20% 130%, rgba(222,140,97,0.22) 0%, rgba(222,140,97,0) 70%),
+  linear-gradient(150deg,#FCF8F1 0%,#F8F0E4 55%,#F4EEE3 100%)}
+.ab-terrain{position:absolute;z-index:-2;top:46%;left:76%;width:2200px;height:1375px;opacity:0.5;
+  transform-origin:52.08% 35.33%;transform:translate(-52.08%,-35.33%) rotate(-4deg);
+  background:url(assets/home-terrain.svg) center/100% 100% no-repeat;
+  -webkit-mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 7%, #000 26%, rgba(0,0,0,0) 52%);
+          mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 7%, #000 26%, rgba(0,0,0,0) 52%)}
+.ab-hero::after{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;
+  background:linear-gradient(96deg,#FBF6EE 0%,rgba(251,246,238,0.92) 34%,rgba(251,246,238,0.3) 56%,rgba(251,246,238,0) 66%)}
+.ab-lab{position:absolute;z-index:-1;top:-170px;right:-170px;width:1000px;height:1000px;pointer-events:none;opacity:0.8;
+  background:url(assets/home-labyrinth.svg) center/100% 100% no-repeat;
+  -webkit-mask-image:radial-gradient(circle at 83% 17%, #000 0, rgba(0,0,0,0.55) 170px, rgba(0,0,0,0) 380px);
+          mask-image:radial-gradient(circle at 83% 17%, #000 0, rgba(0,0,0,0.55) 170px, rgba(0,0,0,0) 380px)}
+.ab-emblem{position:absolute;z-index:0;top:46%;left:76%;width:78px;transform:translate(calc(-50% - 8px),calc(-58% + 6px))}
+.ab-emblem img{display:block;width:100%;height:auto;opacity:0.9;
+  filter:drop-shadow(0 1.2px 0 rgba(255,255,255,0.95)) drop-shadow(-0.6px -1.6px 0.8px rgba(110,28,34,0.34)) drop-shadow(0 -3px 6px rgba(110,28,34,0.10)) drop-shadow(0 0 10px rgba(110,28,34,0.05))}
+.ab-hero-inner{position:relative;z-index:1;max-width:1180px;margin:0 auto}
+.ab-eyebrow{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase;color:#C0603A;margin-bottom:22px}
+.ab-title{font-family:'Bitter',serif;font-weight:400;font-size:54px;line-height:1.14;letter-spacing:-0.02em;color:#9B2C2C;max-width:620px;text-wrap:balance;margin-bottom:26px}
+.ab-rule{width:56px;height:1px;background:#C97B5A;margin-bottom:26px}
+.ab-lede{font-family:'Bitter',serif;font-weight:400;font-size:20px;line-height:1.55;color:#3A2A22;max-width:540px;text-wrap:pretty}
+
+/* portraits: wider than tall so names and bios arrive sooner */
+.ab-portrait{aspect-ratio:4/3}
+
+/* focus tags (replace the archived Kernel Cycle tags) */
+.ab-tag-label{font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;color:#a89684}
+.ab-tags{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap}
+.ab-tag{display:flex;align-items:center;gap:7px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#7a6355}
+.ab-tag>span{width:5px;height:5px;border-radius:50%;flex:none}
+
+/* living systems band, now light */
+.ab-living{position:relative;overflow:hidden;isolation:isolate;background:#F2E9DC;padding:104px 40px;border-top:1px solid rgba(58,42,34,0.08)}
+.ab-living-terrain{position:absolute;z-index:-1;top:50%;left:50%;width:2400px;height:1500px;opacity:0.32;
+  transform-origin:52.08% 35.33%;transform:translate(-52.08%,-35.33%) rotate(-4deg);
+  background:url(assets/home-terrain.svg) center/100% 100% no-repeat;
+  -webkit-mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0) 22%, rgba(0,0,0,0.6) 31%, #000 40%, rgba(0,0,0,0) 60%);
+          mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0) 22%, rgba(0,0,0,0.6) 31%, #000 40%, rgba(0,0,0,0) 60%)}
+.ab-living>div:not(.ab-living-terrain){max-width:860px;margin:0 auto;text-align:center;position:relative}
+.ab-living-quote{font-family:'Bitter',serif;font-style:italic;font-weight:300;font-size:33px;line-height:1.45;text-wrap:balance;color:#9B2C2C;max-width:760px;margin:0 auto}
+.ab-living-rule{width:44px;height:1px;background:#C97B5A;margin:26px auto}
+.ab-living-body{font-size:17px;line-height:1.85;text-wrap:pretty;color:#5b453a;max-width:600px;margin:0 auto}
+.ab-living-tags{margin-top:28px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#C0603A}
+
+@media (max-width:1020px){
+  .ab-terrain,.ab-emblem{left:84%}
+}
+@media (max-width:720px){
+  .ab-hero{padding:150px 22px 56px}
+  .ab-title{font-size:clamp(30px,9vw,36px) !important}
+  .ab-lede{font-size:18px}
+  .ab-hero::after{background:linear-gradient(200deg,rgba(251,246,238,0) 0%,rgba(251,246,238,0) 22%,rgba(251,246,238,0.75) 42%,#FBF6EE 62%)}
+  .ab-terrain{top:96px;left:auto;right:4px;width:1500px;height:938px;opacity:0.8;transform:translate(47.92%,-35.33%) rotate(-4deg);
+    -webkit-mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 6%, rgba(0,0,0,0.6) 22%, rgba(0,0,0,0) 46%);
+            mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 6%, rgba(0,0,0,0.6) 22%, rgba(0,0,0,0) 46%)}
+  .ab-emblem{top:96px;left:auto;right:56px;width:58px;transform:translate(50%,-58%)}
+  .ab-lab{width:700px;height:700px;opacity:0.4}
+  #about{padding:48px 22px 72px !important}
+  .ab-living{padding:72px 22px}
+  .ab-living-quote{font-size:26px}
+}
