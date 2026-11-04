@@ -12,8 +12,8 @@ MAX_SCANS_PER_IP_PER_DAY = "3"
 MAX_SCANS_PER_DAY = "25"
 ALLOWED_ORIGIN = "https://kernel-collective.com,https://www.kernel-collective.com,https://kernel.ryan-corcoran.com"   # comma-separated
 # Kernel HQ (/hq). Fill these in after setting up Cloudflare Access; HQ stays locked until then.
-ACCESS_TEAM_DOMAIN = ""        # e.g. "kernel.cloudflareaccess.com"
-ACCESS_AUD = ""                # the Access application's Audience (AUD) tag
+ACCESS_TEAM_DOMAIN = "tight-bush-d14b.cloudflareaccess.com"        # e.g. "kernel.cloudflareaccess.com"
+ACCESS_AUD = "86359b47058203d3c878300238294d53eed6fd8b30d4bdd5d887e9c3b2aa7d0a"                # the Access application's Audience (AUD) tag
 HQ_EMAILS = "hello@kernel-collective.com,ryan@kernel-collective.com,rcorcoran03@gmail.com"   # who may use HQ, comma-separated
 SITE_URL = "https://kernel-collective.com"   # used for links in emails
 NOTIFY_EMAIL = "hello@kernel-collective.com"
