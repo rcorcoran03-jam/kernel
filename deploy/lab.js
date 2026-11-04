@@ -576,6 +576,7 @@ var SAMPLE_BRIEF = {
     if (room) out.push("More room for: " + (room.value === "Other" ? (f.room_other.value.trim() || "Something else") : room.value));
     if (f.stuck.value.trim()) out.push("Keeps slipping: " + f.stuck.value.trim());
     if (f.admire.value.trim()) out.push("Admires: " + f.admire.value.trim());
+    if (f.operations.value.trim()) out.push("How it runs: " + f.operations.value.trim());
     if (f.tools.value.trim()) out.push("Tools: " + f.tools.value.trim());
     if (f.team.value.trim()) out.push("Who does the work: " + f.team.value.trim());
     return out;
@@ -588,7 +589,7 @@ var SAMPLE_BRIEF = {
     var payload = {
       website: noSite.checked ? "" : f.website.value.trim(), describe: f.describe.value.trim(),
       room: (form.querySelector("input[name=room]:checked") || {}).value || "", room_other: f.room_other.value.trim(),
-      stuck: f.stuck.value.trim(), admire: f.admire.value.trim(), tools: f.tools.value.trim(), team: f.team.value.trim(),
+      stuck: f.stuck.value.trim(), admire: f.admire.value.trim(), operations: f.operations.value.trim(), tools: f.tools.value.trim(), team: f.team.value.trim(),
       location: f.location.value.trim(), allowDiscovery: f.allowDiscovery.checked,
       name: f.name.value.trim(), email: f.email.value.trim(), consent: f.consent.checked,
       turnstileToken: (form.querySelector("[name=cf-turnstile-response]") || {}).value || ""
