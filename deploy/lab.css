@@ -772,3 +772,12 @@
 .sp-steps li.is-now::before{border-color:var(--brass);background:var(--brass);box-shadow:0 0 0 3px rgba(210,170,90,0.25)}
 .sp-steps li.is-done::before{border-color:var(--g2);background:var(--g2)}
 @media (prefers-reduced-motion:reduce){.sp-spin{animation:none;border-top-color:rgba(62,80,69,0.2)}}
+
+/* live brief wrapper (v2 renderer) */
+.brief-live{margin-top:28px}
+.brief-live:focus{outline:none}
+.brief-live .brief-tools{border:none;padding:0 0 12px;margin:0}
+.brief-live .brief-tools #sel-count{color:var(--sage)}
+.brief-live .btn-sm-quiet{color:#EFEADB;border-color:rgba(210,170,90,0.45)}
+#panel-sample .kb{border:1px solid rgba(210,170,90,0.3)}
+@media print{.brief-live{display:block !important}}

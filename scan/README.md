@@ -121,3 +121,15 @@ When you trust the output, set `HUMAN_REVIEW = "false"`. Briefs then appear on t
 - A private page for reviewing and editing stored briefs. For now, review happens by email.
 - Background processing. A scan runs while the visitor waits, usually one to two minutes, so the page asks them to keep it open.
 - Saving a brief to a shareable link.
+
+## Version 2 (November 2026)
+
+**One stage per request.** `POST /api/scan` checks the form, Turnstile and limits, then creates a job in KV and returns `{ id, key }`. The page calls `POST /api/scan-step` once per stage (site, peers, synthesis, review), so no single request runs long, and the progress panel shows the real stage. A failed stage can be retried; after three failures the job stops.
+
+**Richer brief.** Each opportunity now has value and complexity on a 1 to 3 scale, example tools tagged have / add / build / write, what it needs first, and obstacles. The brief adds inspiration from peers (themes, plus a compact profile of each: moat, offers, programs, strategy, sales tools, tech stack, each marked seen or inferred), foundations to put in place, and pitfalls. `validate.js` enforces the shape: "have" tools must match the founder's tools or the site's visible tools, and profiles must match researched peers.
+
+**Approve and send.** With human review on, Kernel gets a branded HTML email with a **Review and send** button. That opens `/api/brief-approve`, a confirmation page (a plain link click never sends anything, so email link scanners are safe). Sending emails the founder a private link to `brief.html`, which loads the brief from `/api/brief`. Kernel's preview link works before sending; the founder's link works only after.
+
+**One shared renderer.** `deploy/brief-render.js` + `deploy/brief.css` draw the Lab sample, a live brief, and the private brief page in one compact, branded layout.
+
+KV writes per scan: about 12, well inside the free plan's daily limit at 25 scans a day.

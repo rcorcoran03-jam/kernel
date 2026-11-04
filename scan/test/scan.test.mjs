@@ -6,9 +6,13 @@ import { cleanInput, normalizeBrief } from "../lib/validate.js";
 import { runScan } from "../lib/pipeline.js";
 import { parseJson } from "../lib/claude.js";
 import { onRequestPost } from "../../functions/api/scan.js";
+import { onRequestPost as stepPost } from "../../functions/api/scan-step.js";
+import { onRequestGet as briefGet } from "../../functions/api/brief.js";
+import { onRequestGet as approveGet, onRequestPost as approvePost } from "../../functions/api/brief-approve.js";
+import { briefEmailHtml } from "../lib/notify.js";
 
 const SITE = {
-  business_name: "Test Studio", summary: "A pottery studio offering classes.",
+  business_name: "Test Studio", summary: "A pottery studio offering classes.", tools_seen: [{ name: "Squarespace", role: "site", url: "https://teststudio.com/" }],
   pages: [{ url: "https://teststudio.com/", title: "Home", loaded: true }],
   observations: [{ id: "s1", text: "Contact page lists email and Instagram.", url: "https://teststudio.com/contact" }],
   gaps: [], limits: [],
@@ -17,11 +21,15 @@ const PEERS = { peers: [{ name: "Peer Clay", url: "https://peerclay.com", origin
 const DRAFT = {
   business: "Test Studio", summary: "Inquiries are scattered.", notes: "",
   opportunities: [
-    { id: "intake", top: true, category: "Programs & Workflows", title: "One intake path for inquiries — email and DMs", why: "Inquiries get lost.", prompted: [["site", "Two contact routes."], ["told", "Questions get lost."]], build: "A single form.", experiment: "Two weeks, one form.", effort: ["Low", "Existing tools."], value: ["High", "Every customer."], sources: ["https://teststudio.com/contact", "https://made-up.example/x"], validate: ["Volume"] },
+    { id: "intake", top: true, category: "Programs & Workflows", title: "One intake path for inquiries — email and DMs", why: "Inquiries get lost.", prompted: [["site", "Two contact routes."], ["told", "Questions get lost."]], build: "A single form.", experiment: "Two weeks, one form.", complexity: [1, "Existing tools."], value: [3, "Every customer."], tools: [["Squarespace", "have"], ["Typeform", "have"], ["Intake form", "build"]], needs: ["One official channel"], obstacles: ["Old links keep working"], sources: ["https://teststudio.com/contact", "https://made-up.example/x"], validate: ["Volume"] },
     { id: "quiz", top: true, category: "Products & Offerings", title: "A class finder", why: "Fewer repeat questions.", prompted: [["peer", "Peer has a quiz."]], build: "Short quiz.", experiment: "Table of top five questions.", effort: ["Low", "Writing."], value: ["Medium", "Fewer emails."], sources: ["https://peerclay.com/classes"], validate: ["Top questions"] },
     { id: "bad", category: "Nonsense", title: "Bad category", prompted: [["site", "x"]] },
     { id: "nothing", category: "Admin & Operations", title: "No evidence", prompted: [] },
   ],
+  foundations: [{ item: "A written deposit policy", for: "deposits" }],
+  pitfalls: ["Switching every channel at once."],
+  inspiration: { themes: [{ theme: "Help people choose", detail: "Both peers guide class choice.", peers: ["Peer Clay"], opportunity: "quiz" }],
+    profiles: [{ name: "Peer Clay", url: "https://peerclay.com", moat: "A class finder quiz.", offers: [["Classes", "seen"]], tech_stack: [{ text: "Shopify", basis: "maybe" }], borrow: "A quiz.", stand_apart: "Parties." }, { name: "Invented Co", moat: "x" }] },
 };
 
 function mockClaude(replies) {
@@ -126,7 +134,7 @@ test("API returns a ready brief when human review is off", async () => {
   } finally { globalThis.fetch = realFetch; }
 });
 
-test("API queues for human review and stores the brief", async () => {
+test("API with KV starts a job instead of running everything", async () => {
   const { fetchImpl } = mockClaude([{ json: SITE }, { json: PEERS }, { json: DRAFT }, { json: DRAFT }]);
   const store = new Map();
   const kv = { get: async (k) => store.get(k) || null, put: async (k, v) => store.set(k, v) };
@@ -135,8 +143,53 @@ test("API queues for human review and stores the brief", async () => {
     const request = new Request("https://kernel-collective.com/api/scan", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(validRaw) });
     const r = await onRequestPost({ request, env: { SCAN_ENABLED: "true", SCAN_KV: kv, ANTHROPIC_API_KEY: "k" } });
     const d = await r.json();
-    assert.equal(d.status, "queued");
-    assert.ok([...store.keys()].some((k) => k.startsWith("brief:")));
+    assert.equal(d.status, "started");
+    assert.ok([...store.keys()].some((k) => k.startsWith("job:")));
     assert.ok([...store.keys()].some((k) => k.endsWith(":all")), "daily counter recorded");
+  } finally { globalThis.fetch = realFetch; }
+});
+
+test("v2 brief: ratings, tools, inspiration, foundations", () => {
+  const { brief, problems } = normalizeBrief(DRAFT, [], { haveTools: ["Squarespace"], peerNames: ["Peer Clay"] });
+  const o = brief.opportunities[0];
+  assert.deepEqual(o.value[0], 3); assert.deepEqual(o.complexity[0], 1);
+  assert.deepEqual(o.tools.map((t) => t[1]), ["have", "add", "build"], "unknown have tool becomes add");
+  assert.equal(brief.opportunities[1].complexity[0], 1, "old effort words map to 1-3");
+  assert.equal(brief.inspiration.profiles.length, 1, "profiles not in the research are dropped");
+  assert.deepEqual(brief.inspiration.profiles[0].tech_stack, [["Shopify", "inferred"]]);
+  assert.equal(brief.inspiration.themes[0].opportunity, "quiz");
+  assert.equal(brief.foundations[0].item, "A written deposit policy");
+  assert.ok(problems.some((p) => p.includes("relabeled")));
+  assert.ok(briefEmailHtml({}, brief, { eyebrow: "x", heading: "y", intro: "z", ctaHref: "https://a", ctaLabel: "Go" }).includes("A good place to start"));
+});
+
+test("stepwise flow: start, one stage per step, review, approve, founder link", async () => {
+  const { fetchImpl } = mockClaude([{ json: SITE }, { json: PEERS }, { json: DRAFT }, { json: DRAFT }]);
+  const store = new Map(); const sent = [];
+  const kv = { get: async (k) => store.get(k) || null, put: async (k, v) => store.set(k, v) };
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url, init) => { if (String(url).includes("resend.com")) { sent.push(JSON.parse(init.body)); return new Response("{}", { status: 200 }); } return fetchImpl(url, init); };
+  const env = { SCAN_ENABLED: "true", SCAN_KV: kv, ANTHROPIC_API_KEY: "k", RESEND_API_KEY: "r", FROM_EMAIL: "Kernel <scan@x.com>", NOTIFY_EMAIL: "hello@x.com" };
+  const post = (url, body) => new Request(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+  try {
+    let d = await (await onRequestPost({ request: post("https://k.com/api/scan", validRaw), env })).json();
+    assert.equal(d.status, "started"); assert.deepEqual(d.stages, ["site", "peers", "synthesis", "review"]);
+    const { id, key } = d;
+    const bad = await stepPost({ request: post("https://k.com/api/scan-step", { id, key: "wrong" }), env });
+    assert.equal(bad.status, 404, "wrong key is refused");
+    const seenNext = [];
+    for (let i = 0; i < 4; i++) { d = await (await stepPost({ request: post("https://k.com/api/scan-step", { id, key }), env })).json(); seenNext.push(d.next || d.status); }
+    assert.deepEqual(seenNext, ["peers", "synthesis", "review", "queued"]);
+    assert.equal(sent.length, 1, "Kernel was emailed"); assert.ok(sent[0].html.includes("Review and send"));
+    const rec = JSON.parse(store.get("brief:" + id));
+    let r = await briefGet({ request: new Request(`https://k.com/api/brief?id=${id}&t=${rec.viewToken}`), env });
+    assert.equal(r.status, 404, "founder link waits for approval");
+    r = await approveGet({ request: new Request(`https://k.com/api/brief-approve?id=${id}&t=${rec.approveToken}`), env });
+    assert.ok((await r.text()).includes("Send to a@b.co"), "GET only shows a confirm page");
+    const fd = new FormData(); fd.append("id", id); fd.append("t", rec.approveToken);
+    r = await approvePost({ request: new Request("https://k.com/api/brief-approve", { method: "POST", body: fd }), env });
+    assert.equal(r.status, 200); assert.equal(sent.length, 2); assert.deepEqual(sent[1].to, ["a@b.co"]);
+    r = await briefGet({ request: new Request(`https://k.com/api/brief?id=${id}&t=${rec.viewToken}`), env });
+    const b = await r.json(); assert.equal(b.status, "ok"); assert.equal(b.brief.version, 2);
   } finally { globalThis.fetch = realFetch; }
 });

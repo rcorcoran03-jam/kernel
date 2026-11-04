@@ -13,7 +13,10 @@ Your job is to make the brief trustworthy. Check every opportunity and fix it:
 6. Top three. At most three items may be top. They should be the strongest-evidenced, most actionable ones.
 7. Sources. Every source must be a URL that appears in the evidence. Remove any that do not.
 8. Voice. Warm, plain, specific. No em dashes. No hype.
-9. Shape. Keep the exact JSON shape of the draft. Categories must be "Products & Offerings", "Programs & Workflows", or "Admin & Operations". Effort and value levels must be one of "Low", "Low to medium", "Medium", "Medium to high", "High".
+9. Tools. A "have" tool must appear in the founder's answers or the site's tools_seen; otherwise change it to "add" or remove it. Remove tools that are not real, widely known products, and any stated prices or unsupported feature claims.
+10. Inspiration. Every profile must match a researched peer. "seen" items must be visible in the peer evidence; anything else is "inferred". A moat must rest on something visible. Remove claims about a peer's results, revenue, or size.
+11. Foundations and pitfalls. Keep them short, specific to this brief, and free of invented numbers.
+12. Shape. Keep the exact JSON shape of the draft. Categories must be "Products & Offerings", "Programs & Workflows", or "Admin & Operations". Value and complexity are whole numbers from 1 to 3.
 
 In "notes", add one short sentence for each significant change you made, so a human reviewer can see what you changed.
 

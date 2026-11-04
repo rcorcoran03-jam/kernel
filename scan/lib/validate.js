@@ -57,10 +57,28 @@ export function founderAnswers(input) {
   };
 }
 
+const TOOL_KINDS = ["have", "add", "build", "write"];
+const BASIS = ["seen", "inferred"];
+const LEVEL_TO_N = { "Low": 1, "Low to medium": 1, "Medium": 2, "Medium to high": 3, "High": 3 };
+
+/** A 1 to 3 rating with a reason. Accepts the older word levels too. */
+function rating(pair) {
+  const raw = Array.isArray(pair) ? pair[0] : pair;
+  let n = typeof raw === "number" ? Math.round(raw) : (LEVEL_TO_N[raw] || parseInt(raw, 10));
+  if (!(n >= 1 && n <= 3)) n = 2;
+  return [n, noDash(clip(Array.isArray(pair) ? pair[1] : "", 240)) || "Reasoning not given."];
+}
+const strList = (v, n, len) => (Array.isArray(v) ? v : []).filter((x) => typeof x === "string" && x.trim()).map((x) => noDash(clip(x, len))).slice(0, n);
+const basisList = (v, n) => (Array.isArray(v) ? v : [])
+  .map((x) => (Array.isArray(x) ? x : x && typeof x === "object" ? [x.text, x.basis] : [x, "inferred"]))
+  .filter((x) => typeof x[0] === "string" && x[0].trim())
+  .map((x) => [noDash(clip(x[0], 90)), BASIS.includes(x[1]) ? x[1] : "inferred"]).slice(0, n);
+
 /** Normalize and enforce the brief shape. Returns { brief, problems }. */
-export function normalizeBrief(raw, evidenceUrls = []) {
+export function normalizeBrief(raw, evidenceUrls = [], ctx = {}) {
   const problems = [];
   const allowed = new Set(evidenceUrls);
+  const haveOk = (ctx.haveTools || []).map((t) => String(t).toLowerCase());
   const seen = new Set();
   const list = Array.isArray(raw && raw.opportunities) ? raw.opportunities : [];
   const opps = [];
@@ -77,23 +95,31 @@ export function normalizeBrief(raw, evidenceUrls = []) {
     let id = String(o.id || o.title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "opp";
     while (seen.has(id)) id += "-2";
     seen.add(id);
-    const level = (pair) => {
-      const lv = Array.isArray(pair) && LEVELS.includes(pair[0]) ? pair[0] : "Medium";
-      return [lv, noDash(clip(Array.isArray(pair) ? pair[1] : "", 300)) || "Reasoning not given."];
-    };
     const sources = (Array.isArray(o.sources) ? o.sources : []).filter((s) => typeof s === "string" && (allowed.size === 0 ? /^https?:\/\//.test(s) : allowed.has(s)));
     if (Array.isArray(o.sources) && sources.length < o.sources.length) problems.push(`Removed unverified sources from "${o.title}".`);
+    const tools = (Array.isArray(o.tools) ? o.tools : [])
+      .map((t) => (Array.isArray(t) ? t : t && typeof t === "object" ? [t.name, t.kind] : null))
+      .filter((t) => t && typeof t[0] === "string" && t[0].trim())
+      .map((t) => {
+        let kind = TOOL_KINDS.includes(t[1]) ? t[1] : "add";
+        const name = noDash(clip(t[0], 50));
+        if (kind === "have" && haveOk.length && !haveOk.some((h) => name.toLowerCase().includes(h) || h.includes(name.toLowerCase()))) { kind = "add"; problems.push(`"${name}" relabeled from have to add.`); }
+        return [name, kind];
+      }).slice(0, 4);
     opps.push({
       id, top: !!o.top, category,
-      title: noDash(clip(o.title, 160)),
-      why: noDash(clip(o.why, 500)),
+      title: noDash(clip(o.title, 120)),
+      why: noDash(clip(o.why, 400)),
       prompted,
-      build: noDash(clip(o.build, 500)),
-      experiment: noDash(clip(o.experiment, 400)),
-      effort: level(o.effort),
-      value: level(o.value),
+      build: noDash(clip(o.build, 400)),
+      experiment: noDash(clip(o.experiment, 300)),
+      value: rating(o.value),
+      complexity: rating(o.complexity || o.effort),
+      tools,
+      needs: strList(o.needs, 3, 120),
+      obstacles: strList(o.obstacles, 3, 140),
       sources: sources.slice(0, 6),
-      validate: (Array.isArray(o.validate) ? o.validate : []).filter((v) => typeof v === "string" && v.trim()).map((v) => noDash(clip(v, 200))).slice(0, 5),
+      validate: strList(o.validate, 4, 160),
     });
   }
 
@@ -101,13 +127,41 @@ export function normalizeBrief(raw, evidenceUrls = []) {
   opps.forEach((o) => { if (o.top) { tops++; if (tops > 3) { o.top = false; problems.push("Limited top picks to three."); } } });
   if (tops === 0 && opps.length) opps.slice(0, Math.min(3, opps.length)).forEach((o) => (o.top = true));
 
+  const ids = new Set(opps.map((o) => o.id));
+  const insp = (raw && raw.inspiration) || {};
+  const peerNames = (ctx.peerNames || []).map((n) => String(n).toLowerCase());
+  const profiles = (Array.isArray(insp.profiles) ? insp.profiles : [])
+    .filter((p) => p && typeof p.name === "string" && p.name.trim())
+    .filter((p) => { const ok = !peerNames.length || peerNames.includes(p.name.trim().toLowerCase()); if (!ok) problems.push(`Dropped profile "${p.name}": not in the research.`); return ok; })
+    .slice(0, 3)
+    .map((p) => ({
+      name: noDash(clip(p.name, 80)),
+      url: typeof p.url === "string" && /^https?:\/\//.test(p.url) ? p.url : "",
+      origin: p.origin === "found_by_search" ? "found_by_search" : "named_by_founder",
+      moat: noDash(clip(p.moat, 220)),
+      offers: basisList(p.offers, 3), programs: basisList(p.programs, 3), strategy: basisList(p.strategy, 3),
+      sales_tools: basisList(p.sales_tools, 3), tech_stack: basisList(p.tech_stack, 4),
+      borrow: noDash(clip(p.borrow, 220)), stand_apart: noDash(clip(p.stand_apart, 220)),
+    }));
+  const themes = (Array.isArray(insp.themes) ? insp.themes : [])
+    .filter((t) => t && typeof t.theme === "string" && t.theme.trim()).slice(0, 5)
+    .map((t) => ({ theme: noDash(clip(t.theme, 70)), detail: noDash(clip(t.detail, 220)), peers: strList(t.peers, 3, 80), opportunity: ids.has(t.opportunity) ? t.opportunity : null }));
+  const foundations = (Array.isArray(raw && raw.foundations) ? raw.foundations : [])
+    .map((f) => (typeof f === "string" ? { item: f, for: "" } : f))
+    .filter((f) => f && typeof f.item === "string" && f.item.trim()).slice(0, 6)
+    .map((f) => ({ item: noDash(clip(f.item, 120)), for: noDash(clip(f.for, 80)) }));
+
   return {
     brief: {
+      version: 2,
       sample: false,
       business: noDash(clip(raw && raw.business, 120)) || "Your business",
-      summary: noDash(clip(raw && raw.summary, 600)),
+      summary: noDash(clip(raw && raw.summary, 500)),
       notes: noDash(clip(raw && raw.notes, 1200)),
       opportunities: opps,
+      foundations,
+      pitfalls: strList(raw && raw.pitfalls, 5, 220),
+      inspiration: { themes, profiles },
     },
     problems,
   };

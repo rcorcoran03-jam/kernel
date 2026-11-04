@@ -11,117 +11,513 @@
    3. Paste your Turnstile site key (public, safe to include) below.
    API keys stay on the server. Never place them in this file. */
 var SCAN_ENDPOINT = "/api/scan";       // "" = sample only. "/api/scan" = live.
+var SCAN_STEP_ENDPOINT = "/api/scan-step";
 var TURNSTILE_SITE_KEY = "0x4AAAAAAFrykI24AUmOXZml";  // public Cloudflare Turnstile site key
 
 var SAMPLE_BRIEF = {
-  sample: true,
-  business: "Juniper & Clay (fictional)",
-  opportunities: [
-    {
-      id: "intake", top: true, category: "Programs & Workflows",
-      title: "Turn class and party inquiries into one intake and follow-up path",
-      why: "Inquiries are the start of every sale. When they arrive in three places, some go unanswered and the rest cost time to track.",
-      prompted: [
-        ["site", "The contact page offers email, an Instagram DM link, and a separate party form."],
-        ["told", "Class questions arrive by email and get lost between sessions."]
-      ],
-      build: "A single inquiry form that feeds one simple tracker, sends an immediate acknowledgment, and reminds the studio to follow up.",
-      experiment: "For two weeks, point every contact link at one form and note how long replies take.",
-      effort: ["Low to medium", "Uses tools a studio like this usually already has."],
-      value: ["High", "Touches every new customer, and the founder named it directly."],
-      sources: ["Sample site: juniperandclay.example/contact (fictional)"],
-      validate: ["How many inquiries arrive each week", "Which channel customers actually prefer"]
-    },
-    {
-      id: "choose", top: true, category: "Products & Offerings",
-      title: "Help visitors choose the right class before they email",
-      why: "If the same questions repeat, the site is not yet answering them. A clear comparison can turn a question into a booking.",
-      prompted: [
-        ["site", "The classes page lists six class types with no guidance on level, time commitment, or who each suits."],
-        ["told", "The founder answers the same class questions again and again."]
-      ],
-      build: "A short guide or quiz, written from real customer questions, that points each visitor to the class that fits.",
-      experiment: "Turn the five most-asked questions into a comparison table on the classes page.",
-      effort: ["Low", "Mostly writing and page structure; no new tools required."],
-      value: ["High", "Reduces repeat email and could lift bookings."],
-      sources: ["Sample site: juniperandclay.example/classes (fictional)"],
-      validate: ["Which questions come up most often", "Whether visitors drop off on the classes page"]
-    },
-    {
-      id: "deposit", top: true, category: "Programs & Workflows",
-      title: "Collect party deposits when the booking is made, not after",
-      why: "Chasing payments is time and goodwill spent on the least creative part of the job. This is a process fix first; no AI required.",
-      prompted: [
-        ["site", "The private parties page says to email to book, with no deposit step."],
-        ["told", "Chasing party deposits is a recurring drain."]
-      ],
-      build: "A booking request that includes a deposit link and a confirmation template with the policy spelled out.",
-      experiment: "Add a deposit link to the next five party confirmations and compare how quickly they are paid.",
-      effort: ["Low", "A payment link and a template."],
-      value: ["Medium to high", "Saves follow-up time and reduces late cancellations."],
-      sources: ["Sample site: juniperandclay.example/parties (fictional)"],
-      validate: ["Current payment tool", "Cancellation and refund policy"]
-    },
-    {
-      id: "connect", category: "Programs & Workflows",
-      title: "Connect registration, reminders, and class-day prep",
-      why: "Entering the same details in several places is where errors creep in.",
-      prompted: [
-        ["hyp", "Registrations may be copied by hand into a roster and a materials list."]
-      ],
-      build: "Registration that feeds the roster automatically, sends reminders, and produces a prep checklist for each class.",
-      experiment: "Map one class from sign-up to clean-up and mark every place information is typed twice.",
-      effort: ["Medium", "Depends on how the current booking tool connects."],
-      value: ["Medium", "Fewer errors and less evening admin."],
-      sources: [],
-      validate: ["Whether re-entry actually happens", "Which booking tool is in use"]
-    },
-    {
-      id: "promo", category: "Products & Offerings",
-      title: "Plan the busy season as a promotion calendar",
-      why: "Planned promotions take less effort than last-minute ones and protect time for making.",
-      prompted: [
-        ["site", "Both admired studios run seasonal gift-card promotions."],
-        ["told", "The founder wants more room for creative work."],
-        ["hyp", "Promotions here may currently be ad hoc."]
-      ],
-      build: "A twelve-month promotion calendar with drafted posts and emails in the studio's own voice.",
-      experiment: "In one session, plan the November to December gift-card push end to end.",
-      effort: ["Low to medium", "One planning session, then light upkeep."],
-      value: ["Medium", "Depends on seasonal demand."],
-      sources: ["Sample admired studios (fictional)"],
-      validate: ["Sales by month last year", "Whether gift cards are already offered"]
-    },
-    {
-      id: "brief", category: "Admin & Operations",
-      title: "A Monday brief of commitments, deposits due, and stock to reorder",
-      why: "Restocking and follow-ups slip when they live only in the founder's head.",
-      prompted: [
-        ["told", "Remembering to restock the shop keeps slipping."],
-        ["hyp", "Commitments are spread across inbox, booking tool, and shop."]
-      ],
-      build: "A short weekly brief assembled from the inbox, bookings, and shop inventory, listing decisions, commitments, and neglected follow-ups.",
-      experiment: "Keep the brief by hand for four Mondays to learn what belongs in it before automating.",
-      effort: ["Medium", "Needs access to three systems."],
-      value: ["Medium", "Fewer dropped balls; calmer weeks."],
-      sources: [],
-      validate: ["Which systems hold the information", "What the founder checks each week today"]
-    },
-    {
-      id: "answers", category: "Admin & Operations",
-      title: "Turn recurring customer questions into a reusable answer library",
-      why: "Good answers written once can be reused in email, on the site, and later by an assistant.",
-      prompted: [
-        ["told", "The same class questions repeat."]
-      ],
-      build: "A saved-reply library and an FAQ page, which could later train a simple assistant on the studio's own material.",
-      experiment: "Collect the last twenty customer questions and group them into themes.",
-      effort: ["Low", "Pairs naturally with the class guide above."],
-      value: ["Medium", "Overlaps with helping visitors choose; best done together."],
-      sources: [],
-      validate: ["Overlap with the class guide", "Tone the founder wants in replies"]
-    }
+ "version": 2,
+ "sample": true,
+ "business": "Juniper & Clay",
+ "summary": "A two-person ceramics studio with classes, private parties, and a small online shop. The clearest wins are in how inquiries, bookings, and payments arrive, not in the making itself.",
+ "notes": "",
+ "opportunities": [
+  {
+   "id": "intake",
+   "top": true,
+   "category": "Programs & Workflows",
+   "title": "One intake path for every class and party inquiry",
+   "why": "Inquiries arrive in three places, so some go unanswered and the rest take time to track.",
+   "prompted": [
+    [
+     "site",
+     "The contact page offers email, an Instagram DM link, and a separate party form."
+    ],
+    [
+     "told",
+     "Class questions arrive by email and get lost between sessions."
+    ]
+   ],
+   "build": "A single inquiry form that feeds one simple tracker, sends an instant reply, and reminds the studio to follow up.",
+   "experiment": "For two weeks, point every contact link at one form and note reply times.",
+   "value": [
+    3,
+    "Touches every new customer, and you named it directly."
+   ],
+   "complexity": [
+    1,
+    "Uses tools the studio already has."
+   ],
+   "tools": [
+    [
+     "Squarespace Forms",
+     "have"
+    ],
+    [
+     "Google Sheets",
+     "have"
+    ],
+    [
+     "Reply templates",
+     "build"
+    ]
+   ],
+   "needs": [
+    "One channel chosen as official"
+   ],
+   "obstacles": [
+    "Old links and DMs will keep arriving for a while"
+   ],
+   "sources": [],
+   "validate": [
+    "Inquiries per week",
+    "Which channel customers prefer"
+   ]
+  },
+  {
+   "id": "choose",
+   "top": true,
+   "category": "Products & Offerings",
+   "title": "Help visitors choose the right class before they email",
+   "why": "The same questions repeat because the site doesn't answer them yet.",
+   "prompted": [
+    [
+     "site",
+     "Six class types are listed with no guidance on level or time."
+    ],
+    [
+     "told",
+     "You answer the same class questions again and again."
+    ]
+   ],
+   "build": "A short comparison or quiz, written from real customer questions, that points each visitor to the right class.",
+   "experiment": "Turn the five most-asked questions into a comparison table on the classes page.",
+   "value": [
+    3,
+    "Cuts repeat email and could lift bookings."
+   ],
+   "complexity": [
+    1,
+    "Mostly writing and page structure."
+   ],
+   "tools": [
+    [
+     "Class guide page",
+     "build"
+    ],
+    [
+     "AI-drafted FAQ",
+     "build"
+    ]
+   ],
+   "needs": [
+    "Your 20 most common questions"
+   ],
+   "obstacles": [
+    "Class details change each season"
+   ],
+   "sources": [],
+   "validate": [
+    "Which questions come up most",
+    "Where visitors drop off"
+   ]
+  },
+  {
+   "id": "deposit",
+   "top": true,
+   "category": "Programs & Workflows",
+   "title": "Take party deposits at booking, not after",
+   "why": "Chasing payments costs time and goodwill. A process fix first; no AI needed.",
+   "prompted": [
+    [
+     "site",
+     "The parties page says to email to book, with no deposit step."
+    ],
+    [
+     "told",
+     "Chasing party deposits is a recurring drain."
+    ]
+   ],
+   "build": "A booking request with a deposit link and a confirmation template that spells out the policy.",
+   "experiment": "Add a deposit link to the next five party confirmations.",
+   "value": [
+    2,
+    "Saves follow-up and reduces late cancellations."
+   ],
+   "complexity": [
+    1,
+    "A payment link and a template."
+   ],
+   "tools": [
+    [
+     "Square",
+     "add"
+    ],
+    [
+     "Deposit policy",
+     "write"
+    ]
+   ],
+   "needs": [
+    "A written deposit and cancellation policy"
+   ],
+   "obstacles": [
+    "Regular customers may push back at first"
+   ],
+   "sources": [],
+   "validate": [
+    "Current payment tool",
+    "Refund policy"
+   ]
+  },
+  {
+   "id": "connect",
+   "top": false,
+   "category": "Programs & Workflows",
+   "title": "Connect registration, reminders, and class-day prep",
+   "why": "Typing the same details in several places is where errors creep in.",
+   "prompted": [
+    [
+     "hyp",
+     "Registrations may be copied by hand into a roster and a materials list."
+    ]
+   ],
+   "build": "Registration that fills the roster, sends reminders, and produces a prep checklist for each class.",
+   "experiment": "Map one class from sign-up to clean-up and mark every place details are retyped.",
+   "value": [
+    2,
+    "Fewer errors and less evening admin."
+   ],
+   "complexity": [
+    2,
+    "Depends on how the booking tool connects."
+   ],
+   "tools": [
+    [
+     "Acuity Scheduling",
+     "add"
+    ],
+    [
+     "Zapier",
+     "add"
+    ]
+   ],
+   "needs": [
+    "One booking tool as the source of truth"
+   ],
+   "obstacles": [
+    "Re-entry may not happen as often as it seems"
+   ],
+   "sources": [],
+   "validate": [
+    "Whether re-entry happens",
+    "Which booking tool is in use"
+   ]
+  },
+  {
+   "id": "promo",
+   "top": false,
+   "category": "Products & Offerings",
+   "title": "Plan the busy season as a promotion calendar",
+   "why": "Planned promotions take less effort than last-minute ones and protect time for making.",
+   "prompted": [
+    [
+     "peer",
+     "Both studios you admire run a gift-card push every November."
+    ],
+    [
+     "told",
+     "You want more room for creative work."
+    ]
+   ],
+   "build": "A twelve-month calendar with posts and emails drafted in the studio's own voice.",
+   "experiment": "Plan the November to December gift-card push in one session.",
+   "value": [
+    2,
+    "Depends on seasonal demand."
+   ],
+   "complexity": [
+    1,
+    "One planning session, then light upkeep."
+   ],
+   "tools": [
+    [
+     "Mailchimp",
+     "add"
+    ],
+    [
+     "AI drafts in your voice",
+     "build"
+    ]
+   ],
+   "needs": [
+    "Last year's sales by month",
+    "Product photos"
+   ],
+   "obstacles": [
+    "Busy season leaves little time to plan"
+   ],
+   "sources": [],
+   "validate": [
+    "Sales by month",
+    "Whether gift cards are offered"
+   ]
+  },
+  {
+   "id": "monday",
+   "top": false,
+   "category": "Admin & Operations",
+   "title": "A Monday brief: deposits due, stock to reorder",
+   "why": "Restocking and follow-ups slip when they live only in your head.",
+   "prompted": [
+    [
+     "told",
+     "Remembering to restock the shop keeps slipping."
+    ],
+    [
+     "hyp",
+     "Commitments are spread across inbox, bookings, and shop."
+    ]
+   ],
+   "build": "A short weekly summary pulled from the inbox, bookings, and shop inventory.",
+   "experiment": "Keep it by hand for four Mondays before automating.",
+   "value": [
+    2,
+    "Fewer dropped balls; calmer weeks."
+   ],
+   "complexity": [
+    3,
+    "Needs access to three systems."
+   ],
+   "tools": [
+    [
+     "Gmail",
+     "add"
+    ],
+    [
+     "Square",
+     "add"
+    ],
+    [
+     "Google Sheets",
+     "have"
+    ]
+   ],
+   "needs": [
+    "A simple stock list",
+    "Access to each system"
+   ],
+   "obstacles": [
+    "Two people share the inbox"
+   ],
+   "sources": [],
+   "validate": [
+    "Where the information lives",
+    "What you check each week today"
+   ]
+  },
+  {
+   "id": "answers",
+   "top": false,
+   "category": "Admin & Operations",
+   "title": "Turn repeat questions into a reusable answer library",
+   "why": "Good answers written once work in email, on the site, and later for an assistant.",
+   "prompted": [
+    [
+     "told",
+     "The same class questions repeat."
+    ]
+   ],
+   "build": "Saved replies and an FAQ page, in your own voice.",
+   "experiment": "Collect the last twenty customer questions and group them.",
+   "value": [
+    2,
+    "Overlaps with the class guide; best done together."
+   ],
+   "complexity": [
+    1,
+    "Pairs naturally with the class guide."
+   ],
+   "tools": [
+    [
+     "Gmail templates",
+     "add"
+    ],
+    [
+     "FAQ page",
+     "build"
+    ]
+   ],
+   "needs": [
+    "Your 20 most common questions"
+   ],
+   "obstacles": [
+    "Answers go stale if nobody owns them"
+   ],
+   "sources": [],
+   "validate": [
+    "Tone you want in replies"
+   ]
+  }
+ ],
+ "foundations": [
+  {
+   "item": "A written deposit and cancellation policy",
+   "for": "deposits"
+  },
+  {
+   "item": "Your 20 most common customer questions",
+   "for": "class guide, answer library"
+  },
+  {
+   "item": "One booking tool as the source of truth",
+   "for": "registration, Monday brief"
+  },
+  {
+   "item": "Product photos and a simple stock list",
+   "for": "promotions, restocking"
+  }
+ ],
+ "pitfalls": [
+  "Switching every contact channel at once; move one, then the next.",
+  "Automating reminders before the class process is written down.",
+  "Letting AI send replies unreviewed in the first month.",
+  "Planning promotions inside the busy season instead of before it."
+ ],
+ "inspiration": {
+  "themes": [
+   {
+    "theme": "A reason to come back",
+    "detail": "Both studios turn a first class into a habit with a pass or a series.",
+    "peers": [
+     "Kiln House",
+     "Moss Street Pottery"
+    ],
+    "opportunity": "choose"
+   },
+   {
+    "theme": "The season is planned",
+    "detail": "Gift cards and holiday sales go to their email list first, weeks ahead.",
+    "peers": [
+     "Moss Street Pottery"
+    ],
+    "opportunity": "promo"
+   },
+   {
+    "theme": "Choosing is easy",
+    "detail": "Classes are grouped by level with clear time commitments.",
+    "peers": [
+     "Kiln House"
+    ],
+    "opportunity": "choose"
+   }
+  ],
+  "profiles": [
+   {
+    "name": "Kiln House",
+    "url": "",
+    "origin": "named_by_founder",
+    "moat": "A members' studio pass that gives regulars a reason to return every week.",
+    "offers": [
+     [
+      "Wheel and hand-building classes",
+      "seen"
+     ],
+     [
+      "Open studio time",
+      "seen"
+     ]
+    ],
+    "programs": [
+     [
+      "Monthly membership",
+      "seen"
+     ],
+     [
+      "Six-week series",
+      "seen"
+     ]
+    ],
+    "strategy": [
+     [
+      "Community of regulars",
+      "inferred"
+     ]
+    ],
+    "sales_tools": [
+     [
+      "Intro-class bundle",
+      "seen"
+     ],
+     [
+      "Waitlist",
+      "seen"
+     ]
+    ],
+    "tech_stack": [
+     [
+      "Squarespace",
+      "seen"
+     ],
+     [
+      "Acuity Scheduling",
+      "inferred"
+     ]
+    ],
+    "borrow": "A simple returning-student offer after a first class.",
+    "stand_apart": "Private parties; they don't offer them."
+   },
+   {
+    "name": "Moss Street Pottery",
+    "url": "",
+    "origin": "named_by_founder",
+    "moat": "A recognizable seasonal gift-card push, promoted to a loyal email list.",
+    "offers": [
+     [
+      "Date-night classes",
+      "seen"
+     ],
+     [
+      "Shop of finished pieces",
+      "seen"
+     ]
+    ],
+    "programs": [
+     [
+      "Holiday workshops",
+      "seen"
+     ]
+    ],
+    "strategy": [
+     [
+      "Seasonal rhythm",
+      "inferred"
+     ]
+    ],
+    "sales_tools": [
+     [
+      "Gift cards",
+      "seen"
+     ],
+     [
+      "Email-first sales",
+      "inferred"
+     ]
+    ],
+    "tech_stack": [
+     [
+      "Shopify",
+      "seen"
+     ],
+     [
+      "Mailchimp",
+      "inferred"
+     ]
+    ],
+    "borrow": "Plan the gift-card season ahead, drafted in your voice.",
+    "stand_apart": "Small classes and a two-person studio feel."
+   }
   ]
+ }
 };
 
 (function () {
@@ -206,36 +602,53 @@ var SAMPLE_BRIEF = {
     var label = submitBtn.textContent; submitBtn.textContent = "Scanning\u2026";
     say("Your scan has started. This usually takes one to three minutes, so please keep this page open.");
     var prog = startProgress();
-    var httpStatus = 0;
-    fetch(SCAN_ENDPOINT, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) })
-      .then(function (r) { httpStatus = r.status; return r.json().catch(function () { return { status: "error", message: "The scan stopped before it finished (error " + r.status + "). Your answers are saved in the conversation form below, so nothing is lost." }; }); })
-      .then(function (d) {
-        if (d.status === "ready" && d.brief) { say("Your brief is ready below. Treat it as a first draft: check each point against what you know."); showBrief(d.brief, payload); }
-        else if (d.status === "queued") say(d.message || "Your brief is with Kernel for a quick review. We'll email it to you.");
-        else if (d.status === "invalid") say((d.errors || ["Please check the form."]).join(" "), true);
-        else say(d.message || "Something went wrong running the scan. Your answers are saved in the conversation form below.", true);
-      })
-      .catch(function () { say("We lost the connection while the scan was running. If your phone locked or the page closed, that can stop it. Your answers are saved in the conversation form below.", true); })
-      .then(function () { prog.stop(); submitBtn.textContent = label; submitBtn.disabled = false; submitBtn.removeAttribute("aria-busy"); if (window.turnstile) try { window.turnstile.reset("#scan-turnstile"); } catch (e) {} });
+    var fail = "Your answers are saved in the conversation form below, so nothing is lost.";
+    function done() { prog.stop(); submitBtn.textContent = label; submitBtn.disabled = false; submitBtn.removeAttribute("aria-busy"); if (window.turnstile) try { window.turnstile.reset("#scan-turnstile"); } catch (e) {} }
+    function post(url, body) {
+      return fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
+        .then(function (r) { return r.json().catch(function () { return { status: "error", retry: true, message: "The scan stopped before it finished (error " + r.status + "). " + fail }; }); });
+    }
+    function finish(d) {
+      if (d.status === "ready" && d.brief) { prog.stage("done"); say("Your brief is ready below. Treat it as a first draft: check each point against what you know."); showBrief(d.brief, payload); }
+      else if (d.status === "queued") { prog.stage("done"); say(d.message || "Your scan is done. It's with Kernel for a quick review, and we'll email your brief."); }
+      else if (d.status === "invalid") say((d.errors || ["Please check the form."]).join(" "), true);
+      else say(d.message || "Something went wrong running the scan. " + fail, true);
+      done();
+    }
+    function step(job, tries) {
+      prog.stage(job.next);
+      post(SCAN_STEP_ENDPOINT, { id: job.id, key: job.key }).then(function (d) {
+        if (d.status === "running") { if (d.next === job.next) { setTimeout(function () { step(job, tries); }, 4000); return; } job.next = d.next; step(job, 0); return; }
+        if (d.status === "error" && d.retry && tries < 2) { setTimeout(function () { step(job, tries + 1); }, 2500); return; }
+        finish(d);
+      }).catch(function () {
+        if (tries < 2) { setTimeout(function () { step(job, tries + 1); }, 3000); return; }
+        say("We lost the connection while the scan was running. If your phone locked or the page closed, that can stop it. " + fail, true); done();
+      });
+    }
+    post(SCAN_ENDPOINT, payload).then(function (d) {
+      if (d.status === "started") step({ id: d.id, key: d.key, next: d.next }, 0);
+      else finish(d);
+    }).catch(function () { say("We couldn't reach the scan. " + fail, true); done(); });
   }
 
   function startProgress() {
     var box = document.getElementById("scan-progress"), time = document.getElementById("sp-time");
-    if (!box) return { stop: function () {} };
+    if (!box) return { stop: function () {}, stage: function () {} };
     var steps = Array.prototype.slice.call(box.querySelectorAll(".sp-steps li"));
+    var order = steps.map(function (li) { return li.dataset.stage; });
     var t0 = Date.now();
     box.hidden = false;
     box.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
-    function tick() {
-      var s = Math.floor((Date.now() - t0) / 1000);
-      time.textContent = Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2);
-      steps.forEach(function (li, i) {
-        var next = steps[i + 1], on = s >= +li.dataset.at && (!next || s < +next.dataset.at);
-        li.classList.toggle("is-now", on); li.classList.toggle("is-done", !!next && s >= +next.dataset.at);
-      });
-    }
+    function tick() { var s = Math.floor((Date.now() - t0) / 1000); time.textContent = Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2); }
     tick(); var iv = setInterval(tick, 1000);
-    return { stop: function () { clearInterval(iv); box.hidden = true; } };
+    return {
+      stage: function (name) {
+        var at = name === "done" ? order.length : order.indexOf(name);
+        steps.forEach(function (li, i) { li.classList.toggle("is-done", i < at); li.classList.toggle("is-now", i === at); });
+      },
+      stop: function () { clearInterval(iv); setTimeout(function () { box.hidden = true; }, 1200); }
+    };
   }
 
   if (form) form.addEventListener("submit", function (e) {
@@ -257,137 +670,24 @@ var SAMPLE_BRIEF = {
     if (ex) ex.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
   });
 
-  /* ---------- sample brief: condensed, read-only (lives in the Examples tabs) ---------- */
-  function thinking(o) {
-    var d = el("div", "sb-thinking");
-    var p1 = el("div", "full"); p1.appendChild(el("span", "dh", "What prompted it"));
-    var ul = el("ul"); o.prompted.forEach(function (p) { var li = el("li"); var t = EV[p[0]]; li.appendChild(el("span", "ev " + t[0], t[1])); li.appendChild(document.createTextNode(p[1])); ul.appendChild(li); });
-    p1.appendChild(ul); d.appendChild(p1);
-    [["What Kernel could help build", o.build], ["A first experiment", o.experiment]].forEach(function (x) {
-      var b = el("div"); b.appendChild(el("span", "dh", x[0])); b.appendChild(el("p", null, x[1])); d.appendChild(b);
-    });
-    var v = el("div", "full"); v.appendChild(el("span", "dh", "Still to validate")); v.appendChild(el("p", null, o.validate.join(" · "))); d.appendChild(v);
-    return d;
-  }
-  function labels(o) { var w = el("span", "sb-labels"); o.prompted.forEach(function (p) { var t = EV[p[0]]; w.appendChild(el("span", "ev " + t[0], t[1])); }); return w; }
-  function rate(o) { var r = el("span", "sb-rate"); r.appendChild(el("span", null, "Effort ")); r.appendChild(el("b", null, o.effort[0])); r.appendChild(el("span", null, " · Value ")); r.appendChild(el("b", null, o.value[0])); return r; }
+  /* ---------- sample brief (Examples tab) and live brief: shared compact renderer ---------- */
   function renderSample() {
-    var top = document.getElementById("sb-top"), rest = document.getElementById("sb-rest");
-    if (!top || !rest) return;
-    var opps = SAMPLE_BRIEF.opportunities;
-    opps.filter(function (o) { return o.top; }).forEach(function (o, i) {
-      var c = el("article", "sb-card");
-      c.appendChild(el("span", "sb-n", "0" + (i + 1)));
-      c.appendChild(el("span", "sb-cat", o.category));
-      c.appendChild(el("h5", null, o.title));
-      c.appendChild(el("p", "sb-why", o.why));
-      c.appendChild(labels(o));
-      c.appendChild(rate(o));
-      var dt = el("details", "sb-more"); dt.appendChild(el("summary", null, "Show the thinking")); dt.appendChild(thinking(o)); c.appendChild(dt);
-      top.appendChild(c);
-    });
-    opps.filter(function (o) { return !o.top; }).forEach(function (o) {
-      var row = el("details", "sb-row");
-      var sm = el("summary");
-      sm.appendChild(el("span", "sb-cat", o.category));
-      sm.appendChild(el("span", "sb-title", o.title));
-      sm.appendChild(labels(o));
-      sm.appendChild(rate(o));
-      row.appendChild(sm);
-      var body = el("div", "sb-row-body"); body.appendChild(el("p", "sb-why", o.why)); body.appendChild(thinking(o)); row.appendChild(body);
-      rest.appendChild(row);
+    var root = document.getElementById("sb-root");
+    if (!root || !window.KernelBrief) return;
+    window.KernelBrief.render(root, SAMPLE_BRIEF, {
+      sample: true, idPrefix: "sb", cta: ["Run your own scan", "#scan-form"],
+      input: { website: "juniperandclay.example (fictional)", room: "Creative work", stuck: "Answering the same class questions, chasing party deposits, remembering to restock the shop." }
     });
   }
   renderSample();
 
-  /* ---------- brief rendering ---------- */
-  function rating(label, pair) {
-    var w = el("span", null, label); var b = el("b", null, pair[0]); w.appendChild(b); return w;
-  }
-  function renderOpp(o) {
-    state[o.id] = state[o.id] || { selected: false, status: "" };
-    var card = el("article", "opp" + (o.top ? " top" : "")); card.id = "opp-" + o.id;
-    var main = el("div", "opp-main");
-    var left = el("div");
-    var k = el("div", "opp-kicker");
-    k.appendChild(el("span", null, o.category));
-    if (o.top) k.appendChild(el("span", null, "· Strongest three"));
-    o.prompted.forEach(function (p) { var t = EV[p[0]]; k.appendChild(el("span", "ev " + t[0], t[1])); });
-    left.appendChild(k);
-    var h = el("h6", null, o.title); h.id = "opp-t-" + o.id; left.appendChild(h);
-    left.appendChild(el("p", "opp-why", o.why));
-    main.appendChild(left);
-    var r = el("div", "ratings"); r.appendChild(rating("Effort", o.effort)); r.appendChild(rating("Potential value", o.value)); main.appendChild(r);
-
-    var c = el("div", "opp-controls");
-    var sel = el("button", "tgl tgl-sel", "This resonates"); sel.type = "button"; sel.setAttribute("aria-pressed", "false"); sel.setAttribute("aria-describedby", h.id);
-    var doing = el("button", "tgl", "Already doing this"); doing.type = "button"; doing.setAttribute("aria-pressed", "false"); doing.setAttribute("aria-describedby", h.id);
-    var nr = el("button", "tgl", "Not relevant"); nr.type = "button"; nr.setAttribute("aria-pressed", "false"); nr.setAttribute("aria-describedby", h.id);
-    var exp = el("button", "tgl tgl-exp", "Show the thinking"); exp.type = "button"; exp.setAttribute("aria-expanded", "false"); exp.setAttribute("aria-controls", "opp-d-" + o.id); exp.setAttribute("aria-describedby", h.id);
-    [sel, doing, nr, exp].forEach(function (b) { c.appendChild(b); });
-    main.appendChild(c);
-    card.appendChild(main);
-
-    var d = el("div", "opp-detail"); d.id = "opp-d-" + o.id; d.hidden = true;
-    var p1 = el("div", "full"); p1.appendChild(el("span", "dh", "What prompted it"));
-    var ul = el("ul"); o.prompted.forEach(function (p) { var li = el("li"); var t = EV[p[0]]; li.appendChild(el("span", "ev " + t[0], t[1])); li.appendChild(document.createTextNode(p[1])); ul.appendChild(li); }); p1.appendChild(ul); d.appendChild(p1);
-    function block(title, text, full) { var b = el("div", full ? "full" : null); b.appendChild(el("span", "dh", title)); b.appendChild(el("p", null, text)); d.appendChild(b); }
-    block("What Kernel could help build", o.build);
-    block("A first experiment", o.experiment);
-    block("Effort: " + o.effort[0], o.effort[1]);
-    block("Potential value: " + o.value[0], o.value[1]);
-    var v = el("div"); v.appendChild(el("span", "dh", "Still to validate")); var vu = el("ul"); o.validate.forEach(function (x) { vu.appendChild(el("li", null, x)); }); v.appendChild(vu); d.appendChild(v);
-    var s = el("div"); s.appendChild(el("span", "dh", "Sources")); s.appendChild(el("p", "src", o.sources.length ? o.sources.join("; ") : "None. This one rests on the founder's answers and our hypothesis.")); d.appendChild(s);
-    card.appendChild(d);
-
-    exp.addEventListener("click", function () { var open = d.hidden; d.hidden = !open; exp.setAttribute("aria-expanded", String(open)); exp.textContent = open ? "Hide the thinking" : "Show the thinking"; });
-    function sync() {
-      var st = state[o.id];
-      sel.setAttribute("aria-pressed", String(st.selected));
-      doing.setAttribute("aria-pressed", String(st.status === "doing"));
-      nr.setAttribute("aria-pressed", String(st.status === "irrelevant"));
-      card.classList.toggle("is-selected", st.selected);
-      card.classList.toggle("is-dim", !!st.status);
-      updateCount();
-    }
-    sel.addEventListener("click", function () { var st = state[o.id]; st.selected = !st.selected; if (st.selected) st.status = ""; sync(); });
-    doing.addEventListener("click", function () { var st = state[o.id]; st.status = st.status === "doing" ? "" : "doing"; if (st.status) st.selected = false; sync(); });
-    nr.addEventListener("click", function () { var st = state[o.id]; st.status = st.status === "irrelevant" ? "" : "irrelevant"; if (st.status) st.selected = false; sync(); });
-    return card;
-  }
-
-  function setHead(data, payload) {
-    function put(id, html) { var n = document.getElementById(id); if (n) n.innerHTML = html; }
-    if (data.sample) { Object.keys(sampleHead).forEach(function (id) { put(id, sampleHead[id]); }); return; }
-    var esc = function (t) { var d = document.createElement("div"); d.textContent = t || ""; return d.innerHTML; };
-    put("brief-tag", "Opportunity brief &middot; first draft to validate");
-    put("brief-title", "Opportunity brief: " + esc(data.business));
-    put("brief-intro", esc(data.summary) + (data.notes ? " <em>" + esc(data.notes) + "</em>" : "") + " This brief draws only on your answers, your public website, and public pages of other businesses.");
-    var rows = [];
-    if (payload) {
-      if (payload.website) rows.push(["Website", payload.website]);
-      if (payload.describe) rows.push(["In your words", payload.describe]);
-      if (payload.room) rows.push(["More room for", payload.room === "Other" ? payload.room_other || "Something else" : payload.room]);
-      if (payload.stuck) rows.push(["Keeps slipping", payload.stuck]);
-      if (payload.admire) rows.push(["Admires", payload.admire]);
-    }
-    put("brief-inputs", rows.map(function (r) { return "<div><dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1]) + "</dd></div>"; }).join(""));
-    var n = data.opportunities.length;
-    put("brief-close", n + (n === 1 ? " opportunity" : " opportunities") + ". A brief only lists what the evidence supports, so some will be shorter than others.");
-  }
-
   function showBrief(data, payload) {
-    brief = data;
-    setHead(data, payload);
-    var top = document.getElementById("brief-top"), rest = document.getElementById("brief-rest");
-    top.innerHTML = ""; rest.innerHTML = "";
-    var opps = data.opportunities.slice(0, 10);
-    opps.filter(function (o) { return o.top; }).slice(0, 3).forEach(function (o) { top.appendChild(renderOpp(o)); });
-    CATS.forEach(function (cat) {
-      var list = opps.filter(function (o) { return !o.top && o.category === cat; });
-      if (!list.length) return;
-      var g = el("div", "cat-group"); g.appendChild(el("h5", null, cat));
-      var l = el("div", "opp-list"); list.forEach(function (o) { l.appendChild(renderOpp(o)); }); g.appendChild(l); rest.appendChild(g);
+    brief = data; state = {};
+    var root = document.getElementById("brief-root");
+    window.KernelBrief.render(root, data, {
+      input: payload || {}, selectable: true, idPrefix: "live", cta: ["Book the follow\u2011up call", "#inquiry"],
+      date: new Date().toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }),
+      onSelect: function (o, on) { state[o.id] = { selected: on }; updateCount(); updateCarry(); }
     });
     var b = document.getElementById("brief"); b.hidden = false; b.focus({ preventScroll: true });
     b.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
@@ -427,33 +727,17 @@ var SAMPLE_BRIEF = {
   updateCarry();
 
   /* ---------- keep a copy ---------- */
-  function briefText() {
-    if (!brief) return "";
-    var out = ["KERNEL OPPORTUNITY SCAN", brief.sample ? "SAMPLE BRIEF: " + brief.business + ". Not an analysis of any real business." : brief.business, ""];
-    brief.opportunities.forEach(function (o, i) {
-      var st = state[o.id] || {};
-      out.push((i + 1) + ". " + o.title + (o.top ? "  [strongest three]" : ""));
-      out.push("   Category: " + o.category + (st.selected ? "  | You selected this" : "") + (st.status === "doing" ? "  | Already doing this" : "") + (st.status === "irrelevant" ? "  | Not relevant" : ""));
-      o.prompted.forEach(function (p) { out.push("   " + EV[p[0]][1] + ": " + p[1]); });
-      out.push("   Why it could matter: " + o.why, "   What Kernel could help build: " + o.build, "   First experiment: " + o.experiment);
-      out.push("   Effort: " + o.effort[0] + " (" + o.effort[1] + ")", "   Potential value: " + o.value[0] + " (" + o.value[1] + ")");
-      out.push("   Still to validate: " + o.validate.join("; "));
-      if (o.sources.length) out.push("   Sources: " + o.sources.join("; "));
-      out.push("");
-    });
-    out.push("kernel-collective.com");
-    return out.join("\n");
-  }
   document.getElementById("download-brief").addEventListener("click", function () {
-    var blob = new Blob([briefText()], { type: "text/plain" });
-    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = brief && brief.sample ? "kernel-sample-opportunity-brief.txt" : "kernel-opportunity-brief.txt";
+    if (!brief) return;
+    var blob = new Blob([window.KernelBrief.toText(brief)], { type: "text/plain" });
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "kernel-opportunity-brief.txt";
     document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
   });
   document.getElementById("print-brief").addEventListener("click", function () {
-    var closed = Array.prototype.slice.call(document.querySelectorAll(".opp-detail[hidden]"));
-    closed.forEach(function (d) { d.hidden = false; });
+    var closed = Array.prototype.slice.call(document.querySelectorAll("#brief .kb-item:not([open])"));
+    closed.forEach(function (d) { d.open = true; });
     window.print();
-    closed.forEach(function (d) { d.hidden = true; });
+    closed.forEach(function (d) { d.open = false; });
   });
 
   /* ---------- honest send hint ---------- */

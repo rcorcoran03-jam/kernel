@@ -1,13 +1,12 @@
 // POST /api/scan  (Cloudflare Pages Function)
-// Runs the Kernel Opportunity Scan on the server. Secrets live in Cloudflare
-// environment variables, never in the browser.
+// Starts the Kernel Opportunity Scan. With KV bound, it only checks the form and
+// creates a job; the browser then calls /api/scan-step once per stage, so no
+// single request runs long. Secrets live in Cloudflare, never in the browser.
 import { cleanInput } from "../../scan/lib/validate.js";
-import { runScan } from "../../scan/lib/pipeline.js";
+import { runScan, STAGES } from "../../scan/lib/pipeline.js";
 import { verifyTurnstile, checkLimits } from "../../scan/lib/guard.js";
-import { storeBrief, notifyKernel } from "../../scan/lib/notify.js";
-import { ScanError } from "../../scan/lib/claude.js";
-
-const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json", "cache-control": "no-store" } });
+import { storeBrief, notifyKernel, token } from "../../scan/lib/notify.js";
+import { createJob, json, errorBody } from "../../scan/lib/jobs.js";
 
 export async function onRequestPost({ request, env }) {
   if (env.SCAN_ENABLED !== "true") return json({ status: "off", message: "The live scan isn't switched on yet." }, 503);
@@ -28,21 +27,23 @@ export async function onRequestPost({ request, env }) {
   try {
     await verifyTurnstile(env, raw.turnstileToken, ip);
     await checkLimits(env, ip);
+    if (env.SCAN_KV) {
+      const job = await createJob(env, input);
+      return json({ status: "started", id: job.id, key: job.secret, next: job.next, stages: STAGES });
+    }
+    // Local fallback without KV: run everything in one request.
     const { brief, meta } = await runScan(input, env);
     const id = crypto.randomUUID();
-
     if (humanReview) {
-      await storeBrief(env, id, { createdAt: new Date().toISOString(), input, brief, meta });
-      await notifyKernel(env, { id, brief, input, problems: meta.problems });
+      const approveToken = token();
+      await storeBrief(env, id, { createdAt: new Date().toISOString(), input, brief, meta, status: "pending", approveToken, viewToken: token() });
+      await notifyKernel(env, { id, brief, input, problems: meta.problems, approveToken });
       return json({ status: "queued", id, message: "Your brief is with Kernel for a quick human review. We'll email it to you within one business day." });
     }
     return json({ status: "ready", id, brief });
   } catch (err) {
-    const known = err instanceof ScanError;
-    console.error("scan failed", known ? err.kind : "unknown", err.message, known && err.detail ? err.detail : "");
-    const status = known && (err.kind === "guard" || err.kind === "limit") ? 429 : known && err.kind === "empty" ? 200 : 500;
-    const message = known && ["guard", "limit", "empty"].includes(err.kind) ? err.message : "Something went wrong running the scan. Your answers are still saved below, so you can send them with an inquiry.";
-    return json({ status: known && err.kind === "empty" ? "empty" : "error", message }, status);
+    const [body, status] = errorBody(err);
+    return json(body, status);
   }
 }
 

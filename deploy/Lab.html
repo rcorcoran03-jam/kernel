@@ -28,8 +28,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
 <link rel="stylesheet" href="lab.css?v=20261031b">
+<link rel="stylesheet" href="brief.css?v=20261103">
 <script src="site.js" defer></script>
-<script src="lab.js" defer></script>
+<script src="brief-render.js?v=20261103" defer></script>
+<script src="lab.js?v=20261103" defer></script>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -320,12 +322,12 @@
           </div>
           <div class="scan-progress" id="scan-progress" hidden>
             <div class="sp-head"><span class="sp-spin" aria-hidden="true"></span><strong>Your scan is running</strong><span class="sp-time" id="sp-time" aria-hidden="true">0:00</span></div>
-            <p class="sp-note">Scans usually take one to three minutes, and the steps below are approximate. Please keep this page open and your screen awake.</p>
+            <p class="sp-note">Scans usually take two to four minutes. Please keep this page open and your screen awake.</p>
             <ol class="sp-steps" aria-label="What the scan does">
-              <li data-at="0">Reading your public website</li>
-              <li data-at="35">Looking at businesses you admire</li>
-              <li data-at="75">Drafting opportunities from your answers</li>
-              <li data-at="110">Checking every point against the evidence</li>
+              <li data-stage="site">Reading your public website</li>
+              <li data-stage="peers">Looking at businesses you admire</li>
+              <li data-stage="synthesis">Drafting opportunities from your answers</li>
+              <li data-stage="review">Checking every point against the evidence</li>
             </ol>
           </div>
           <p class="form-note" id="scan-status" aria-live="polite"></p>
@@ -351,28 +353,14 @@
       </div>
 
       <!-- Your brief (live scan results render here; the sample lives in Examples below) -->
-      <div id="brief" class="brief" role="region" hidden tabindex="-1" aria-labelledby="brief-title">
-        <div class="brief-head">
-          <div>
-            <p class="sample-tag" id="brief-tag">Your opportunity brief</p>
-            <h3 id="brief-title">Opportunity brief</h3>
-            <p class="brief-intro" id="brief-intro">Your brief appears here after you run a scan.</p>
-          </div>
-          <dl class="brief-inputs" id="brief-inputs"></dl>
-        </div>
-
+      <div id="brief" class="brief-live" role="region" hidden tabindex="-1" aria-labelledby="live-title">
         <div class="brief-tools" role="toolbar" aria-label="Brief tools">
           <span id="sel-count" aria-live="polite">0 selected</span>
           <button type="button" class="btn-sm" id="carry">Carry selected into a conversation</button>
           <button type="button" class="btn-sm btn-sm-quiet" id="print-brief">Print or save as PDF</button>
           <button type="button" class="btn-sm btn-sm-quiet" id="download-brief">Download as text</button>
         </div>
-
-        <h4 class="brief-sub">Where we&rsquo;d start</h4>
-        <div id="brief-top" class="opp-list"></div>
-        <h4 class="brief-sub">More possibilities, by where they live</h4>
-        <div id="brief-rest"></div>
-        <p class="brief-close" id="brief-close"></p>
+        <div id="brief-root"></div>
       </div>
       <div id="examples" class="examples" aria-labelledby="ex-title">
       <header class="sec-head on-green ex-head">
@@ -394,24 +382,8 @@
       </div>
 
       <!-- SAMPLE BRIEF (read-only, condensed; cards rendered by lab.js from SAMPLE_BRIEF) -->
-      <div class="ex-panel sb" role="tabpanel" id="panel-sample" aria-labelledby="tab-sample" tabindex="0">
-        <div class="sb-head">
-          <div>
-            <p class="sample-tag">Sample brief &middot; fictional business</p>
-            <h3>Opportunity brief: Juniper &amp; Clay</h3>
-            <p class="sb-intro">A fictional two-person ceramics studio with classes, private parties, and a small online shop. It shows the shape of a brief; it doesn&rsquo;t analyze your answers.</p>
-          </div>
-          <dl class="sb-inputs">
-            <div><dt>Website</dt><dd>juniperandclay.example</dd></div>
-            <div><dt>More room for</dt><dd>Creative work</dd></div>
-            <div class="wide"><dt>Keeps slipping</dt><dd>&ldquo;Answering the same class questions, chasing party deposits, remembering to restock the shop.&rdquo;</dd></div>
-          </dl>
-        </div>
-        <h4 class="brief-sub">Where we&rsquo;d start &middot; the strongest three</h4>
-        <div class="sb-top" id="sb-top"></div>
-        <h4 class="brief-sub">More possibilities &middot; by where they live</h4>
-        <div class="sb-rest" id="sb-rest"></div>
-        <p class="sb-close">Seven opportunities, not ten. A real brief only lists what is worth your time. <a href="#scan-form">Run your own scan <span aria-hidden="true">&uarr;</span></a></p>
+      <div class="ex-panel" role="tabpanel" id="panel-sample" aria-labelledby="tab-sample" tabindex="0">
+        <div id="sb-root" aria-labelledby="sb-title"></div>
       </div>
 
       <!-- STOREFRONT -->
