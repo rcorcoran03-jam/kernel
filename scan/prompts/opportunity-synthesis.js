@@ -92,7 +92,7 @@ Return only JSON in this exact shape, with no other text:
       }
     ]
   }
-}}
+}
 
 JSON rules: return one JSON object and nothing else, with no code fences. Inside text values, never use double quotation marks; use single quotes instead. Keep every text value short.`;
 
