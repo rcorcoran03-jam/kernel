@@ -4,11 +4,23 @@
 // verifies the Access token here, so the API fails closed if Access is off.
 
 export const STAGES = [
-  ["new", "New"], ["sent", "Brief sent"], ["call", "Follow-up call"], ["discovery", "Discovery"],
+  ["new", "New"], ["sent", "Brief sent"], ["call", "Follow-up call"], ["negotiation", "In negotiation"], ["signed", "Contract signed"], ["discovery", "Discovery"],
   ["lab1", "Lab: we drive"], ["lab2", "Lab: you drive"], ["handoff", "Hand-off"], ["alumni", "Alumni"],
   ["nofit", "Not a fit"], ["paused", "Paused"],
 ];
 const STAGE_IDS = STAGES.map((s) => s[0]);
+// The forward path, in order. "Not a fit" and "Paused" are exits, not steps.
+export const PATH = STAGE_IDS.filter((s) => s !== "nofit" && s !== "paused");
+const BY_LABEL = Object.fromEntries(STAGES.map(([id, l]) => [l, id]));
+
+/** The furthest stage on the path a lead has reached, so the dashboard can show where deals stop. */
+export function furthestStage(l) {
+  let best = PATH.indexOf(l.furthest);
+  const see = (id) => { const i = PATH.indexOf(id); if (i > best) best = i; };
+  see(l.stage);
+  (l.notes || []).forEach((n) => { const m = n && n.kind === "stage" && /^Moved from (.+) to (.+)\.$/.exec(n.text || ""); if (m) { see(BY_LABEL[m[1]]); see(BY_LABEL[m[2]]); } });
+  return PATH[Math.max(best, 0)];
+}
 const SOURCES = ["scan", "lab-inquiry", "core-inquiry", "contact", "referral", "manual"];
 const KEY = (id) => `lead:${id}`;
 const clip = (v, n) => (typeof v === "string" ? v.trim().slice(0, n) : "");
@@ -23,6 +35,7 @@ export function sanitize(l) {
   return {
     id: l.id, createdAt: l.createdAt, updatedAt: l.updatedAt || l.createdAt,
     stage: STAGE_IDS.includes(l.stage) ? l.stage : "new",
+    furthest: PATH.includes(l.furthest) ? l.furthest : "",
     source: SOURCES.includes(l.source) ? l.source : "manual",
     name: clip(l.name, 120), email: clip(l.email, 200), phone: clip(l.phone, 40),
     business: clip(l.business, 120), website: clip(l.website, 200), location: clip(l.location, 120),
@@ -43,9 +56,10 @@ export async function getLead(env, id) {
 }
 export async function putLead(env, lead) {
   lead.updatedAt = new Date().toISOString();
+  lead.furthest = furthestStage(lead);
   const clean = sanitize(lead);
   // List metadata lets the board load without reading every lead.
-  const meta = { n: clean.name, b: clean.business, s: clean.stage, src: clean.source, u: clean.updatedAt, d: clean.nextStep.due, bs: clean.briefStatus, br: clean.briefId, e: clean.email, nx: clean.nextStep.text.slice(0, 80) };
+  const meta = { n: clean.name, b: clean.business, s: clean.stage, src: clean.source, u: clean.updatedAt, d: clean.nextStep.due, bs: clean.briefStatus, br: clean.briefId, e: clean.email, nx: clean.nextStep.text.slice(0, 80), c: clean.createdAt, f: clean.furthest };
   await env.SCAN_KV.put(KEY(clean.id), JSON.stringify(clean), { metadata: meta });
   return clean;
 }

@@ -249,6 +249,9 @@ test("HQ refuses without Access, works with it, and scans become leads", async (
     assert.ok(one.brief && one.brief.approveToken, "lead opens its brief");
     let u = await (await hqPost({ request: post("https://k.com/api/hq", { action: "update", id, fields: { stage: "call", nextStep: { text: "Call Tue", due: "2026-11-10" } } }), env })).json();
     assert.equal(u.lead.stage, "call"); assert.ok(u.lead.notes.some((n) => n.kind === "stage"));
+    u = await (await hqPost({ request: post("https://k.com/api/hq", { action: "update", id, fields: { stage: "nofit" } }), env })).json();
+    assert.equal(u.lead.furthest, "call", "an exit keeps the furthest stage reached");
+    u = await (await hqPost({ request: post("https://k.com/api/hq", { action: "update", id, fields: { stage: "call" } }), env })).json();
     u = await (await hqPost({ request: post("https://k.com/api/hq", { action: "send-brief", id }), env })).json();
     assert.equal(u.lead.briefStatus, "sent"); assert.ok(sent.some((m) => m.to[0] === "a@b.co"));
     u = await (await hqPost({ request: post("https://k.com/api/hq", { action: "ai", id, task: "followup" }), env })).json();

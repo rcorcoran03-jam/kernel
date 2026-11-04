@@ -91,6 +91,50 @@ label.f input,label.f select,label.f textarea,.ta{border:1px solid var(--rule);b
 dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);padding:0;width:min(520px,94vw)}
 dialog::backdrop{background:rgba(42,29,23,.35)}
 dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
+/* dashboard */
+.dash{margin-bottom:22px}
+.dash-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.dash-h h2,.list-h{font-size:20px}
+.list-h{margin:4px 0 12px}
+.btn.sm{padding:5px 12px;font-size:12px}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.kpi{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:12px 14px}
+.kpi .m{color:var(--ink2)}
+.kpi .v{font-family:'Bitter',serif;font-size:30px;line-height:1.15;margin-top:4px}
+.kpi .s{color:var(--ink2);font-size:12px}
+.kpi.warn .v{color:var(--maroon)}
+.panel{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.panel h3{font-size:16px;margin-bottom:4px}
+.panel .cap{font-size:12px;margin:0 0 8px}
+.sk-scroll{overflow-x:auto}
+.sankey{width:100%;min-width:660px;display:block}
+.sankey .node{fill:var(--maroon)}
+.sankey .flow{fill:rgba(155,44,44,.2)}
+.sankey .flow:hover{fill:rgba(155,44,44,.34)}
+.sankey .drop{fill:rgba(122,99,85,.22)}
+.sankey .drop:hover{fill:rgba(122,99,85,.38)}
+.sankey .nl{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;fill:var(--ink2)}
+.sankey .nv{font-family:'Bitter',serif;font-size:24px;fill:var(--ink)}
+.sankey .ns,.sankey .dl{font-size:12px;fill:var(--ink2)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two .panel{margin-bottom:0}
+.wk{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;height:150px;margin-top:8px;border-bottom:1px solid var(--rule);padding-bottom:0}
+.wc{display:flex;flex-direction:column;cursor:default}
+.wp{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-top:16px}
+.wb{display:block;width:70%;max-width:34px;background:var(--maroon);border-radius:4px 4px 0 0;min-height:3px}
+.wc:hover .wb{background:var(--maroon2)}
+.wv{font-size:11px;color:var(--ink);margin-bottom:2px}
+.wx{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;color:var(--ink2);text-align:center;height:0;overflow:visible;white-space:nowrap;transform:translateY(6px)}
+.two .panel:first-child{padding-bottom:28px}
+.hbars{display:grid;gap:8px;margin-top:8px}
+.hb{display:grid;grid-template-columns:96px 1fr 88px;gap:10px;align-items:center;font-size:13px}
+.hl{color:var(--ink)}
+.ht{height:10px;background:rgba(58,42,34,.06);border-radius:0 4px 4px 0}
+.hf{display:block;height:100%;background:var(--maroon);border-radius:0 4px 4px 0;min-width:4px}
+.hv{color:var(--ink2);font-size:12px;white-space:nowrap;text-align:right}
+.tip{position:fixed;z-index:60;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;padding:6px 9px;border-radius:6px;max-width:260px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:700px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}.kpi .v{font-size:24px}}
 @media (max-width:700px){.grid2{grid-template-columns:1fr}.kv{grid-template-columns:1fr}.who{flex-basis:100%;font-size:12px}.top-in{padding:10px 12px}main{padding:12px}}
 </style>
 </head>
@@ -126,8 +170,8 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 
 <script>
 (function () {
-  var S = { leads: [], stages: [], view: "board", q: "", sort: "u", user: "" };
-  var MAIN = ["new", "sent", "call", "discovery", "lab1", "lab2", "handoff", "alumni"], SIDE = ["nofit", "paused"];
+  var S = { leads: [], stages: [], view: "board", q: "", sort: "u", user: "", dash: true };
+  var MAIN = ["new", "sent", "call", "negotiation", "signed", "discovery", "lab1", "lab2", "handoff", "alumni"], SIDE = ["nofit", "paused"];
   var SRC = { scan: "Scan", "lab-inquiry": "Lab inquiry", "core-inquiry": "Suite inquiry", contact: "Contact", referral: "Referral", manual: "Added" };
   var $ = function (s, r) { return (r || document).querySelector(s); };
   function el(t, c, x) { var n = document.createElement(t); if (c) n.className = c; if (x != null) n.textContent = x; return n; }
@@ -195,7 +239,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     return col;
   }
   function move(id, stage) {
-    var l = S.leads.find(function (x) { return x.id === id; }); if (l) l.s = stage; render();
+    var l = S.leads.find(function (x) { return x.id === id; }); if (l) { l.f = furthest(l); l.s = stage; l.f = furthest(l); } render();
     api("POST", { action: "update", id: id, fields: { stage: stage } }).then(function (d) { if (d.status !== "ok") { toast(d.message || "Couldn't move it."); load(); } else toast("Moved to " + label(stage)); });
   }
 
@@ -210,9 +254,160 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     });
   }
 
+  /* ---------- dashboard ---------- */
+  var PATH = MAIN.slice();
+  var GROUPS = [
+    { id: "active", label: "Active leads", stages: ["new", "sent", "call"] },
+    { id: "neg", label: "In negotiation", stages: ["negotiation"] },
+    { id: "signed", label: "Contract signed", stages: ["signed"] },
+    { id: "wip", label: "Work in progress", stages: ["discovery", "lab1", "lab2", "handoff"] },
+    { id: "port", label: "Portfolio", stages: ["alumni"] }
+  ];
+  var NS = "http://www.w3.org/2000/svg";
+  function sv(t, a, txt) { var n = document.createElementNS(NS, t); for (var k in a) n.setAttribute(k, a[k]); if (txt != null) n.textContent = txt; return n; }
+  function gIndex(stage) { for (var i = 0; i < GROUPS.length; i++) if (GROUPS[i].stages.indexOf(stage) !== -1) return i; return -1; }
+  function furthest(l) { var a = PATH.indexOf(l.f), b = PATH.indexOf(l.s); return PATH[Math.max(a, b, 0)]; }
+  function isExit(l) { return SIDE.indexOf(l.s) !== -1; }
+  function isOpen(l) { return !isExit(l) && l.s !== "alumni"; }
+  function plural(n, a, b) { return n + " " + (n === 1 ? a : (b || a + "s")); }
+
+  function flowData() {
+    return GROUPS.map(function (g, i) {
+      var reached = S.leads.filter(function (l) { return gIndex(furthest(l)) >= i; });
+      var here = S.leads.filter(function (l) { return !isExit(l) && gIndex(l.s) === i; });
+      var stop = S.leads.filter(function (l) { return isExit(l) && gIndex(furthest(l)) === i; });
+      return { g: g, reached: reached.length, here: here.length, nofit: stop.filter(function (l) { return l.s === "nofit"; }).length, paused: stop.filter(function (l) { return l.s === "paused"; }).length };
+    });
+  }
+
+  function sankey() {
+    var D = flowData(), N = Math.max(D[0].reached, 1);
+    var W = 1000, H = 300, x0 = 8, nw = 14, step = (W - x0 * 2 - nw) / (GROUPS.length - 1), yc = 150, maxH = 150, yDrop = 290;
+    var hOf = function (n) { return n ? Math.max(3, n / N * maxH) : 0; };
+    var svg = sv("svg", { viewBox: "0 0 " + W + " " + H, class: "sankey", role: "img", "aria-label": "Pipeline: how many leads reached each stage and where they stopped" });
+    var nodes = D.map(function (d, i) { var h = hOf(d.reached); return { x: x0 + i * step, top: yc - h / 2, h: h }; });
+    function band(xa, ya1, ya2, xb, yb1, yb2) {
+      var m = (xa + xb) / 2;
+      return "M" + xa + "," + ya1 + " C" + m + "," + ya1 + " " + m + "," + yb1 + " " + xb + "," + yb1 + " L" + xb + "," + yb2 + " C" + m + "," + yb2 + " " + m + "," + ya2 + " " + xa + "," + ya2 + " Z";
+    }
+    D.forEach(function (d, i) {
+      var n = nodes[i], next = D[i + 1], stopped = d.nofit + d.paused;
+      if (next && next.reached) {
+        var hc = hOf(next.reached), nn = nodes[i + 1];
+        svg.appendChild(sv("path", { d: band(n.x + nw, n.top, n.top + hc, nn.x, nn.top, nn.top + nn.h), class: "flow", "data-tip": plural(next.reached, "lead") + " moved on to " + next.g.label.toLowerCase() }));
+      }
+      if (stopped) {
+        var hs = hOf(stopped), ys = n.top + n.h - hs, ex = n.x + nw + 24 + hs;
+        svg.appendChild(sv("path", { d: "M" + (n.x + nw) + "," + ys + " C" + (ex - 10) + "," + ys + " " + ex + "," + (ys + 10) + " " + ex + "," + (yDrop - 24) + " L" + (ex - hs) + "," + (yDrop - 24) + " C" + (ex - hs) + "," + (ys + hs + 6) + " " + (ex - hs - 10) + "," + (ys + hs) + " " + (n.x + nw) + "," + (ys + hs) + " Z", class: "drop", "data-tip": "Stopped at " + d.g.label.toLowerCase() + ": " + [d.nofit ? d.nofit + " not a fit" : "", d.paused ? d.paused + " paused" : ""].filter(Boolean).join(", ") }));
+        var t = sv("text", { x: ex - hs / 2, y: yDrop - 6, class: "dl", "text-anchor": "middle" }, stopped + " stopped");
+        svg.appendChild(t);
+      }
+    });
+    D.forEach(function (d, i) {
+      var n = nodes[i], last = i === D.length - 1, anchor = last ? "end" : "start", tx = last ? n.x + nw : n.x;
+      if (d.reached) svg.appendChild(sv("rect", { x: n.x, y: n.top, width: nw, height: n.h, rx: 3, class: "node", "data-tip": d.g.label + ": " + plural(d.reached, "lead") + " got this far, " + d.here + " here now" }));
+      svg.appendChild(sv("text", { x: tx, y: 18, class: "nl", "text-anchor": anchor }, d.g.label.toUpperCase()));
+      svg.appendChild(sv("text", { x: tx, y: 46, class: "nv", "text-anchor": anchor }, String(d.here)));
+      svg.appendChild(sv("text", { x: tx, y: 64, class: "ns", "text-anchor": anchor }, "here now · " + d.reached + " reached"));
+    });
+    return svg;
+  }
+
+  function tile(label, value, sub, warn) {
+    var t = el("div", "kpi" + (warn ? " warn" : "")); t.appendChild(el("div", "m", label)); t.appendChild(el("div", "v", value)); if (sub) t.appendChild(el("div", "s", sub)); return t;
+  }
+  function dayKey(iso) { return (iso || "").slice(0, 10); }
+  function daysAgo(n) { return new Date(Date.now() - n * 864e5).toISOString().slice(0, 10); }
+
+  function weekly() {
+    var weeks = [], now = new Date(); now.setHours(0, 0, 0, 0);
+    var start = new Date(now); start.setDate(start.getDate() - ((start.getDay() + 6) % 7)); // this Monday
+    for (var i = 11; i >= 0; i--) { var a = new Date(start); a.setDate(a.getDate() - i * 7); var b = new Date(a); b.setDate(b.getDate() + 7); weeks.push({ a: a, b: b, n: 0 }); }
+    S.leads.forEach(function (l) { var c = new Date(l.c || l.u); weeks.forEach(function (w) { if (c >= w.a && c < w.b) w.n++; }); });
+    var max = Math.max.apply(null, weeks.map(function (w) { return w.n; }).concat([1]));
+    var box = el("div", "wk"); box.setAttribute("role", "img"); box.setAttribute("aria-label", "New leads per week, last 12 weeks: " + weeks.map(function (w) { return w.n; }).join(", "));
+    weeks.forEach(function (w, i) {
+      var d = w.a.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      var c = el("div", "wc"); c.dataset.tip = "Week of " + d + ": " + plural(w.n, "new lead");
+      var plot = el("div", "wp");
+      if (w.n) { plot.appendChild(el("span", "wv", String(w.n))); var bar = el("span", "wb"); bar.style.height = (w.n / max * 100) + "%"; plot.appendChild(bar); }
+      c.appendChild(plot); c.appendChild(el("span", "wx", i === 11 ? "This wk" : (i % 3 === 0 ? d : "")));
+      box.appendChild(c);
+    });
+    return box;
+  }
+
+  function sources() {
+    var signedAt = 2, rows = Object.keys(SRC).map(function (k) {
+      var ls = S.leads.filter(function (l) { return l.src === k; });
+      return { k: k, n: ls.length, won: ls.filter(function (l) { return gIndex(furthest(l)) >= signedAt; }).length };
+    }).filter(function (r) { return r.n; }).sort(function (a, b) { return b.n - a.n; });
+    var max = Math.max.apply(null, rows.map(function (r) { return r.n; }).concat([1]));
+    var box = el("div", "hbars");
+    if (!rows.length) box.appendChild(el("p", "muted", "No leads yet."));
+    rows.forEach(function (r) {
+      var row = el("div", "hb"); row.dataset.tip = SRC[r.k] + ": " + plural(r.n, "lead") + ", " + r.won + " signed or beyond";
+      row.appendChild(el("span", "hl", SRC[r.k]));
+      var tr = el("span", "ht"); var f = el("span", "hf"); f.style.width = (r.n / max * 100) + "%"; tr.appendChild(f); row.appendChild(tr);
+      row.appendChild(el("span", "hv", r.n + (r.won ? " · " + r.won + " signed" : "")));
+      box.appendChild(row);
+    });
+    return box;
+  }
+
+  function dashboard() {
+    var wrap = el("section", "dash"); wrap.setAttribute("aria-label", "Dashboard");
+    var hd = el("div", "dash-h"); hd.appendChild(el("h2", null, "Pipeline"));
+    var tg = el("button", "btn q sm", S.dash ? "Hide dashboard" : "Show dashboard"); tg.type = "button";
+    tg.addEventListener("click", function () { S.dash = !S.dash; try { localStorage.setItem("hq_dash", S.dash ? "1" : "0"); } catch (e) {} render(); });
+    hd.appendChild(tg); wrap.appendChild(hd);
+    if (!S.dash) return wrap;
+
+    var L = S.leads, open = L.filter(isOpen), t = today();
+    var n30 = L.filter(function (l) { return dayKey(l.c || l.u) >= daysAgo(30); }).length;
+    var p30 = L.filter(function (l) { var d = dayKey(l.c || l.u); return d >= daysAgo(60) && d < daysAgo(30); }).length;
+    var signed = L.filter(function (l) { return gIndex(furthest(l)) >= 2; }).length;
+    var decided = L.filter(function (l) { return gIndex(furthest(l)) >= 2 || isExit(l); }).length;
+    var dueN = open.filter(function (l) { return l.d && l.d <= t; }).length, late = open.filter(function (l) { return l.d && l.d < t; }).length;
+    var review = L.filter(function (l) { return l.bs === "pending"; }).length;
+    var quiet = open.filter(function (l) { return dayKey(l.u) < daysAgo(14); }).length;
+
+    var k = el("div", "kpis");
+    k.appendChild(tile("Open pipeline", String(open.length), plural(L.filter(function (l) { return gIndex(l.s) === 0; }).length, "active lead") + ", " + L.filter(function (l) { return l.s === "negotiation"; }).length + " negotiating"));
+    k.appendChild(tile("New, last 30 days", String(n30), p30 || n30 ? p30 + " the 30 days before" : "nothing yet"));
+    k.appendChild(tile("Lead to contract", L.length ? Math.round(signed / L.length * 100) + "%" : "–", signed + " of " + plural(L.length, "lead") + (decided ? ", " + Math.round(signed / decided * 100) + "% of decided" : "")));
+    k.appendChild(tile("Follow-ups due", String(dueN), late ? late + " overdue" : "none overdue", late > 0));
+    k.appendChild(tile("Briefs to review", String(review), review ? "waiting on you" : "all clear", review > 0));
+    k.appendChild(tile("Going quiet", String(quiet), "open, untouched 14+ days", quiet > 0));
+    wrap.appendChild(k);
+
+    var sk = el("div", "panel"); sk.appendChild(el("h3", null, "Where deals stop"));
+    sk.appendChild(el("p", "muted cap", "Each bar is everyone who got that far. Ribbons carry leads forward; grey ribbons drop off as not a fit or paused."));
+    var sc = el("div", "sk-scroll"); sc.appendChild(sankey()); sk.appendChild(sc); wrap.appendChild(sk);
+
+    var two = el("div", "two");
+    var a = el("div", "panel"); a.appendChild(el("h3", null, "New leads per week")); a.appendChild(weekly()); two.appendChild(a);
+    var b = el("div", "panel"); b.appendChild(el("h3", null, "Where leads come from")); b.appendChild(sources()); two.appendChild(b);
+    wrap.appendChild(two);
+    return wrap;
+  }
+
+  // One tooltip for every chart mark that carries data-tip.
+  var tipEl = null;
+  document.addEventListener("mousemove", function (e) {
+    var t = e.target.closest && e.target.closest("[data-tip]");
+    if (!t || !t.closest(".dash")) { if (tipEl) tipEl.hidden = true; return; }
+    if (!tipEl) { tipEl = el("div", "tip"); tipEl.setAttribute("role", "tooltip"); document.body.appendChild(tipEl); }
+    tipEl.textContent = t.getAttribute("data-tip"); tipEl.hidden = false;
+    var x = Math.min(e.clientX + 14, window.innerWidth - tipEl.offsetWidth - 8), y = e.clientY + 16;
+    tipEl.style.left = x + "px"; tipEl.style.top = y + "px";
+  });
+
   function render() {
     renderToday();
     var m = $("#main"); m.innerHTML = ""; var list = filtered();
+    m.appendChild(dashboard());
+    var lh = el("h2", "list-h", S.view === "board" ? "Leads" : "All leads"); m.appendChild(lh);
     if (!S.leads.length) { m.appendChild(el("p", "empty", "No leads yet. Scans and website inquiries will show up here, or add one by hand.")); return; }
     if (S.view === "board") {
       var b = el("div", "board"); MAIN.forEach(function (s) { b.appendChild(column(s, list.filter(function (l) { return l.s === s; }).sort(function (x, y) { return (y.u || "").localeCompare(x.u || ""); }))); }); m.appendChild(b);
@@ -361,6 +556,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
   function setView(v) { S.view = v; $("#v-board").setAttribute("aria-pressed", String(v === "board")); $("#v-list").setAttribute("aria-pressed", String(v === "list")); try { localStorage.setItem("hq_view", v); } catch (e) {} render(); }
   $("#v-board").addEventListener("click", function () { setView("board"); });
   $("#v-list").addEventListener("click", function () { setView("list"); });
+  try { if (localStorage.getItem("hq_dash") === "0") S.dash = false; } catch (e) {}
   try { if (localStorage.getItem("hq_view") === "list") { S.view = "list"; $("#v-board").setAttribute("aria-pressed", "false"); $("#v-list").setAttribute("aria-pressed", "true"); } } catch (e) {}
   load();
 })();
