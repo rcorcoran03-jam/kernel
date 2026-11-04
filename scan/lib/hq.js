@@ -93,28 +93,36 @@ let certCache = { at: 0, keys: [] };
 
 /** Returns the signed-in email, or null. Requires ACCESS_TEAM_DOMAIN and ACCESS_AUD. */
 export async function accessUser(request, env, fetchImpl = fetch) {
-  if (env.HQ_DEV_USER && env.HQ_DEV_ALLOW === "true") return env.HQ_DEV_USER; // local testing only
+  return (await accessCheck(request, env, fetchImpl)).email;
+}
+
+// Same check, but says why it failed so HQ can show a useful message.
+export async function accessCheck(request, env, fetchImpl = fetch) {
+  const no = (reason, email) => ({ email: null, reason, seen: email || null });
+  if (env.HQ_DEV_USER && env.HQ_DEV_ALLOW === "true") return { email: env.HQ_DEV_USER }; // local testing only
   const team = (env.ACCESS_TEAM_DOMAIN || "").replace(/^https?:\/\//, "").replace(/\/$/, "");
   const aud = env.ACCESS_AUD || "";
-  if (!team || !aud) return null;
+  if (!team || !aud) return no("not_configured");
   const jwt = request.headers.get("cf-access-jwt-assertion") || (request.headers.get("cookie") || "").match(/CF_Authorization=([^;]+)/)?.[1];
-  if (!jwt) return null;
+  if (!jwt) return no("no_signin");
   const [h, p, s] = jwt.split(".");
-  if (!h || !p || !s) return null;
+  if (!h || !p || !s) return no("bad_token");
   let header, payload;
-  try { header = JSON.parse(new TextDecoder().decode(b64u(h))); payload = JSON.parse(new TextDecoder().decode(b64u(p))); } catch (e) { return null; }
+  try { header = JSON.parse(new TextDecoder().decode(b64u(h))); payload = JSON.parse(new TextDecoder().decode(b64u(p))); } catch (e) { return no("bad_token"); }
   if (Date.now() - certCache.at > 3600e3 || !certCache.keys.length) {
     const r = await fetchImpl(`https://${team}/cdn-cgi/access/certs`); const j = await r.json();
     certCache = { at: Date.now(), keys: j.keys || [] };
   }
   const jwk = certCache.keys.find((k) => k.kid === header.kid);
-  if (!jwk) return null;
+  if (!jwk) return no("bad_token");
   const key = await crypto.subtle.importKey("jwk", jwk, { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" }, false, ["verify"]);
   const ok = await crypto.subtle.verify("RSASSA-PKCS1-v1_5", key, b64u(s), new TextEncoder().encode(h + "." + p));
-  if (!ok) return null;
+  if (!ok) return no("bad_token");
   const auds = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
-  if (!auds.includes(aud) || (payload.exp && payload.exp * 1000 < Date.now()) || payload.iss !== `https://${team}`) return null;
+  if (!auds.includes(aud) || payload.iss !== `https://${team}`) return no("wrong_app");
+  if (payload.exp && payload.exp * 1000 < Date.now()) return no("expired");
+  const email = String(payload.email || "").toLowerCase();
   const allow = (env.HQ_EMAILS || "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
-  if (allow.length && !allow.includes(String(payload.email || "").toLowerCase())) return null;
-  return payload.email || null;
+  if (allow.length && !allow.includes(email)) return no("not_allowed", email);
+  return { email: payload.email || null, reason: payload.email ? undefined : "bad_token" };
 }

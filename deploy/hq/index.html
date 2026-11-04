@@ -32,6 +32,8 @@ h1,h2,h3{font-family:'Bitter',serif;font-weight:400;margin:0}
 .btn.q:hover{background:rgba(155,44,44,.06)}
 .btn:disabled{opacity:.55;cursor:wait}
 .who{margin-left:auto;color:var(--ink2);font-size:12px}
+.who a{color:var(--maroon)}
+.gate .btn{display:inline-block;margin-top:10px;text-decoration:none}
 /* today */
 .today{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 20px;border-bottom:1px solid var(--rule);background:var(--paper)}
 .today .m{color:var(--maroon)}
@@ -89,7 +91,7 @@ label.f input,label.f select,label.f textarea,.ta{border:1px solid var(--rule);b
 dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);padding:0;width:min(520px,94vw)}
 dialog::backdrop{background:rgba(42,29,23,.35)}
 dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
-@media (max-width:700px){.grid2{grid-template-columns:1fr}.kv{grid-template-columns:1fr}.who{display:none}.top-in{padding:10px 12px}main{padding:12px}}
+@media (max-width:700px){.grid2{grid-template-columns:1fr}.kv{grid-template-columns:1fr}.who{flex-basis:100%;font-size:12px}.top-in{padding:10px 12px}main{padding:12px}}
 </style>
 </head>
 <body>
@@ -100,7 +102,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     <div class="seg" role="group" aria-label="View"><button type="button" id="v-board" aria-pressed="true">Board</button><button type="button" id="v-list" aria-pressed="false">List</button></div>
     <button type="button" class="btn" id="add">+ Add lead</button>
     <button type="button" class="btn q" id="csv">Export CSV</button>
-    <span class="who" id="who"></span>
+    <span class="who" id="who" hidden><span id="who-e"></span> &middot; <a href="/cdn-cgi/access/logout">Sign out</a></span>
   </div>
   <div class="today" id="today" hidden></div>
 </header>
@@ -141,16 +143,26 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
   function load() {
     return api("GET").then(function (d) {
       if (d.status !== "ok") { gate(d); return; }
-      S.leads = d.leads; S.stages = d.stages; S.user = d.user; $("#who").textContent = d.user; render();
+      S.leads = d.leads; S.stages = d.stages; S.user = d.user; $("#who-e").textContent = "Signed in as " + d.user; $("#who").hidden = false; render();
     }).catch(function () { gate({ message: "Couldn't reach Kernel HQ." }); });
   }
+  var WHY = {
+    not_configured: "Sign-in is working, but HQ isn't connected to Cloudflare Access yet. The team domain and AUD tag still need to go into the site settings.",
+    no_signin: "You need to sign in with an approved Kernel email. If you just signed in, refresh this page.",
+    not_allowed: "You're signed in, but this email isn't on the HQ list.",
+    wrong_app: "Your sign-in is for a different Cloudflare Access app. The AUD tag in the site settings may not match the HQ app.",
+    expired: "Your sign-in expired. Sign out and sign in again.",
+    bad_token: "Your sign-in couldn't be verified. Sign out and sign in again."
+  };
   function gate(d) {
     var m = $("#main"); m.innerHTML = "";
     var g = el("div", "gate"); g.appendChild(el("h1", null, "Kernel HQ"));
-    g.appendChild(el("p", "muted", d._code === 401 ? "You need to sign in with an approved Kernel email. If you just signed in, refresh this page." : (d.message || "Something went wrong.")));
+    var msg = d._code === 401 ? (WHY[d.reason] || WHY.no_signin) : (d.message || "Something went wrong.");
+    g.appendChild(el("p", "muted", msg));
+    if (d.seen) g.appendChild(el("p", "muted", "Signed in as " + d.seen + "."));
+    if (d._code === 401) { var a = el("a", "btn q", "Sign out and switch account"); a.href = "/cdn-cgi/access/logout"; g.appendChild(a); }
     m.appendChild(g);
   }
-
   function filtered() {
     var q = S.q.toLowerCase();
     return S.leads.filter(function (l) { return !q || [l.n, l.b, l.e, l.nx].join(" ").toLowerCase().indexOf(q) !== -1; });

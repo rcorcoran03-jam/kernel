@@ -1,6 +1,6 @@
 // Kernel HQ API. GET lists leads; POST { action, ... } changes them.
 // Protected twice: Cloudflare Access in front, and a token check here.
-import { STAGES, newLead, getLead, putLead, listLeads, accessUser, markBriefSent } from "../../scan/lib/hq.js";
+import { STAGES, newLead, getLead, putLead, listLeads, accessCheck, markBriefSent } from "../../scan/lib/hq.js";
 import { loadBrief, storeBrief, sendToFounder } from "../../scan/lib/notify.js";
 import { callClaude } from "../../scan/lib/claude.js";
 import { json } from "../../scan/lib/jobs.js";
@@ -9,8 +9,9 @@ const PREP_SYSTEM = `You help Kernel Collective, a Minneapolis consultancy for f
 const FOLLOWUP_SYSTEM = `You draft short emails for Kernel Collective, a Minneapolis consultancy for founder-led small businesses, in the voice of the person sending it. Warm, plain, specific, under 140 words. No em dashes, no hype, no pressure. Use only the lead record, brief, and notes you are given. Return only the email: a subject line starting with "Subject:", a blank line, then the body, signed with the sender's first name.`;
 
 async function authed(request, env) {
-  const user = await accessUser(request, env).catch(() => null);
-  if (!user) return [null, json({ status: "error", message: "Sign in through Kernel HQ to continue." }, 401)];
+  const c = await accessCheck(request, env).catch(() => ({ email: null, reason: "bad_token" }));
+  const user = c.email;
+  if (!user) return [null, json({ status: "error", reason: c.reason, seen: c.seen, message: "Sign in through Kernel HQ to continue." }, 401)];
   if (!env.SCAN_KV) return [null, json({ status: "error", message: "Storage isn't connected." }, 503)];
   return [user, null];
 }
