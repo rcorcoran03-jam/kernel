@@ -55,7 +55,7 @@ main{padding:16px 20px 40px}
 .card .s{font-size:12px;color:var(--ink2);margin-top:2px}
 .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .tag{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;border-radius:3px;padding:2px 5px;background:var(--cream);color:var(--ink2)}
-.tag.scan{background:#E3E9DA;color:#2F3F36}.tag.review{background:#F3E3BF;color:#5E4518}.tag.sentb{background:#DCE3EC;color:#24384F}.tag.late{background:#F6DCD6;color:var(--maroon)}
+.tag.scan,.tag.src-lab{background:#E3E9DA;color:#2F3F36}.tag.src-suite{background:#F4E1DE;color:#7E2424}.tag.src-general{background:#EFEAE3;color:#5B4638}.tag.review{background:#F3E3BF;color:#5E4518}.tag.sentb{background:#DCE3EC;color:#24384F}.tag.late{background:#F6DCD6;color:var(--maroon)}
 .side{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
 /* list */
 table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--rule);border-radius:10px;overflow:hidden}
@@ -153,10 +153,18 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 .wx{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;color:var(--ink2);text-align:center;height:0;overflow:visible;white-space:nowrap;transform:translateY(6px)}
 .two .panel:first-child{padding-bottom:28px}
 .hbars{display:grid;gap:8px;margin-top:8px}
-.hb{display:grid;grid-template-columns:96px 1fr 88px;gap:10px;align-items:center;font-size:13px}
+.hb{display:grid;grid-template-columns:104px 1fr 88px;gap:10px;align-items:center;font-size:13px;border:0;background:none;padding:4px 8px;margin:0 -8px;border-radius:8px;cursor:pointer;text-align:left;width:calc(100% + 16px)}
+.hb:hover,.hb.on{background:rgba(58,42,34,.05)}
+.lines{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:8px 0 12px}
+.line{border:1px solid var(--rule);border-top:3px solid var(--lc);background:#fff;border-radius:10px;padding:8px 10px;text-align:left;cursor:pointer;display:grid;gap:1px}
+.line:hover,.line.on{background:rgba(58,42,34,.04)}
+.line.on{box-shadow:0 0 0 1.5px var(--lc) inset}
+.ln{font-size:12px;color:var(--ink2);font-weight:500}
+.lv{font-family:'Bitter',serif;font-size:22px;line-height:1.1}
+.lw{font-size:11.5px;color:var(--ink2)}
 .hl{color:var(--ink)}
 .ht{height:10px;background:rgba(58,42,34,.06);border-radius:0 4px 4px 0}
-.hf{display:block;height:100%;background:#5B4638;border-radius:0 4px 4px 0;min-width:4px}
+.hf{display:block;height:100%;border-radius:0 4px 4px 0;min-width:4px}
 .hv{color:var(--ink2);font-size:12px;white-space:nowrap;text-align:right}
 .tip{position:fixed;z-index:60;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;padding:6px 9px;border-radius:6px;max-width:260px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
 @media (max-width:1100px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -186,7 +194,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
       <label class="f">Email<input name="email" type="email"></label>
       <label class="f">Business<input name="business"></label>
       <label class="f">Website<input name="website"></label>
-      <label class="f">Source<select name="source"><option value="referral">Referral</option><option value="manual">Other</option><option value="contact">Website contact</option></select></label>
+      <label class="f">Source<select name="source"><option value="referral">Referral</option><option value="manual">Other</option><option value="contact">General inquiry</option><option value="core-inquiry">Suite inquiry</option><option value="lab-inquiry">Lab inquiry</option></select></label>
       <label class="f">Phone<input name="phone"></label>
     </div>
     <label class="f">Notes<textarea name="message" rows="3"></textarea></label>
@@ -198,7 +206,10 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 (function () {
   var S = { leads: [], stages: [], view: "board", q: "", sort: "u", user: "", dash: true, focus: "" };
   var MAIN = ["new", "sent", "call", "negotiation", "signed", "discovery", "lab1", "lab2", "handoff", "alumni"], SIDE = ["nofit", "paused"];
-  var SRC = { scan: "Scan", "lab-inquiry": "Lab inquiry", "core-inquiry": "Suite inquiry", contact: "Contact", referral: "Referral", manual: "Added" };
+  var SRC = { scan: "Lab scan", "lab-inquiry": "Lab inquiry", "core-inquiry": "Suite inquiry", contact: "General inquiry", referral: "Referral", manual: "Added by hand" };
+  // Which part of Kernel a source belongs to: Lab (scans + Lab page), Suite (Suite page), or general.
+  var LINE = { scan: "lab", "lab-inquiry": "lab", "core-inquiry": "suite", contact: "general", referral: "other", manual: "other" };
+  var LINES = [["lab", "Kernel Lab", "#2F3F36"], ["suite", "Kernel Suite", "#9B2C2C"], ["general", "General", "#5B4638"], ["other", "Referral & other", "#9C8A7D"]];
   var $ = function (s, r) { return (r || document).querySelector(s); };
   function el(t, c, x) { var n = document.createElement(t); if (c) n.className = c; if (x != null) n.textContent = x; return n; }
   function today() { return new Date().toISOString().slice(0, 10); }
@@ -247,7 +258,8 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     c.appendChild(el("div", "t", l.b || l.n || "Untitled"));
     if (l.b && l.n) c.appendChild(el("div", "s", l.n));
     var tg = el("div", "tags");
-    tg.appendChild(el("span", "tag" + (l.src === "scan" ? " scan" : ""), SRC[l.src] || l.src));
+    tg.appendChild(el("span", "tag src-" + (LINE[l.src] || "other"), SRC[l.src] || l.src));
+    (l.t || []).forEach(function (t) { var k = Object.keys(SRC).find(function (x) { return SRC[x] === t; }); tg.appendChild(el("span", "tag" + (k ? " src-" + LINE[k] : ""), k ? "+ " + t : t)); });
     if (l.bs === "pending") tg.appendChild(el("span", "tag review", "Brief to review"));
     if (l.bs === "sent" && l.s === "new") tg.appendChild(el("span", "tag sentb", "Brief sent"));
     if (l.d) tg.appendChild(el("span", "tag" + (due(l) === "late" ? " late" : ""), (due(l) === "late" ? "Overdue " : "Due ") + l.d.slice(5)));
@@ -384,23 +396,36 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
   }
 
   function sources() {
-    var signedAt = 2, rows = Object.keys(SRC).map(function (k) {
-      var ls = S.leads.filter(function (l) { return l.src === k; });
-      return { k: k, n: ls.length, won: ls.filter(function (l) { return gIndex(furthest(l)) >= signedAt; }).length };
-    }).filter(function (r) { return r.n; }).sort(function (a, b) { return b.n - a.n; });
+    var signedAt = 2, wrap = el("div");
+    function won(ls) { return ls.filter(function (l) { return gIndex(furthest(l)) >= signedAt; }).length; }
+    // Lab / Suite / General split
+    var split = el("div", "lines");
+    LINES.forEach(function (ln) {
+      var ls = S.leads.filter(function (l) { return (LINE[l.src] || "other") === ln[0]; }); if (!ls.length && ln[0] === "other") return;
+      var b = el("button", "line" + (S.focus === "line:" + ln[0] ? " on" : "")); b.type = "button"; b.style.setProperty("--lc", ln[2]);
+      b.appendChild(el("span", "ln", ln[1])); b.appendChild(el("span", "lv", String(ls.length)));
+      b.appendChild(el("span", "lw", won(ls) + " signed"));
+      b.dataset.tip = ln[1] + ": " + plural(ls.length, "lead") + ", " + won(ls) + " signed or beyond. Click to filter.";
+      b.addEventListener("click", function () { setFocus(S.focus === "line:" + ln[0] ? "" : "line:" + ln[0]); });
+      split.appendChild(b);
+    });
+    wrap.appendChild(split);
+    var rows = Object.keys(SRC).map(function (k) { var ls = S.leads.filter(function (l) { return l.src === k; }); return { k: k, n: ls.length, won: won(ls) }; }).filter(function (r) { return r.n; });
     var max = Math.max.apply(null, rows.map(function (r) { return r.n; }).concat([1]));
     var box = el("div", "hbars");
     if (!rows.length) box.appendChild(el("p", "muted", "No leads yet."));
     rows.forEach(function (r) {
-      var row = el("div", "hb"); row.dataset.tip = SRC[r.k] + ": " + plural(r.n, "lead") + ", " + r.won + " signed or beyond";
+      var ln = LINES.find(function (x) { return x[0] === (LINE[r.k] || "other"); });
+      var row = el("button", "hb" + (S.focus === "src:" + r.k ? " on" : "")); row.type = "button"; row.dataset.tip = SRC[r.k] + ": " + plural(r.n, "lead") + ", " + r.won + " signed or beyond. Click to filter.";
       row.appendChild(el("span", "hl", SRC[r.k]));
-      var tr = el("span", "ht"); var f = el("span", "hf"); f.style.width = (r.n / max * 100) + "%"; tr.appendChild(f); row.appendChild(tr);
+      var tr = el("span", "ht"); var f = el("span", "hf"); f.style.width = (r.n / max * 100) + "%"; f.style.background = ln[2]; tr.appendChild(f); row.appendChild(tr);
       row.appendChild(el("span", "hv", r.n + (r.won ? " · " + r.won + " signed" : "")));
+      row.addEventListener("click", function () { setFocus(S.focus === "src:" + r.k ? "" : "src:" + r.k); });
       box.appendChild(row);
     });
-    return box;
+    wrap.appendChild(box);
+    return wrap;
   }
-
   function card4(label, value, sub, pill) {
     var t = el("div", "kpi"); var top = el("div", "kt"); top.appendChild(el("span", "kl", label));
     if (pill) top.appendChild(el("span", "pillx " + pill.k, pill.t));
@@ -424,10 +449,17 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     if (f === "due") return isOpen(l) && l.d && l.d <= t;
     if (f === "review") return l.bs === "pending";
     if (f === "quiet") return isOpen(l) && dayKey(l.u) < daysAgo(14);
+    if (f.indexOf("src:") === 0) return l.src === f.slice(4);
+    if (f.indexOf("line:") === 0) return (LINE[l.src] || "other") === f.slice(5);
     var gi = GROUPS.map(function (g) { return g.id; }).indexOf(f);
     return gi === -1 || (!isExit(l) && gIndex(l.s) === gi);
   }
-  function focusLabel() { var g = GROUPS.find(function (x) { return x.id === S.focus; }); return g ? g.label : FOCUS[S.focus]; }
+  function focusLabel() {
+    var f = S.focus, g = GROUPS.find(function (x) { return x.id === f; }); if (g) return g.label;
+    if (f.indexOf("src:") === 0) return SRC[f.slice(4)];
+    if (f.indexOf("line:") === 0) { var ln = LINES.find(function (x) { return x[0] === f.slice(5); }); return ln ? ln[1] + " leads" : ""; }
+    return FOCUS[f];
+  }
   function setFocus(f) { S.focus = f; render(); if (f) { var h = $(".list-h"); if (h) h.scrollIntoView({ behavior: "smooth", block: "start" }); } }
 
   function dashboard() {
@@ -547,7 +579,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     var dr = el("aside", "drawer"); dr.setAttribute("role", "dialog"); dr.setAttribute("aria-label", "Lead: " + (L.business || L.name));
     var h = el("div", "dh"), hl = el("div");
     hl.appendChild(el("h2", null, L.business || L.name || "Lead"));
-    hl.appendChild(el("div", "muted", [L.name, L.email, SRC[L.source] || L.source, "added " + ago(L.createdAt)].filter(Boolean).join(" · ")));
+    hl.appendChild(el("div", "muted", [L.name, L.email, SRC[L.source] || L.source, (L.tags || []).length ? "also " + L.tags.join(", ") : "", "added " + ago(L.createdAt)].filter(Boolean).join(" · ")));
     h.appendChild(hl);
     var x = el("button", "x", "×"); x.type = "button"; x.setAttribute("aria-label", "Close"); x.addEventListener("click", closeDrawer); h.appendChild(x);
     dr.appendChild(h);

@@ -59,7 +59,7 @@ export async function putLead(env, lead) {
   lead.furthest = furthestStage(lead);
   const clean = sanitize(lead);
   // List metadata lets the board load without reading every lead.
-  const meta = { n: clean.name, b: clean.business, s: clean.stage, src: clean.source, u: clean.updatedAt, d: clean.nextStep.due, bs: clean.briefStatus, br: clean.briefId, e: clean.email, nx: clean.nextStep.text.slice(0, 80), c: clean.createdAt, f: clean.furthest };
+  const meta = { n: clean.name, b: clean.business, s: clean.stage, src: clean.source, u: clean.updatedAt, d: clean.nextStep.due, bs: clean.briefStatus, br: clean.briefId, e: clean.email, nx: clean.nextStep.text.slice(0, 80), c: clean.createdAt, f: clean.furthest, t: clean.tags.slice(0, 4) };
   await env.SCAN_KV.put(KEY(clean.id), JSON.stringify(clean), { metadata: meta });
   return clean;
 }
@@ -73,16 +73,30 @@ export async function listLeads(env) {
   return out;
 }
 
+/** An existing lead with this email that's still in play, so repeat visitors don't become duplicates. */
+export async function findOpenLead(env, email) {
+  const e = String(email || "").trim().toLowerCase();
+  if (!e || !env.SCAN_KV) return null;
+  const m = (await listLeads(env)).filter((x) => (x.e || "").toLowerCase() === e && x.s !== "nofit").sort((a, b) => (b.u || "").localeCompare(a.u || ""))[0];
+  return m ? getLead(env, m.id) : null;
+}
+const SOURCE_NAMES = { scan: "Lab scan", "lab-inquiry": "Lab inquiry", "core-inquiry": "Suite inquiry", contact: "General inquiry" };
+export const sourceName = (k) => SOURCE_NAMES[k] || k;
+
 /** Called by the scan when a brief is ready. Reuses an open lead with the same email. */
 export async function leadFromScan(env, { briefId, input, brief, status }) {
   if (!env.SCAN_KV) return null;
-  const lead = newLead({ source: "scan" });
-  Object.assign(lead, {
+  const found = await findOpenLead(env, input.email);
+  const lead = found || newLead({ source: "scan" });
+  const fill = {
     name: input.name, email: input.email, website: input.website, business: (brief && brief.business) || input.website || "",
     room: input.room === "Other" ? input.room_other : input.room, stuck: input.stuck, operations: input.operations,
     admire: input.admire, tools: input.tools, team: input.team, location: input.location,
-    briefId, briefStatus: status,
-  });
+  };
+  // Keep anything already on file; the scan fills the gaps.
+  Object.keys(fill).forEach((k) => { if (fill[k] && (!found || !lead[k])) lead[k] = fill[k]; });
+  lead.briefId = briefId; lead.briefStatus = status;
+  if (found && found.source !== "scan") lead.tags = Array.from(new Set((lead.tags || []).concat("Lab scan")));
   lead.notes = (lead.notes || []).concat({ at: new Date().toISOString(), kind: "system", text: `Opportunity Scan finished: ${(brief && brief.opportunities && brief.opportunities.length) || 0} opportunities. Brief ${status === "sent" ? "shown to the founder" : "waiting for review"}.` });
   return putLead(env, lead);
 }

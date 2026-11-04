@@ -261,5 +261,13 @@ test("HQ refuses without Access, works with it, and scans become leads", async (
     assert.equal(r.status, 200);
     list = await (await hqGet({ request: new Request("https://k.com/api/hq"), env })).json();
     assert.equal(list.leads.length, 2); assert.ok(list.leads.some((l) => l.src === "lab-inquiry"));
+    // Suite form: company becomes the business; a repeat email joins the existing lead
+    const g = new FormData(); g.append("form", "core-inquiry"); g.append("name", "Ana"); g.append("email", "ana@x.co"); g.append("company", "Ana Studio"); g.append("message", "Suite please");
+    await inquiryPost({ request: new Request("https://k.com/api/inquiry", { method: "POST", body: g }), env: base });
+    const h = new FormData(); h.append("form", "contact"); h.append("name", "Ana"); h.append("email", "ANA@x.co"); h.append("message", "Also hi");
+    await inquiryPost({ request: new Request("https://k.com/api/inquiry", { method: "POST", body: h }), env: base });
+    list = await (await hqGet({ request: new Request("https://k.com/api/hq"), env })).json();
+    const ana = list.leads.filter((l) => l.e && l.e.toLowerCase() === "ana@x.co");
+    assert.equal(ana.length, 1, "repeat email reuses the lead"); assert.equal(ana[0].src, "core-inquiry"); assert.equal(ana[0].b, "Ana Studio");
   } finally { globalThis.fetch = realFetch; }
 });
