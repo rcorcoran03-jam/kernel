@@ -565,6 +565,12 @@ var SAMPLE_BRIEF = {
     if (e.target.name === "room") roomOther.hidden = e.target.value !== "Other";
   });
 
+  function admireValue() {
+    if (!form) return "";
+    var f = form.elements;
+    return [f.admire.value.trim(), f.admire2 ? f.admire2.value.trim() : ""].filter(Boolean).join("\n");
+  }
+
   function scanAnswers() {
     if (!form) return [];
     var f = form.elements, out = [];
@@ -575,7 +581,7 @@ var SAMPLE_BRIEF = {
     var room = form.querySelector("input[name=room]:checked");
     if (room) out.push("More room for: " + (room.value === "Other" ? (f.room_other.value.trim() || "Something else") : room.value));
     if (f.stuck.value.trim()) out.push("Keeps slipping: " + f.stuck.value.trim());
-    if (f.admire.value.trim()) out.push("Admires: " + f.admire.value.trim());
+    var adm = admireValue(); if (adm) out.push("Admires: " + adm.replace(/\n/g, "; "));
     if (f.operations.value.trim()) out.push("How it runs: " + f.operations.value.trim());
     if (f.tools.value.trim()) out.push("Tools: " + f.tools.value.trim());
     if (f.team.value.trim()) out.push("Who does the work: " + f.team.value.trim());
@@ -589,7 +595,7 @@ var SAMPLE_BRIEF = {
     var payload = {
       website: noSite.checked ? "" : f.website.value.trim(), describe: f.describe.value.trim(),
       room: (form.querySelector("input[name=room]:checked") || {}).value || "", room_other: f.room_other.value.trim(),
-      stuck: f.stuck.value.trim(), admire: f.admire.value.trim(), operations: f.operations.value.trim(), tools: f.tools.value.trim(), team: f.team.value.trim(),
+      stuck: f.stuck.value.trim(), admire: admireValue(), operations: f.operations.value.trim(), tools: f.tools.value.trim(), team: f.team.value.trim(),
       location: f.location.value.trim(), allowDiscovery: f.allowDiscovery.checked,
       name: f.name.value.trim(), email: f.email.value.trim(), consent: f.consent.checked,
       turnstileToken: (form.querySelector("[name=cf-turnstile-response]") || {}).value || ""
@@ -601,7 +607,7 @@ var SAMPLE_BRIEF = {
     updateCarry();
     submitBtn.disabled = true; submitBtn.setAttribute("aria-busy", "true");
     var label = submitBtn.textContent; submitBtn.textContent = "Scanning\u2026";
-    say("Your scan has started. This usually takes one to three minutes, so please keep this page open.");
+    say("Your scan has started. This usually takes two to four minutes, so please keep this page open.");
     var prog = startProgress();
     var fail = "Your answers are saved in the conversation form below, so nothing is lost.";
     function done() { prog.stop(); submitBtn.textContent = label; submitBtn.disabled = false; submitBtn.removeAttribute("aria-busy"); if (window.turnstile) try { window.turnstile.reset("#scan-turnstile"); } catch (e) {} }

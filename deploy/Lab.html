@@ -27,11 +27,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
-<link rel="stylesheet" href="lab.css?v=20261031b">
+<link rel="stylesheet" href="lab.css?v=20261104">
 <link rel="stylesheet" href="brief.css?v=20261103">
 <script src="site.js" defer></script>
 <script src="brief-render.js?v=20261103" defer></script>
-<script src="lab.js?v=20261103" defer></script>
+<script src="lab.js?v=20261104" defer></script>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -283,10 +283,13 @@
 
           <details class="more">
             <summary>Add more context <span>(optional)</span></summary>
-            <div class="field">
-              <label for="scan-admire">Competitors or businesses you admire</label>
-              <input id="scan-admire" name="admire" type="text" placeholder="Names or links">
-            </div>
+            <fieldset class="field field-pair">
+              <legend>Two businesses you compete with or admire</legend>
+              <label class="sr-only" for="scan-admire">First business</label>
+              <input id="scan-admire" name="admire" type="text" inputmode="url" placeholder="Paste a link, or type a name">
+              <label class="sr-only" for="scan-admire-2">Second business</label>
+              <input id="scan-admire-2" name="admire2" type="text" inputmode="url" placeholder="A second one (optional)">
+            </fieldset>
             <div class="field">
               <label for="scan-ops">How does the business run today?</label>
               <textarea id="scan-ops" name="operations" rows="3" placeholder="What you sell, how people find you, how they buy"></textarea>
@@ -311,8 +314,8 @@
 
           <div class="live-only" hidden>
             <div class="row2">
-              <div class="field"><label for="scan-name">Your name</label><input id="scan-name" name="name" type="text" autocomplete="name"></div>
-              <div class="field"><label for="scan-email">Your email</label><input id="scan-email" name="email" type="email" autocomplete="email"></div>
+              <div class="field"><label for="scan-name">Full name</label><input id="scan-name" name="name" type="text" autocomplete="name" placeholder="First and last name"></div>
+              <div class="field"><label for="scan-email">Email for your brief</label><input id="scan-email" name="email" type="email" autocomplete="email" placeholder="you@yourbusiness.com"></div>
             </div>
             <div class="check check-consent">
               <input id="scan-consent" name="consent" type="checkbox">
@@ -333,6 +336,7 @@
               <li data-stage="synthesis">Drafting opportunities from your answers</li>
               <li data-stage="review">Checking every point against the evidence</li>
             </ol>
+            <p class="sp-by">Powered by Claude, from Anthropic</p>
           </div>
           <p class="form-note" id="scan-status" aria-live="polite"></p>
         </form>

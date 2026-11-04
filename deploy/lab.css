@@ -781,3 +781,8 @@
 .brief-live .btn-sm-quiet{color:#EFEADB;border-color:rgba(210,170,90,0.45)}
 #panel-sample .kb{border:1px solid rgba(210,170,90,0.3)}
 @media print{.brief-live{display:block !important}}
+
+/* form polish: two admired businesses, attribution */
+.field-pair{border:0;padding:0;margin:0 0 18px;min-width:0}
+.field-pair legend{padding:0}
+.sp-by{margin-top:14px;padding-top:10px;border-top:1px dashed rgba(35,48,42,0.18);font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink2);opacity:0.85}
