@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Opportunity brief prototype · Kernel Lab</title>
+<link rel="icon" type="image/png" href="assets/kernel-seed.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@400;500&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--g:#2F3F36;--g2:#3E5045;--brass:#D2AA5A;--brass-t:#D9B872;--brass-ink:#7A5C24;--sage:#C9D1BC;--ivory:#FBF8EF;--ivory2:#F4EFE2;--ink:#23302A;--ink2:#4A564E;--rule:rgba(35,48,42,0.14)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#E9E4D6;font-family:'DM Sans',sans-serif;color:var(--ink);font-size:13.5px;line-height:1.55}
+.doc{max-width:960px;margin:28px auto;background:var(--ivory);border-radius:12px;overflow:hidden;box-shadow:0 18px 50px -30px rgba(0,0,0,.45)}
+.mono{font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase}
+h1,h2,h3{font-family:'Bitter',serif;font-weight:400}
+/* header */
+.hd{position:relative;background:var(--g);color:#EFEADB;padding:26px 32px 24px;overflow:hidden}
+.hd::before{content:"";position:absolute;right:-160px;top:-200px;width:520px;height:520px;background:repeating-radial-gradient(closest-side,rgba(210,170,90,.12) 0 1px,transparent 1px 20px);-webkit-mask-image:radial-gradient(closest-side,#000 20%,transparent 75%);mask-image:radial-gradient(closest-side,#000 20%,transparent 75%)}
+.hd-top{position:relative;display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}
+.hd-top img{height:34px;display:block}
+.hd-top .mono{color:var(--brass-t)}
+.hd-main{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:end}
+.hd h1{font-size:30px;line-height:1.15;color:#FFF}
+.hd .sum{margin-top:8px;font-size:14px;color:rgba(239,234,219,.85);max-width:520px}
+.hd dl{display:grid;gap:7px;font-size:12.5px;border-left:1px solid rgba(210,170,90,.35);padding-left:16px}
+.hd dt{color:var(--brass-t)} .hd dd{color:#EFEADB}
+.tag{display:inline-block;border:1px solid rgba(210,170,90,.6);border-radius:100px;padding:3px 10px;color:var(--brass-t)}
+/* stat strip */
+.strip{display:flex;flex-wrap:wrap;gap:6px 22px;padding:12px 32px;background:var(--ivory2);border-bottom:1px solid var(--rule);color:var(--ink2)}
+.strip b{color:var(--g2);font-weight:500}
+section{padding:22px 32px;border-bottom:1px solid var(--rule)}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px}
+.sh h2{font-size:19px;color:var(--g2)}
+.sh .mono{color:var(--brass-ink)}
+/* ratings */
+.rate{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.dots{display:inline-flex;gap:3px}
+.dots i{width:9px;height:9px;border-radius:50%;border:1.4px solid var(--g2);display:block}
+.dots i.on{background:var(--g2)}
+.dots.v i{border-color:var(--brass-ink)} .dots.v i.on{background:var(--brass)}
+.rate .mono{color:var(--ink2);font-size:8.5px}
+/* chips */
+.chip{display:inline-block;font-size:11px;padding:2px 8px;border-radius:100px;background:#fff;border:1px solid var(--rule);color:var(--ink);margin:0 4px 4px 0;white-space:nowrap}
+.chip em{font-style:normal;color:var(--brass-ink);font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;margin-left:4px}
+.ev{display:inline-block;font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-right:4px}
+.ev-site{background:#E3E9DA;color:#2F3F36}.ev-told{background:#F3E3BF;color:#5E4518}.ev-peer{background:#DCE3EC;color:#24384F}.ev-hyp{border:1px dashed rgba(35,48,42,.45);color:var(--ink2)}
+/* start here */
+.start{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card{background:#FFFDF7;border:1px solid rgba(201,161,90,.7);border-top:3px solid var(--brass);border-radius:8px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:7px}
+.card .mono{color:var(--brass-ink)}
+.card h3{font-size:15.5px;line-height:1.3;color:var(--ink)}
+.card p{font-size:12.5px;color:var(--ink2)}
+.card .exp{border-top:1px dashed var(--rule);padding-top:7px}
+.card .exp b{font-weight:500;color:var(--g2)}
+.card .rates{display:flex;gap:14px;flex-wrap:wrap}
+/* matrix */
+table{width:100%;border-collapse:collapse}
+th{font-family:'DM Mono',monospace;font-weight:400;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-ink);text-align:left;padding:0 8px 7px;border-bottom:1px solid var(--rule)}
+td{padding:9px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+.mx td:first-child{width:36%}
+.mx .t{font-family:'Bitter',serif;font-size:14px;line-height:1.3;color:var(--ink)}
+.mx .c{display:block;margin-top:3px}
+.mx .top{color:var(--brass-ink)}
+details summary{cursor:pointer;list-style:none;font-size:11.5px;color:var(--g2);font-weight:500;margin-top:5px}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"+ ";color:var(--brass-ink)}
+details[open] summary::before{content:"\2212 "}
+.dt{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin-top:8px;font-size:12px;color:var(--ink2)}
+.dt b{display:block;font-family:'DM Mono',monospace;font-weight:400;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-ink);margin-bottom:2px}
+/* competition */
+.cp td{font-size:12.5px;color:var(--ink2)} .cp td:first-child{width:18%;color:var(--ink)} .cp .n{font-family:'Bitter',serif;font-size:14px}
+.moat{display:block;font-size:12.5px;color:var(--ink)}
+/* foundations / obstacles */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.two h3{font-size:15px;color:var(--g2);margin-bottom:8px}
+.two ul{list-style:none;display:grid;gap:6px}
+.two li{position:relative;padding-left:16px;font-size:12.5px;color:var(--ink2)}
+.two li::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;border-radius:50%;background:var(--brass)}
+.two .ob li::before{background:transparent;border:1.4px solid var(--g2)}
+.two li span{color:var(--brass-ink);font-size:11px}
+/* footer */
+.ft{background:var(--g);color:#EFEADB;padding:20px 32px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;border-bottom:none}
+.ft p{font-size:13px;color:rgba(239,234,219,.85);max-width:520px}
+.ft a.btn{display:inline-block;background:var(--brass);color:var(--g);text-decoration:none;border-radius:100px;padding:11px 20px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+.fine{padding:12px 32px 18px;font-size:11px;color:var(--ink2);background:var(--ivory2);border-bottom:none}
+@media (max-width:760px){.hd-main,.start,.two,.dt{grid-template-columns:1fr}.mx thead{display:none}.mx tr{display:block;border-bottom:1px solid var(--rule);padding:8px 0}.mx td{display:block;border:none;padding:3px 0}.mx td:first-child{width:auto}section,.hd,.strip,.ft,.fine{padding-left:18px;padding-right:18px}.cp td{display:block;border:none;padding:2px 0}.cp tr{display:block;padding:8px 0;border-bottom:1px solid var(--rule)}.cp thead{display:none}}
+@media print{body{background:#fff}.doc{margin:0;box-shadow:none;border-radius:0;max-width:none}details{display:block}details>*{display:block}details summary{display:none}.hd,.ft,.card,.ev,.dots i.on,.strip{-webkit-print-color-adjust:exact;print-color-adjust:exact}section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<article class="doc" aria-labelledby="bt">
+  <header class="hd">
+    <div class="hd-top"><img src="assets/kernel-lab-wordmark-brass.svg" alt="Kernel Lab"><span class="mono">Opportunity brief &middot; prototype layout &middot; fictional business</span></div>
+    <div class="hd-main">
+      <div>
+        <span class="tag mono">First draft to validate</span>
+        <h1 id="bt" style="margin-top:10px">Juniper &amp; Clay</h1>
+        <p class="sum">A two-person ceramics studio with classes, private parties, and a small shop. The clearest wins are in how inquiries and bookings arrive, not in the work itself.</p>
+      </div>
+      <dl>
+        <div><dt class="mono">More room for</dt><dd>Creative work</dd></div>
+        <div><dt class="mono">Keeps slipping</dt><dd>Repeat class questions, chasing party deposits, restocking the shop</dd></div>
+        <div><dt class="mono">Compared with</dt><dd>2 studios you admire</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="strip mono"><span><b>6</b> opportunities</span><span><b>3</b> to start</span><span><b>2</b> businesses compared</span><span>Prepared Nov 3, 2026 for a working session</span></div>
+
+  <section aria-labelledby="s1">
+    <div class="sh"><h2 id="s1">Where we&rsquo;d start</h2><span class="mono">Value &#9679; &middot; Complexity &#9679;</span></div>
+    <div class="start">
+      <div class="card">
+        <span class="mono">Programs &amp; Workflows</span>
+        <h3>One intake path for every class and party inquiry</h3>
+        <p>Inquiries arrive by email, DM, and a separate form, so some go unanswered.</p>
+        <div class="rates"><span class="rate"><span class="dots v" role="img" aria-label="Value 3 of 3"><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="mono">Value</span></span><span class="rate"><span class="dots" role="img" aria-label="Complexity 1 of 3"><i class="on"></i><i></i><i></i></span><span class="mono">Complexity</span></span></div>
+        <div><span class="chip">Squarespace Forms <em>have</em></span><span class="chip">Google Sheets <em>have</em></span><span class="chip">Gmail templates <em>add</em></span></div>
+        <p class="exp"><b>First experiment:</b> point every contact link at one form for two weeks.</p>
+      </div>
+      <div class="card">
+        <span class="mono">Products &amp; Offerings</span>
+        <h3>Help visitors choose the right class before they email</h3>
+        <p>Six class types, no guidance on level or time; the same questions repeat.</p>
+        <div class="rates"><span class="rate"><span class="dots v" role="img" aria-label="Value 3 of 3"><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="mono">Value</span></span><span class="rate"><span class="dots" role="img" aria-label="Complexity 1 of 3"><i class="on"></i><i></i><i></i></span><span class="mono">Complexity</span></span></div>
+        <div><span class="chip">Class comparison page <em>build</em></span><span class="chip">AI-drafted FAQ <em>build</em></span></div>
+        <p class="exp"><b>First experiment:</b> turn the five most-asked questions into one comparison table.</p>
+      </div>
+      <div class="card">
+        <span class="mono">Programs &amp; Workflows</span>
+        <h3>Take party deposits at booking, not after</h3>
+        <p>Booking is by email with no deposit step. Process fix first; no AI needed.</p>
+        <div class="rates"><span class="rate"><span class="dots v" role="img" aria-label="Value 2 of 3"><i class="on"></i><i class="on"></i><i></i></span><span class="mono">Value</span></span><span class="rate"><span class="dots" role="img" aria-label="Complexity 1 of 3"><i class="on"></i><i></i><i></i></span><span class="mono">Complexity</span></span></div>
+        <div><span class="chip">Square or Stripe payment link <em>add</em></span><span class="chip">Deposit policy <em>write</em></span></div>
+        <p class="exp"><b>First experiment:</b> add a deposit link to the next five party confirmations.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="s2">
+    <div class="sh"><h2 id="s2">All opportunities</h2><span class="mono">Tap a row for the thinking</span></div>
+    <table class="mx">
+      <thead><tr><th>Opportunity</th><th>Value</th><th>Complexity</th><th>Example tools</th><th>Needs first</th></tr></thead>
+      <tbody>
+        <tr><td><span class="t">One intake path for every inquiry</span><span class="c mono top">Start here &middot; Workflows</span>
+          <details><summary>Show the thinking</summary><div class="dt">
+            <div><b>What prompted it</b><span class="ev ev-site">Website</span>Three contact routes on the contact page. <span class="ev ev-told">You told us</span>Class questions get lost.</div>
+            <div><b>What Kernel could build</b>One form feeding a simple tracker, an instant reply, and a follow-up reminder.</div>
+            <div><b>Obstacles</b>Old links and DMs will keep arriving for a while; one place has to win.</div>
+            <div><b>Still to validate</b>How many inquiries a week; which channel customers prefer.</div>
+          </div></details></td>
+          <td><span class="dots v" role="img" aria-label="Value 3 of 3"><i class="on"></i><i class="on"></i><i class="on"></i></span></td>
+          <td><span class="dots" role="img" aria-label="Complexity 1 of 3"><i class="on"></i><i></i><i></i></span></td>
+          <td><span class="chip">Squarespace Forms</span><span class="chip">Google Sheets</span></td>
+          <td>A decision on which channel is official</td></tr>
+        <tr><td><span class="t">Help visitors choose the right class</span><span class="c mono top">Start here &middot; Offerings</span></td>
+          <td><span class="dots v" role="img" aria-label="Value 3 of 3"><i class="on"></i><i class="on"></i><i class="on"></i></span></td>
+          <td><span class="dots" role="img" aria-label="Complexity 1 of 3"><i class="on"></i><i></i><i></i></span></td>
+          <td><span class="chip">Class comparison page</span></td>
+          <td>Your real customer questions</td></tr>
+        <tr><td><span class="t">Take party deposits at booking</span><span class="c mono top">Start here &middot; Workflows</span></td>
+          <td><span class="dots v" role="img" aria-label="Value 2 of 3"><i class="on"></i><i class="on"></i><i></i></span></td>
+          <td><span class="dots" role="img" aria-label="Complexity 1 of 3"><i class="on"></i><i></i><i></i></span></td>
+          <td><span class="chip">Square</span><span class="chip">Stripe</span></td>
+          <td>A written deposit and cancellation policy</td></tr>
+        <tr><td><span class="t">Connect registration, reminders, and class-day prep</span><span class="c mono">Workflows</span></td>
+          <td><span class="dots v" role="img" aria-label="Value 2 of 3"><i class="on"></i><i class="on"></i><i></i></span></td>
+          <td><span class="dots" role="img" aria-label="Complexity 2 of 3"><i class="on"></i><i class="on"></i><i></i></span></td>
+          <td><span class="chip">Squarespace Scheduling</span><span class="chip">Zapier</span></td>
+          <td>One booking tool as the source of truth</td></tr>
+        <tr><td><span class="t">Plan the busy season as a promotion calendar</span><span class="c mono">Offerings</span></td>
+          <td><span class="dots v" role="img" aria-label="Value 2 of 3"><i class="on"></i><i class="on"></i><i></i></span></td>
+          <td><span class="dots" role="img" aria-label="Complexity 1 of 3"><i class="on"></i><i></i><i></i></span></td>
+          <td><span class="chip">Mailchimp</span><span class="chip">AI drafts in your voice</span></td>
+          <td>Last year&rsquo;s sales by month; product photos</td></tr>
+        <tr><td><span class="t">A Monday brief: deposits due, stock to reorder</span><span class="c mono">Admin</span></td>
+          <td><span class="dots v" role="img" aria-label="Value 2 of 3"><i class="on"></i><i class="on"></i><i></i></span></td>
+          <td><span class="dots" role="img" aria-label="Complexity 3 of 3"><i class="on"></i><i class="on"></i><i class="on"></i></span></td>
+          <td><span class="chip">Gmail</span><span class="chip">Square</span><span class="chip">Sheets</span></td>
+          <td>Access to three systems; a simple stock list</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section aria-labelledby="s3">
+    <div class="sh"><h2 id="s3">The businesses you admire</h2><span class="mono">Only what&rsquo;s publicly visible</span></div>
+    <table class="cp">
+      <thead><tr><th>Business</th><th>Their moat</th><th>What you could borrow</th><th>Where you can stand apart</th></tr></thead>
+      <tbody>
+        <tr><td><span class="n">Kiln House</span><br><span class="ev ev-peer">Peer</span><span class="mono" style="font-size:8px">Fictional</span></td>
+          <td><span class="moat">A members&rsquo; studio pass that gives regulars a reason to return every week.</span></td>
+          <td>A simple returning-student offer after a first class.</td>
+          <td>Your private parties; they don&rsquo;t offer them.</td></tr>
+        <tr><td><span class="n">Moss Street Pottery</span><br><span class="ev ev-peer">Peer</span><span class="mono" style="font-size:8px">Fictional</span></td>
+          <td><span class="moat">A seasonal gift-card push every November, promoted to an email list first.</span></td>
+          <td>Plan the gift-card season ahead, drafted in your voice.</td>
+          <td>Small classes and a two-person studio feel.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section aria-labelledby="s4">
+    <div class="two">
+      <div><h3 id="s4">Foundations to put in place</h3><ul>
+        <li>A written deposit and cancellation policy <span>&middot; for deposits</span></li>
+        <li>Your 20 most common customer questions, collected <span>&middot; for the class guide</span></li>
+        <li>One booking tool as the source of truth <span>&middot; for connecting registration</span></li>
+        <li>Product photos and a simple stock list <span>&middot; for promotions and the Monday brief</span></li>
+      </ul></div>
+      <div class="ob"><h3>Obstacles to plan for</h3><ul>
+        <li>Customers will keep using old channels for a few weeks.</li>
+        <li>Busy season leaves little time to set things up; start before October.</li>
+        <li>Two people share the inbox, so ownership of follow-up needs to be clear.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <footer class="ft">
+    <p>This is a starting point, not a verdict. On the free follow&#8209;up call we check each point against what you know and pick one to try.</p>
+    <a class="btn" href="Lab.html#inquiry">Book the follow&#8209;up call</a>
+  </footer>
+  <p class="fine"><span class="ev ev-site">Website</span>seen on your public site <span class="ev ev-told">You told us</span>from your answers <span class="ev ev-peer">Peer</span>seen at a comparable business <span class="ev ev-hyp">Hypothesis</span>our guess, to validate. Tool tags: <b>have</b> already in your stack, <b>add</b> a new tool, <b>build</b> something Kernel makes with you, <b>write</b> an asset you create. Tools are examples to confirm in Discovery, not endorsements. No numbers here are estimates of your results. kernel-collective.com</p>
+</article>
+</body>
+</html>
