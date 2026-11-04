@@ -318,6 +318,16 @@
           <div class="scan-actions">
             <button type="submit" class="btn btn-brass" id="scan-submit">Save my answers for the conversation</button>
           </div>
+          <div class="scan-progress" id="scan-progress" hidden>
+            <div class="sp-head"><span class="sp-spin" aria-hidden="true"></span><strong>Your scan is running</strong><span class="sp-time" id="sp-time" aria-hidden="true">0:00</span></div>
+            <p class="sp-note">Scans usually take one to three minutes, and the steps below are approximate. Please keep this page open and your screen awake.</p>
+            <ol class="sp-steps" aria-label="What the scan does">
+              <li data-at="0">Reading your public website</li>
+              <li data-at="35">Looking at businesses you admire</li>
+              <li data-at="75">Drafting opportunities from your answers</li>
+              <li data-at="110">Checking every point against the evidence</li>
+            </ol>
+          </div>
           <p class="form-note" id="scan-status" aria-live="polite"></p>
         </form>
 

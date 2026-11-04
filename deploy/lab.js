@@ -203,17 +203,39 @@ var SAMPLE_BRIEF = {
     safeStore("kernelScanAnswers", JSON.stringify(scanAnswers()));
     updateCarry();
     submitBtn.disabled = true; submitBtn.setAttribute("aria-busy", "true");
-    say("Running your scan. This usually takes one to two minutes, so please keep this page open.");
+    var label = submitBtn.textContent; submitBtn.textContent = "Scanning\u2026";
+    say("Your scan has started. This usually takes one to three minutes, so please keep this page open.");
+    var prog = startProgress();
+    var httpStatus = 0;
     fetch(SCAN_ENDPOINT, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) })
-      .then(function (r) { return r.json().catch(function () { return { status: "error" }; }); })
+      .then(function (r) { httpStatus = r.status; return r.json().catch(function () { return { status: "error", message: "The scan stopped before it finished (error " + r.status + "). Your answers are saved in the conversation form below, so nothing is lost." }; }); })
       .then(function (d) {
         if (d.status === "ready" && d.brief) { say("Your brief is ready below. Treat it as a first draft: check each point against what you know."); showBrief(d.brief, payload); }
         else if (d.status === "queued") say(d.message || "Your brief is with Kernel for a quick review. We'll email it to you.");
         else if (d.status === "invalid") say((d.errors || ["Please check the form."]).join(" "), true);
         else say(d.message || "Something went wrong running the scan. Your answers are saved in the conversation form below.", true);
       })
-      .catch(function () { say("We couldn't reach the scan. Your answers are saved in the conversation form below.", true); })
-      .then(function () { submitBtn.disabled = false; submitBtn.removeAttribute("aria-busy"); if (window.turnstile) try { window.turnstile.reset("#scan-turnstile"); } catch (e) {} });
+      .catch(function () { say("We lost the connection while the scan was running. If your phone locked or the page closed, that can stop it. Your answers are saved in the conversation form below.", true); })
+      .then(function () { prog.stop(); submitBtn.textContent = label; submitBtn.disabled = false; submitBtn.removeAttribute("aria-busy"); if (window.turnstile) try { window.turnstile.reset("#scan-turnstile"); } catch (e) {} });
+  }
+
+  function startProgress() {
+    var box = document.getElementById("scan-progress"), time = document.getElementById("sp-time");
+    if (!box) return { stop: function () {} };
+    var steps = Array.prototype.slice.call(box.querySelectorAll(".sp-steps li"));
+    var t0 = Date.now();
+    box.hidden = false;
+    box.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+    function tick() {
+      var s = Math.floor((Date.now() - t0) / 1000);
+      time.textContent = Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2);
+      steps.forEach(function (li, i) {
+        var next = steps[i + 1], on = s >= +li.dataset.at && (!next || s < +next.dataset.at);
+        li.classList.toggle("is-now", on); li.classList.toggle("is-done", !!next && s >= +next.dataset.at);
+      });
+    }
+    tick(); var iv = setInterval(tick, 1000);
+    return { stop: function () { clearInterval(iv); box.hidden = true; } };
   }
 
   if (form) form.addEventListener("submit", function (e) {
