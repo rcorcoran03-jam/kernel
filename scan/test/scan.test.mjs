@@ -193,3 +193,27 @@ test("stepwise flow: start, one stage per step, review, approve, founder link", 
     const b = await r.json(); assert.equal(b.status, "ok"); assert.equal(b.brief.version, 2);
   } finally { globalThis.fetch = realFetch; }
 });
+
+test("parseJson handles fences, prose braces, and picks the real object", () => {
+  assert.deepEqual(parseJson('```json\n{"a":1}\n```'), { a: 1 });
+  assert.deepEqual(parseJson('Notes {not json} then {"b":{"c":2}} done'), { b: { c: 2 } });
+  assert.throws(() => parseJson('{"a": "unterminated'), /malformed/);
+});
+
+test("a malformed stage reply gets one repair call", async () => {
+  const { fetchImpl, calls } = mockClaude([
+    { content: [{ type: "text", text: '{"business_name": "Test", "observations": [ {"id": "s1", "text": "Says "hi" here", "url": "https://teststudio.com/"} ] }' }] },
+    { json: SITE }, { json: PEERS }, { json: DRAFT }, { json: DRAFT },
+  ]);
+  const { input } = cleanInput(validRaw);
+  const out = await runScan(input, { ANTHROPIC_API_KEY: "test" }, { fetchImpl });
+  assert.equal(calls.length, 5, "one extra call to repair the JSON");
+  assert.ok(calls[1].system.includes("You fix broken JSON"));
+  assert.equal(out.brief.opportunities.length, 2);
+});
+
+test("a cut-off reply is reported, not parsed", async () => {
+  const { fetchImpl } = mockClaude([{ stop: "max_tokens", content: [{ type: "text", text: '{"business_name": "Te' }] }]);
+  const { input } = cleanInput(validRaw);
+  await assert.rejects(runScan(input, { ANTHROPIC_API_KEY: "test" }, { fetchImpl }), /ran out of room/);
+});

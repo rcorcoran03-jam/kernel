@@ -20,7 +20,9 @@ Your job is to make the brief trustworthy. Check every opportunity and fix it:
 
 In "notes", add one short sentence for each significant change you made, so a human reviewer can see what you changed.
 
-Return only the corrected JSON, in the same shape as the draft, with no other text.`;
+Return only the corrected JSON, in the same shape as the draft, with no other text.
+
+JSON rules: return one JSON object and nothing else, with no code fences. Inside text values, never use double quotation marks; use single quotes instead. Keep every text value short.`;
 
 export function reviewPassUser({ draft, answers, site, peers }) {
   return `Draft brief:

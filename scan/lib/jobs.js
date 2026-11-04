@@ -36,7 +36,7 @@ export async function stepJob(env, job, opts = {}) {
     await runStage(job.next, job.input, job.state, env, opts);
     const i = STAGES.indexOf(job.next);
     if (i < STAGES.length - 1) {
-      job.next = STAGES[i + 1]; job.lockedAt = 0; await save(env, job);
+      job.next = STAGES[i + 1]; job.lockedAt = 0; job.failures = 0; await save(env, job);
       return { status: "running", next: job.next, done: STAGES.slice(0, i + 1) };
     }
     job.result = await finishJob(env, job, opts);

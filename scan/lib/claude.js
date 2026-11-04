@@ -65,16 +65,38 @@ function collectUrls(block, urls) {
   }
 }
 
-/** Pull the first JSON object out of a model reply. */
+/** Pull the JSON object out of a model reply. Tolerates code fences, prose around
+ * the JSON, and braces inside that prose: it tries every top-level object it can
+ * find and returns the largest one that parses. */
 export function parseJson(text) {
-  const start = text.indexOf("{");
-  const end = text.lastIndexOf("}");
-  if (start === -1 || end <= start) throw new ScanError("format", "The model did not return JSON.");
-  try {
-    return JSON.parse(text.slice(start, end + 1));
-  } catch (e) {
-    throw new ScanError("format", "The model returned malformed JSON.");
+  const t = String(text || "").replace(/```(?:json)?/gi, "");
+  const candidates = [];
+  const first = t.indexOf("{"), last = t.lastIndexOf("}");
+  if (first !== -1 && last > first) candidates.push(t.slice(first, last + 1));
+  for (let i = t.indexOf("{"); i !== -1; i = t.indexOf("{", i + 1)) {
+    const end = matchBrace(t, i);
+    if (end !== -1) candidates.push(t.slice(i, end + 1));
   }
+  let best = null, size = -1;
+  for (const c of candidates) {
+    if (c.length <= size) continue;
+    try { const v = JSON.parse(c); if (v && typeof v === "object") { best = v; size = c.length; } } catch (e) { /* try the next one */ }
+  }
+  if (best) return best;
+  if (first === -1) throw new ScanError("format", "The model did not return JSON.", t.slice(0, 300));
+  throw new ScanError("format", "The model returned malformed JSON.", `length ${t.length}; ends: ${t.slice(-200)}`);
+}
+
+function matchBrace(t, start) {
+  let depth = 0, inStr = false, esc = false;
+  for (let i = start; i < t.length; i++) {
+    const ch = t[i];
+    if (inStr) { if (esc) esc = false; else if (ch === "\\") esc = true; else if (ch === '"') inStr = false; continue; }
+    if (ch === '"') inStr = true;
+    else if (ch === "{") depth++;
+    else if (ch === "}") { depth--; if (depth === 0) return i; }
+  }
+  return -1;
 }
 
 export class ScanError extends Error {

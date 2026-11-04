@@ -44,7 +44,7 @@ Across the whole brief:
 - "inspiration": from the peer research only. "themes" are patterns shared by the businesses researched, each tied to an opportunity when one fits. "profiles" summarize each business compactly: its moat, up to three items each for offers, programs, strategy, sales tools, and tech stack (keep the seen or inferred label), what the founder could borrow, and where the founder can stand apart. Leave inspiration empty if there was no peer research.
 
 Quantity:
-- Return between 1 and 10 opportunities. Most briefs should have 4 to 8. Never pad to reach a number. If the evidence is thin, return fewer and say why in "notes".
+- Return between 1 and 10 opportunities. Most briefs should have 4 to 7. Never pad to reach a number. If the evidence is thin, return fewer and say why in "notes".
 - Mark at most three as top: the ones with the strongest evidence and clearest first step.
 - Avoid near-duplicates. Merge them.
 
@@ -92,7 +92,9 @@ Return only JSON in this exact shape, with no other text:
       }
     ]
   }
-}}`;
+}}
+
+JSON rules: return one JSON object and nothing else, with no code fences. Inside text values, never use double quotation marks; use single quotes instead. Keep every text value short.`;
 
 export function opportunitySynthesisUser({ answers, site, peers }) {
   return `What the founder told us:

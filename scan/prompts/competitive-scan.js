@@ -49,7 +49,9 @@ Return only JSON in this shape, with no other text:
   "limits": ["anything that limited the research"]
 }
 
-If there is nothing useful to report, return an empty peers list. Never pad.`;
+If there is nothing useful to report, return an empty peers list. Never pad.
+
+JSON rules: return one JSON object and nothing else, with no code fences. Inside text values, never use double quotation marks; use single quotes instead. Keep every text value short.`;
 
 export function competitiveScanUser({ admire, summary, location, allowDiscovery }) {
   const named = admire && admire.trim() ? admire.trim() : "none";

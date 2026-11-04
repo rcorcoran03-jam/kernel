@@ -32,7 +32,9 @@ Return only JSON in this shape, with no other text:
   "limits": ["anything that limited what you could see, such as pages that did not load"]
 }
 
-Aim for 8 to 20 observations. Fewer is fine for a small site. Never invent observations to reach a number.`;
+Aim for 8 to 20 observations. Fewer is fine for a small site. Never invent observations to reach a number.
+
+JSON rules: return one JSON object and nothing else, with no code fences. Inside text values, never use double quotation marks; use single quotes instead. Keep every text value short.`;
 
 export function siteObservationsUser({ website }) {
   return `Business website: ${website}
