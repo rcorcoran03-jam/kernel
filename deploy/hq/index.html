@@ -94,23 +94,49 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 /* dashboard */
 .dash{margin-bottom:22px}
 .dash-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.dash-h h2,.list-h{font-size:20px}
-.list-h{margin:4px 0 12px}
+.dash-h h2{font-size:20px}
 .btn.sm{padding:5px 12px;font-size:12px}
-.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:12px}
-.kpi{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:12px 14px}
-.kpi .m{color:var(--ink2)}
-.kpi .v{font-family:'Bitter',serif;font-size:30px;line-height:1.15;margin-top:4px}
+.kpis{display:grid;grid-template-columns:1.25fr 1fr 1fr 1.1fr;gap:12px;margin-bottom:12px}
+.kpi{background:#fff;border:1px solid var(--rule);border-radius:14px;padding:16px 18px;box-shadow:0 1px 2px rgba(58,42,34,.04),0 6px 18px rgba(58,42,34,.04);display:flex;flex-direction:column;gap:6px;min-width:0}
+.kt{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.kl{font-size:12.5px;color:var(--ink2);font-weight:500}
+.kpi .v{font-family:'Bitter',serif;font-size:34px;line-height:1.05;color:var(--ink);letter-spacing:-.01em}
 .kpi .s{color:var(--ink2);font-size:12px}
-.kpi.warn .v{color:var(--maroon)}
-.panel{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.pillx{font-size:11.5px;font-weight:500;border-radius:100px;padding:2px 8px;white-space:nowrap}
+.pillx.up{background:#E3F1E8;color:#256B45}.pillx.up::before{content:"\2191 "}
+.pillx.down{background:#F8E1DC;color:#9B2C2C}.pillx.down::before{content:"\2193 "}
+.pillx.flat{background:#EFEAE3;color:var(--ink2)}
+.stack{display:flex;gap:2px;height:8px;border-radius:4px;overflow:hidden;margin-top:4px;background:rgba(58,42,34,.06)}
+.stack span{display:block;cursor:pointer;min-width:6px}
+.lg{display:flex;flex-wrap:wrap;gap:4px 12px}
+.lgi{border:0;background:none;padding:0;font-size:12px;color:var(--ink2);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.lgi:hover{color:var(--ink)}
+.lgi i,.cdot{display:inline-block;width:8px;height:8px;border-radius:50%}
+.cdot{margin-right:7px;vertical-align:1px}
+.spark{width:100%;height:36px;display:block;margin-top:auto}
+.spark .sl{fill:none;stroke:var(--ink);stroke-width:2;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.spark .sa{fill:rgba(58,42,34,.06)}
+.meter{height:8px;border-radius:4px;background:rgba(58,42,34,.06);overflow:hidden;margin-top:4px}
+.meter span{display:block;height:100%;border-radius:4px}
+.need{display:grid;gap:2px;margin-top:2px}
+.nr{display:flex;justify-content:space-between;gap:8px;border:0;background:none;padding:5px 8px;margin:0 -8px;border-radius:8px;font-size:12.5px;color:var(--ink2);cursor:pointer;text-align:left}
+.nr b{font-weight:500;color:var(--ink2)}
+.nr.has b{color:var(--maroon)}
+.nr:hover:not(:disabled),.nr.on{background:rgba(155,44,44,.07)}
+.nr:disabled{cursor:default;opacity:.7}
+.list-h{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 12px}
+.list-h h2{font-size:20px}
+.chip{border:1.5px solid var(--maroon);background:#fff;border-radius:100px;padding:4px 12px;font-size:12.5px;cursor:pointer;color:var(--ink)}
+.skc{cursor:pointer;outline:none}
+.skhit{fill:transparent}
+.skc:hover .skhit,.skc:focus-visible .skhit{fill:rgba(58,42,34,.035)}
+.skc.on .skhit{fill:rgba(58,42,34,.06)}
+.panel{background:#fff;border:1px solid var(--rule);border-radius:14px;padding:16px 18px;margin-bottom:12px;box-shadow:0 1px 2px rgba(58,42,34,.04),0 6px 18px rgba(58,42,34,.04)}
 .panel h3{font-size:16px;margin-bottom:4px}
 .panel .cap{font-size:12px;margin:0 0 8px}
 .sk-scroll{overflow-x:auto}
 .sankey{width:100%;min-width:660px;display:block}
-.sankey .node{fill:var(--maroon)}
-.sankey .flow{fill:rgba(155,44,44,.2)}
-.sankey .flow:hover{fill:rgba(155,44,44,.34)}
+.sankey .flow:hover{opacity:.75}
 .sankey .drop{fill:rgba(122,99,85,.22)}
 .sankey .drop:hover{fill:rgba(122,99,85,.38)}
 .sankey .nl{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;fill:var(--ink2)}
@@ -121,8 +147,8 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 .wk{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;height:150px;margin-top:8px;border-bottom:1px solid var(--rule);padding-bottom:0}
 .wc{display:flex;flex-direction:column;cursor:default}
 .wp{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-top:16px}
-.wb{display:block;width:70%;max-width:34px;background:var(--maroon);border-radius:4px 4px 0 0;min-height:3px}
-.wc:hover .wb{background:var(--maroon2)}
+.wb{display:block;width:70%;max-width:34px;background:#5B4638;border-radius:4px 4px 0 0;min-height:3px}
+.wc:hover .wb{background:var(--ink)}
 .wv{font-size:11px;color:var(--ink);margin-bottom:2px}
 .wx{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;color:var(--ink2);text-align:center;height:0;overflow:visible;white-space:nowrap;transform:translateY(6px)}
 .two .panel:first-child{padding-bottom:28px}
@@ -130,11 +156,11 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 .hb{display:grid;grid-template-columns:96px 1fr 88px;gap:10px;align-items:center;font-size:13px}
 .hl{color:var(--ink)}
 .ht{height:10px;background:rgba(58,42,34,.06);border-radius:0 4px 4px 0}
-.hf{display:block;height:100%;background:var(--maroon);border-radius:0 4px 4px 0;min-width:4px}
+.hf{display:block;height:100%;background:#5B4638;border-radius:0 4px 4px 0;min-width:4px}
 .hv{color:var(--ink2);font-size:12px;white-space:nowrap;text-align:right}
 .tip{position:fixed;z-index:60;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;padding:6px 9px;border-radius:6px;max-width:260px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
-@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:700px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}.kpi .v{font-size:24px}}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:700px){.kpis{grid-template-columns:1fr}.two{grid-template-columns:1fr}.kpi .v{font-size:24px}}
 @media (max-width:700px){.grid2{grid-template-columns:1fr}.kv{grid-template-columns:1fr}.who{flex-basis:100%;font-size:12px}.top-in{padding:10px 12px}main{padding:12px}}
 </style>
 </head>
@@ -170,7 +196,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 
 <script>
 (function () {
-  var S = { leads: [], stages: [], view: "board", q: "", sort: "u", user: "", dash: true };
+  var S = { leads: [], stages: [], view: "board", q: "", sort: "u", user: "", dash: true, focus: "" };
   var MAIN = ["new", "sent", "call", "negotiation", "signed", "discovery", "lab1", "lab2", "handoff", "alumni"], SIDE = ["nofit", "paused"];
   var SRC = { scan: "Scan", "lab-inquiry": "Lab inquiry", "core-inquiry": "Suite inquiry", contact: "Contact", referral: "Referral", manual: "Added" };
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -209,7 +235,10 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
   }
   function filtered() {
     var q = S.q.toLowerCase();
-    return S.leads.filter(function (l) { return !q || [l.n, l.b, l.e, l.nx].join(" ").toLowerCase().indexOf(q) !== -1; });
+    return S.leads.filter(function (l) {
+      if (S.focus && !focusMatch(l)) return false;
+      return !q || [l.n, l.b, l.e, l.nx].join(" ").toLowerCase().indexOf(q) !== -1;
+    });
   }
   function due(l) { if (!l.d) return ""; return l.d < today() ? "late" : l.d === today() ? "today" : ""; }
 
@@ -231,7 +260,9 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
   }
   function column(stage, list) {
     var col = el("section", "col"); col.setAttribute("aria-label", label(stage));
-    var h = el("div", "col-h"); h.appendChild(el("h2", null, label(stage))); h.appendChild(el("span", null, String(list.length))); col.appendChild(h);
+    var h = el("div", "col-h"), gi = gIndex(stage), hh = el("h2", null, label(stage));
+    if (gi !== -1) { var dot = el("i", "cdot"); dot.style.background = GROUPS[gi].c; hh.prepend(dot); }
+    h.appendChild(hh); h.appendChild(el("span", null, String(list.length))); col.appendChild(h);
     var cs = el("div", "cards"); list.forEach(function (l) { cs.appendChild(card(l)); }); col.appendChild(cs);
     col.addEventListener("dragover", function (e) { e.preventDefault(); col.classList.add("drop"); });
     col.addEventListener("dragleave", function () { col.classList.remove("drop"); });
@@ -257,11 +288,11 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
   /* ---------- dashboard ---------- */
   var PATH = MAIN.slice();
   var GROUPS = [
-    { id: "active", label: "Active leads", stages: ["new", "sent", "call"] },
-    { id: "neg", label: "In negotiation", stages: ["negotiation"] },
-    { id: "signed", label: "Contract signed", stages: ["signed"] },
-    { id: "wip", label: "Work in progress", stages: ["discovery", "lab1", "lab2", "handoff"] },
-    { id: "port", label: "Portfolio", stages: ["alumni"] }
+    { id: "active", c: "#3B6FB0", label: "Active leads", stages: ["new", "sent", "call"] },
+    { id: "neg", c: "#C49412", label: "In negotiation", stages: ["negotiation"] },
+    { id: "signed", c: "#D2553A", label: "Contract signed", stages: ["signed"] },
+    { id: "wip", c: "#3F8F62", label: "Work in progress", stages: ["discovery", "lab1", "lab2", "handoff"] },
+    { id: "port", c: "#7A3B8F", label: "Portfolio", stages: ["alumni"] }
   ];
   var NS = "http://www.w3.org/2000/svg";
   function sv(t, a, txt) { var n = document.createElementNS(NS, t); for (var k in a) n.setAttribute(k, a[k]); if (txt != null) n.textContent = txt; return n; }
@@ -282,10 +313,18 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 
   function sankey() {
     var D = flowData(), N = Math.max(D[0].reached, 1);
-    var W = 1000, H = 300, x0 = 8, nw = 14, step = (W - x0 * 2 - nw) / (GROUPS.length - 1), yc = 150, maxH = 150, yDrop = 290;
+    var W = 1000, H = 300, x0 = 8, nw = 14, step = (W - x0 - 112 - nw) / (GROUPS.length - 1), yc = 150, maxH = 150, yDrop = 290;
     var hOf = function (n) { return n ? Math.max(3, n / N * maxH) : 0; };
     var svg = sv("svg", { viewBox: "0 0 " + W + " " + H, class: "sankey", role: "img", "aria-label": "Pipeline: how many leads reached each stage and where they stopped" });
     var nodes = D.map(function (d, i) { var h = hOf(d.reached); return { x: x0 + i * step, top: yc - h / 2, h: h }; });
+    var defs = sv("defs", {}); svg.appendChild(defs);
+    D.forEach(function (d, i) {
+      if (!D[i + 1]) return;
+      var gr = sv("linearGradient", { id: "fl" + i, x1: "0", x2: "1", y1: "0", y2: "0" });
+      gr.appendChild(sv("stop", { offset: "0", "stop-color": d.g.c, "stop-opacity": ".28" }));
+      gr.appendChild(sv("stop", { offset: "1", "stop-color": D[i + 1].g.c, "stop-opacity": ".28" }));
+      defs.appendChild(gr);
+    });
     function band(xa, ya1, ya2, xb, yb1, yb2) {
       var m = (xa + xb) / 2;
       return "M" + xa + "," + ya1 + " C" + m + "," + ya1 + " " + m + "," + yb1 + " " + xb + "," + yb1 + " L" + xb + "," + yb2 + " C" + m + "," + yb2 + " " + m + "," + ya2 + " " + xa + "," + ya2 + " Z";
@@ -294,7 +333,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
       var n = nodes[i], next = D[i + 1], stopped = d.nofit + d.paused;
       if (next && next.reached) {
         var hc = hOf(next.reached), nn = nodes[i + 1];
-        svg.appendChild(sv("path", { d: band(n.x + nw, n.top, n.top + hc, nn.x, nn.top, nn.top + nn.h), class: "flow", "data-tip": plural(next.reached, "lead") + " moved on to " + next.g.label.toLowerCase() }));
+        svg.appendChild(sv("path", { d: band(n.x + nw, n.top, n.top + hc, nn.x, nn.top, nn.top + nn.h), class: "flow", fill: "url(#fl" + i + ")", "data-tip": plural(next.reached, "lead") + " moved on to " + next.g.label.toLowerCase() }));
       }
       if (stopped) {
         var hs = hOf(stopped), ys = n.top + n.h - hs, ex = n.x + nw + 24 + hs;
@@ -304,11 +343,18 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
       }
     });
     D.forEach(function (d, i) {
-      var n = nodes[i], last = i === D.length - 1, anchor = last ? "end" : "start", tx = last ? n.x + nw : n.x;
-      if (d.reached) svg.appendChild(sv("rect", { x: n.x, y: n.top, width: nw, height: n.h, rx: 3, class: "node", "data-tip": d.g.label + ": " + plural(d.reached, "lead") + " got this far, " + d.here + " here now" }));
-      svg.appendChild(sv("text", { x: tx, y: 18, class: "nl", "text-anchor": anchor }, d.g.label.toUpperCase()));
-      svg.appendChild(sv("text", { x: tx, y: 46, class: "nv", "text-anchor": anchor }, String(d.here)));
-      svg.appendChild(sv("text", { x: tx, y: 64, class: "ns", "text-anchor": anchor }, "here now · " + d.reached + " reached"));
+      var n = nodes[i], last = false, anchor = "start", tx = n.x;
+      var col = sv("g", { class: "skc" + (S.focus === d.g.id ? " on" : ""), tabindex: "0", role: "button", "aria-label": "Show " + d.g.label + " leads", "data-tip": d.g.label + ": " + plural(d.reached, "lead") + " got this far, " + d.here + " here now. Click to filter the list." });
+      col.appendChild(sv("rect", { x: n.x - 6, y: 0, width: Math.min(step, 190) - 4, height: H - 40, class: "skhit" }));
+      if (d.reached) col.appendChild(sv("rect", { x: n.x, y: n.top, width: nw, height: n.h, rx: 3, fill: d.g.c }));
+      col.appendChild(sv("circle", { cx: tx + 4, cy: 14, r: 4, fill: d.g.c }));
+      col.appendChild(sv("text", { x: tx + 14, y: 18, class: "nl", "text-anchor": anchor }, d.g.label.toUpperCase()));
+      col.appendChild(sv("text", { x: tx, y: 46, class: "nv", "text-anchor": anchor }, String(d.here)));
+      var conv = i === 0 ? d.reached + " total" : (D[i - 1].reached ? Math.round(d.reached / D[i - 1].reached * 100) : 0) + "% moved on";
+      col.appendChild(sv("text", { x: tx, y: 64, class: "ns", "text-anchor": anchor }, conv));
+      col.addEventListener("click", function () { setFocus(S.focus === d.g.id ? "" : d.g.id); });
+      col.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setFocus(S.focus === d.g.id ? "" : d.g.id); } });
+      svg.appendChild(col);
     });
     return svg;
   }
@@ -355,6 +401,35 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     return box;
   }
 
+  function card4(label, value, sub, pill) {
+    var t = el("div", "kpi"); var top = el("div", "kt"); top.appendChild(el("span", "kl", label));
+    if (pill) top.appendChild(el("span", "pillx " + pill.k, pill.t));
+    t.appendChild(top); t.appendChild(el("div", "v", value)); if (sub) t.appendChild(el("div", "s", sub)); return t;
+  }
+  function spark() {
+    var weeks = [], start = new Date(); start.setHours(0, 0, 0, 0); start.setDate(start.getDate() - ((start.getDay() + 6) % 7));
+    for (var i = 11; i >= 0; i--) { var a = new Date(start); a.setDate(a.getDate() - i * 7); var b = new Date(a); b.setDate(b.getDate() + 7); weeks.push({ a: a, b: b, n: 0 }); }
+    S.leads.forEach(function (l) { var c = new Date(l.c || l.u); weeks.forEach(function (w) { if (c >= w.a && c < w.b) w.n++; }); });
+    var max = Math.max.apply(null, weeks.map(function (w) { return w.n; }).concat([1])), W = 200, H = 36;
+    var pts = weeks.map(function (w, i) { return [i / 11 * (W - 4) + 2, H - 3 - w.n / max * (H - 8)]; });
+    var svg = sv("svg", { viewBox: "0 0 " + W + " " + H, class: "spark", preserveAspectRatio: "none", "aria-hidden": "true" });
+    var line = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ");
+    svg.appendChild(sv("path", { d: line + " L" + (W - 2) + "," + H + " L2," + H + " Z", class: "sa" }));
+    svg.appendChild(sv("path", { d: line, class: "sl" }));
+    return svg;
+  }
+  var FOCUS = { due: "Follow-ups due", review: "Briefs to review", quiet: "Going quiet" };
+  function focusMatch(l) {
+    var f = S.focus, t = today();
+    if (f === "due") return isOpen(l) && l.d && l.d <= t;
+    if (f === "review") return l.bs === "pending";
+    if (f === "quiet") return isOpen(l) && dayKey(l.u) < daysAgo(14);
+    var gi = GROUPS.map(function (g) { return g.id; }).indexOf(f);
+    return gi === -1 || (!isExit(l) && gIndex(l.s) === gi);
+  }
+  function focusLabel() { var g = GROUPS.find(function (x) { return x.id === S.focus; }); return g ? g.label : FOCUS[S.focus]; }
+  function setFocus(f) { S.focus = f; render(); if (f) { var h = $(".list-h"); if (h) h.scrollIntoView({ behavior: "smooth", block: "start" }); } }
+
   function dashboard() {
     var wrap = el("section", "dash"); wrap.setAttribute("aria-label", "Dashboard");
     var hd = el("div", "dash-h"); hd.appendChild(el("h2", null, "Pipeline"));
@@ -373,16 +448,38 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     var quiet = open.filter(function (l) { return dayKey(l.u) < daysAgo(14); }).length;
 
     var k = el("div", "kpis");
-    k.appendChild(tile("Open pipeline", String(open.length), plural(L.filter(function (l) { return gIndex(l.s) === 0; }).length, "active lead") + ", " + L.filter(function (l) { return l.s === "negotiation"; }).length + " negotiating"));
-    k.appendChild(tile("New, last 30 days", String(n30), p30 || n30 ? p30 + " the 30 days before" : "nothing yet"));
-    k.appendChild(tile("Lead to contract", L.length ? Math.round(signed / L.length * 100) + "%" : "–", signed + " of " + plural(L.length, "lead") + (decided ? ", " + Math.round(signed / decided * 100) + "% of decided" : "")));
-    k.appendChild(tile("Follow-ups due", String(dueN), late ? late + " overdue" : "none overdue", late > 0));
-    k.appendChild(tile("Briefs to review", String(review), review ? "waiting on you" : "all clear", review > 0));
-    k.appendChild(tile("Going quiet", String(quiet), "open, untouched 14+ days", quiet > 0));
+    // 1. Open pipeline, split by stage in the same colors as the chart
+    var c1 = card4("Open pipeline", String(open.length), "leads in play");
+    var split = GROUPS.slice(0, 4).map(function (g, i) { return { g: g, n: L.filter(function (l) { return !isExit(l) && gIndex(l.s) === i; }).length }; });
+    var bar = el("div", "stack"); split.forEach(function (x) { if (!x.n) return; var seg = el("span"); seg.style.flex = x.n; seg.style.background = x.g.c; seg.dataset.tip = x.g.label + ": " + x.n; seg.addEventListener("click", function () { setFocus(x.g.id); }); bar.appendChild(seg); });
+    c1.appendChild(bar);
+    var lg = el("div", "lg"); split.forEach(function (x) { var it = el("button", "lgi"); it.type = "button"; var dot = el("i"); dot.style.background = x.g.c; it.appendChild(dot); it.appendChild(document.createTextNode(x.g.label.replace("Work in progress", "In progress").replace("Active leads", "Active").replace("Contract signed", "Signed").replace("In negotiation", "Negotiating") + " " + x.n)); it.addEventListener("click", function () { setFocus(x.g.id); }); lg.appendChild(it); });
+    c1.appendChild(lg); k.appendChild(c1);
+    // 2. New leads, with change and a 12-week sparkline
+    var delta = p30 ? Math.round((n30 - p30) / p30 * 100) : null;
+    var c2 = card4("New leads · 30 days", String(n30), null, delta === null ? (n30 ? { t: "first month", k: "flat" } : null) : { t: (delta > 0 ? "+" : "") + delta + "%", k: delta > 0 ? "up" : delta < 0 ? "down" : "flat" });
+    c2.appendChild(el("div", "s", "vs " + p30 + " the 30 days before"));
+    c2.appendChild(spark()); k.appendChild(c2);
+    // 3. Lead to contract
+    var rate = L.length ? Math.round(signed / L.length * 100) : 0;
+    var c3 = card4("Lead to contract", L.length ? rate + "%" : "–", signed + " of " + plural(L.length, "lead") + " signed");
+    var mt = el("div", "meter"); var mf = el("span"); mf.style.width = rate + "%"; mf.style.background = GROUPS[2].c; mt.appendChild(mf); c3.appendChild(mt);
+    if (decided) c3.appendChild(el("div", "s", Math.round(signed / decided * 100) + "% of leads that reached a decision"));
+    k.appendChild(c3);
+    // 4. Needs you
+    var need = dueN + review + quiet;
+    var c4 = card4("Needs you", String(need), need ? null : "all clear");
+    var nl = el("div", "need");
+    [["due", "Follow-ups due", dueN, late ? late + " overdue" : ""], ["review", "Briefs to review", review, ""], ["quiet", "Going quiet (14+ days)", quiet, ""]].forEach(function (r) {
+      var b = el("button", "nr" + (r[2] ? " has" : "") + (S.focus === r[0] ? " on" : "")); b.type = "button"; b.disabled = !r[2];
+      b.appendChild(el("span", null, r[1])); b.appendChild(el("b", null, String(r[2]) + (r[3] ? " · " + r[3] : "")));
+      b.addEventListener("click", function () { setFocus(S.focus === r[0] ? "" : r[0]); }); nl.appendChild(b);
+    });
+    c4.appendChild(nl); k.appendChild(c4);
     wrap.appendChild(k);
 
     var sk = el("div", "panel"); sk.appendChild(el("h3", null, "Where deals stop"));
-    sk.appendChild(el("p", "muted cap", "Each bar is everyone who got that far. Ribbons carry leads forward; grey ribbons drop off as not a fit or paused."));
+    sk.appendChild(el("p", "muted cap", "The number is who's in that stage now. Each bar is everyone who got that far, and grey ribbons are leads that stopped (not a fit or paused). Click a stage to filter the list."));
     var sc = el("div", "sk-scroll"); sc.appendChild(sankey()); sk.appendChild(sc); wrap.appendChild(sk);
 
     var two = el("div", "two");
@@ -407,7 +504,9 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     renderToday();
     var m = $("#main"); m.innerHTML = ""; var list = filtered();
     m.appendChild(dashboard());
-    var lh = el("h2", "list-h", S.view === "board" ? "Leads" : "All leads"); m.appendChild(lh);
+    var lh = el("div", "list-h"); lh.appendChild(el("h2", null, S.focus ? focusLabel() : (S.view === "board" ? "Leads" : "All leads")));
+    if (S.focus) { var ch = el("button", "chip", "Showing " + plural(list.length, "lead") + " · Clear filter ×"); ch.type = "button"; var g0 = GROUPS.find(function (x) { return x.id === S.focus; }); if (g0) ch.style.borderColor = g0.c; ch.addEventListener("click", function () { setFocus(""); }); lh.appendChild(ch); }
+    m.appendChild(lh);
     if (!S.leads.length) { m.appendChild(el("p", "empty", "No leads yet. Scans and website inquiries will show up here, or add one by hand.")); return; }
     if (S.view === "board") {
       var b = el("div", "board"); MAIN.forEach(function (s) { b.appendChild(column(s, list.filter(function (l) { return l.s === s; }).sort(function (x, y) { return (y.u || "").localeCompare(x.u || ""); }))); }); m.appendChild(b);
