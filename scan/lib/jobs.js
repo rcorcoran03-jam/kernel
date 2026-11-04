@@ -3,6 +3,7 @@
 import { STAGES, runStage, finishScan } from "./pipeline.js";
 import { storeBrief, notifyKernel, token } from "./notify.js";
 import { ScanError } from "./claude.js";
+import { leadFromScan } from "./hq.js";
 
 const KEY = (id) => `job:${id}`;
 const TTL = 60 * 60 * 6;
@@ -59,6 +60,7 @@ async function finishJob(env, job, opts) {
     status: humanReview ? "pending" : "sent", approveToken: token(), viewToken: token(),
   };
   await storeBrief(env, job.id, record);
+  await leadFromScan(env, { briefId: job.id, input: job.input, brief, status: record.status }).catch((e) => console.error("lead save failed", e.message));
   if (humanReview) {
     await notifyKernel(env, { id: job.id, brief, input: job.input, problems, approveToken: record.approveToken }, opts.fetchImpl || fetch).catch(() => false);
     return { status: "queued", id: job.id, message: "Your scan is done. It's with Kernel for a quick human review, and we'll email your brief within one business day." };

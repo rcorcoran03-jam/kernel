@@ -133,3 +133,11 @@ When you trust the output, set `HUMAN_REVIEW = "false"`. Briefs then appear on t
 **One shared renderer.** `deploy/brief-render.js` + `deploy/brief.css` draw the Lab sample, a live brief, and the private brief page in one compact, branded layout.
 
 KV writes per scan: about 12, well inside the free plan's daily limit at 25 scans a day.
+
+## Kernel HQ (lead tracker)
+
+`/hq/` is a small CRM in one HTML file. Every finished scan, and every "Start a conversation" form on the site (`/api/inquiry`), becomes a lead in the same KV namespace (`lead:<id>`). Briefs are now kept with no expiry so a lead can always open its brief.
+
+Board columns: New, Brief sent, Follow-up call, Discovery, Lab: we drive, Lab: you drive, Hand-off, Alumni, plus Not a fit and Paused. Each lead has stage, next step and due date, contact details, what they told us, the brief (open it or send it), a notes timeline, and two Claude actions: **Prep my call** and **Draft follow-up**. Nothing is ever sent by the Claude actions. CSV export is in the top bar.
+
+**Access.** `/hq/*` and `/api/hq` sit behind Cloudflare Access, and the API also verifies the Access token itself (`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, optional `HQ_EMAILS` allowlist). Until those are set, the API refuses every request.

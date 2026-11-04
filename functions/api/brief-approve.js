@@ -1,6 +1,7 @@
 // GET  /api/brief-approve?id=&t=  A confirmation page (safe for email link scanners).
 // POST /api/brief-approve          Sends the brief to the founder.
 import { loadBrief, storeBrief, sendToFounder } from "../../scan/lib/notify.js";
+import { markBriefSent } from "../../scan/lib/hq.js";
 
 const esc = (t) => String(t == null ? "" : t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 const page = (title, body, status = 200) => new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${esc(title)} · Kernel Lab</title>
@@ -32,6 +33,7 @@ export async function onRequestPost({ request, env }) {
     if (!ok) return page("Not sent", "<h1>Couldn&rsquo;t send</h1><p>The email service didn&rsquo;t accept the message. Nothing was sent; try again in a moment.</p>", 502);
     rec.status = "sent"; rec.sentAt = new Date().toISOString();
     await storeBrief(env, id, rec);
+    await markBriefSent(env, id, "email link").catch(() => {});
   }
   return page("Sent", `<h1>Sent</h1><p>${esc(rec.brief.business)}&rsquo;s brief is on its way to ${esc(rec.input.email)}.</p>`);
 }

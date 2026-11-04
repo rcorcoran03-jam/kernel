@@ -4,7 +4,7 @@
    receive form submissions, e.g. "https://formspree.io/f/abcdwxyz".
    While it is empty, forms open the visitor's email app with their
    note prefilled to CONTACT_EMAIL, so no message is ever lost. */
-var FORM_ENDPOINT = "";
+var FORM_ENDPOINT = "/api/inquiry";
 var CONTACT_EMAIL = "hello@kernel-collective.com";
 
 (function () {
@@ -38,6 +38,7 @@ var CONTACT_EMAIL = "hello@kernel-collective.com";
       if (btn) { btn.disabled = true; btn.style.opacity = 0.6; btn.textContent = "Sending…"; }
       try {
         var res = await fetch(FORM_ENDPOINT, { method: "POST", headers: { Accept: "application/json" }, body: data });
+        if (res.status === 404 || res.status === 405) throw new Error("no endpoint");
         if (!res.ok) throw new Error("bad response");
         form.reset();
         if (btn) btn.textContent = "Sent ✓";

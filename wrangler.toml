@@ -11,6 +11,10 @@ SCAN_MODEL = "claude-sonnet-5-5"
 MAX_SCANS_PER_IP_PER_DAY = "3"
 MAX_SCANS_PER_DAY = "25"
 ALLOWED_ORIGIN = "https://kernel-collective.com,https://www.kernel-collective.com,https://kernel.ryan-corcoran.com"   # comma-separated
+# Kernel HQ (/hq). Fill these in after setting up Cloudflare Access; HQ stays locked until then.
+ACCESS_TEAM_DOMAIN = ""        # e.g. "kernel.cloudflareaccess.com"
+ACCESS_AUD = ""                # the Access application's Audience (AUD) tag
+HQ_EMAILS = "hello@kernel-collective.com,rcorcoran03@gmail.com"   # who may use HQ, comma-separated
 SITE_URL = "https://kernel-collective.com"   # used for links in emails
 NOTIFY_EMAIL = "hello@kernel-collective.com"
 FROM_EMAIL = "Kernel Scan <scan@notify.kernel-collective.com>"   # must match the domain verified in Resend

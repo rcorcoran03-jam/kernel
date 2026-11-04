@@ -86,7 +86,8 @@ export function briefEmailHtml(env, brief, { eyebrow, heading, intro, ctaHref, c
 
 export async function storeBrief(env, id, record) {
   if (!env.SCAN_KV) return false;
-  await env.SCAN_KV.put(`brief:${id}`, JSON.stringify(record), { expirationTtl: 60 * 60 * 24 * 60 });
+  // Kept with no expiry so Kernel HQ can always open a lead's brief.
+  await env.SCAN_KV.put(`brief:${id}`, JSON.stringify(record));
   return true;
 }
 export async function loadBrief(env, id) {

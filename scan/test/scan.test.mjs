@@ -10,6 +10,8 @@ import { onRequestPost as stepPost } from "../../functions/api/scan-step.js";
 import { onRequestGet as briefGet } from "../../functions/api/brief.js";
 import { onRequestGet as approveGet, onRequestPost as approvePost } from "../../functions/api/brief-approve.js";
 import { briefEmailHtml } from "../lib/notify.js";
+import { onRequestGet as hqGet, onRequestPost as hqPost } from "../../functions/api/hq.js";
+import { onRequestPost as inquiryPost } from "../../functions/api/inquiry.js";
 
 const SITE = {
   business_name: "Test Studio", summary: "A pottery studio offering classes.", tools_seen: [{ name: "Squarespace", role: "site", url: "https://teststudio.com/" }],
@@ -216,4 +218,45 @@ test("a cut-off reply is reported, not parsed", async () => {
   const { fetchImpl } = mockClaude([{ stop: "max_tokens", content: [{ type: "text", text: '{"business_name": "Te' }] }]);
   const { input } = cleanInput(validRaw);
   await assert.rejects(runScan(input, { ANTHROPIC_API_KEY: "test" }, { fetchImpl }), /ran out of room/);
+});
+
+function memKV() {
+  const store = new Map();
+  return { store,
+    get: async (k) => (store.has(k) ? store.get(k).v : null),
+    put: async (k, v, o) => store.set(k, { v, m: (o && o.metadata) || null }),
+    list: async ({ prefix }) => ({ keys: [...store.keys()].filter((k) => k.startsWith(prefix)).map((k) => ({ name: k, metadata: store.get(k).m })), list_complete: true }),
+  };
+}
+
+test("HQ refuses without Access, works with it, and scans become leads", async () => {
+  const kv = memKV();
+  const { fetchImpl } = mockClaude([{ json: SITE }, { json: PEERS }, { json: DRAFT }, { json: DRAFT }, { content: [{ type: "text", text: "Subject: Hi\n\nHello" }] }]);
+  const sent = []; const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url, init) => { if (String(url).includes("resend.com")) { sent.push(JSON.parse(init.body)); return new Response("{}", { status: 200 }); } return fetchImpl(url, init); };
+  const base = { SCAN_ENABLED: "true", SCAN_KV: kv, ANTHROPIC_API_KEY: "k", RESEND_API_KEY: "r", FROM_EMAIL: "K <s@x.com>", NOTIFY_EMAIL: "hello@x.com" };
+  const post = (url, body) => new Request(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+  try {
+    let r = await hqGet({ request: new Request("https://k.com/api/hq"), env: base });
+    assert.equal(r.status, 401, "no Access token, no data");
+    let d = await (await onRequestPost({ request: post("https://k.com/api/scan", validRaw), env: base })).json();
+    for (let i = 0; i < 4; i++) await stepPost({ request: post("https://k.com/api/scan-step", { id: d.id, key: d.key }), env: base });
+    const env = { ...base, HQ_DEV_ALLOW: "true", HQ_DEV_USER: "ryan@x.com" };
+    let list = await (await hqGet({ request: new Request("https://k.com/api/hq"), env })).json();
+    assert.equal(list.leads.length, 1); assert.equal(list.leads[0].src, "scan"); assert.equal(list.leads[0].bs, "pending");
+    const id = list.leads[0].id;
+    let one = await (await hqGet({ request: new Request("https://k.com/api/hq?id=" + id), env })).json();
+    assert.ok(one.brief && one.brief.approveToken, "lead opens its brief");
+    let u = await (await hqPost({ request: post("https://k.com/api/hq", { action: "update", id, fields: { stage: "call", nextStep: { text: "Call Tue", due: "2026-11-10" } } }), env })).json();
+    assert.equal(u.lead.stage, "call"); assert.ok(u.lead.notes.some((n) => n.kind === "stage"));
+    u = await (await hqPost({ request: post("https://k.com/api/hq", { action: "send-brief", id }), env })).json();
+    assert.equal(u.lead.briefStatus, "sent"); assert.ok(sent.some((m) => m.to[0] === "a@b.co"));
+    u = await (await hqPost({ request: post("https://k.com/api/hq", { action: "ai", id, task: "followup" }), env })).json();
+    assert.equal(u.status, "ok"); assert.ok(u.lead.notes.some((n) => n.kind === "ai"));
+    const f = new FormData(); f.append("form", "lab-inquiry"); f.append("name", "Sam"); f.append("email", "sam@x.co"); f.append("message", "Hello");
+    r = await inquiryPost({ request: new Request("https://k.com/api/inquiry", { method: "POST", body: f }), env: base });
+    assert.equal(r.status, 200);
+    list = await (await hqGet({ request: new Request("https://k.com/api/hq"), env })).json();
+    assert.equal(list.leads.length, 2); assert.ok(list.leads.some((l) => l.src === "lab-inquiry"));
+  } finally { globalThis.fetch = realFetch; }
 });
