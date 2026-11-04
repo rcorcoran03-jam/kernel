@@ -55,6 +55,10 @@ main{padding:16px 20px 40px}
 .lt{font-family:'Bitter',serif;font-size:15px;color:var(--ink)}
 .lane.none .lt{color:var(--ink2);font-size:14px}
 .lc{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink2)}
+.empties{display:flex;flex-wrap:wrap;gap:6px}
+.ech{display:inline-flex;align-items:center;gap:2px;border:1px dashed rgba(58,42,34,.2);border-radius:100px;padding:4px 12px;font-size:12.5px;color:var(--ink2);background:rgba(255,255,255,.5)}
+.ech .lc{margin-left:6px}
+.ech.drop{border-style:solid;border-color:var(--lc);background:#fff;color:var(--ink)}
 .chev{margin-left:auto;font-size:12px;color:var(--ink2)}
 .lane-h:hover .chev{color:var(--maroon)}
 .lane .card{background:var(--paper)}
@@ -300,6 +304,25 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     col.addEventListener("drop", function (e) { e.preventDefault(); col.classList.remove("drop"); var id = e.dataTransfer.getData("text/plain"); var l = S.leads.find(function (x) { return x.id === id; }); if (l && l.s !== stage) move(id, stage); });
     return col;
   }
+  // Stages with leads get a full lane; empty ones fold into one slim row of drop targets.
+  function addLanes(sec, lanes, color, narrowed) {
+    var row = null;
+    lanes.forEach(function (x) {
+      if (x[1].length) { row = null; sec.appendChild(column(x[0], x[1], color)); return; }
+      if (narrowed) return;
+      if (!row) { row = el("div", "empties"); sec.appendChild(row); }
+      row.appendChild(emptyChip(x[0], color));
+    });
+  }
+  function emptyChip(stage, color) {
+    var c = el("div", "ech"); c.style.setProperty("--lc", color); c.title = "Drop a card here to move it to " + label(stage);
+    var dot = el("i", "cdot"); dot.style.background = color; c.appendChild(dot); c.appendChild(el("span", null, label(stage)));
+    c.appendChild(el("span", "lc", "0"));
+    c.addEventListener("dragover", function (e) { e.preventDefault(); c.classList.add("drop"); });
+    c.addEventListener("dragleave", function () { c.classList.remove("drop"); });
+    c.addEventListener("drop", function (e) { e.preventDefault(); c.classList.remove("drop"); var id = e.dataTransfer.getData("text/plain"); var l = S.leads.find(function (x) { return x.id === id; }); if (l && l.s !== stage) move(id, stage); });
+    return c;
+  }
   function stackBoard(list) {
     var narrowed = !!(S.q || S.focus), b = el("div", "stack-board");
     var byStage = function (st) { return list.filter(function (l) { return l.s === st; }).sort(function (x, y) { return (y.u || "").localeCompare(x.u || ""); }); };
@@ -309,14 +332,14 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
       if (narrowed && !n) return;
       var sec = el("div", "grp"); sec.style.setProperty("--lc", g.c);
       if (g.stages.length > 1) { var gh = el("div", "grp-h"); gh.appendChild(el("span", "m", g.label)); gh.appendChild(el("span", "gn", String(n))); sec.appendChild(gh); }
-      lanes.forEach(function (x) { if (narrowed && !x[1].length) return; sec.appendChild(column(x[0], x[1], g.c)); });
+      addLanes(sec, lanes, g.c, narrowed);
       b.appendChild(sec);
     });
     var exits = SIDE.map(function (st) { return [st, byStage(st)]; }), ne = exits.reduce(function (a, x) { return a + x[1].length; }, 0);
     if (!narrowed || ne) {
       var sec = el("div", "grp out"); sec.style.setProperty("--lc", "#9C8A7D");
       var gh = el("div", "grp-h"); gh.appendChild(el("span", "m", "Stopped")); gh.appendChild(el("span", "gn", String(ne))); sec.appendChild(gh);
-      exits.forEach(function (x) { if (narrowed && !x[1].length) return; sec.appendChild(column(x[0], x[1], "#9C8A7D")); });
+      addLanes(sec, exits, "#9C8A7D", narrowed);
       b.appendChild(sec);
     }
     return b;
