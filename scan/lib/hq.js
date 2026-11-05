@@ -33,19 +33,23 @@ export function cleanProposal(p) {
   return {
     status: ["draft", "sent", "accepted", "reviewed"].includes(p.status) ? p.status : "draft",
     discovery: money(p.discovery), credit: !!p.credit, lab: money(p.lab),
-    reviewDays: Math.max(0, Math.min(365, Math.round(Number(p.reviewDays) || 60))),
+    reviewDays: Math.max(0, Math.min(365, Math.round(Number(p.reviewDays) || 90))),
     handoff: /^\d{4}-\d{2}-\d{2}$/.test(p.handoff || "") ? p.handoff : "",
     targets: (Array.isArray(p.targets) ? p.targets : []).slice(0, 8).map((t) => ({
-      label: clip(t.label, 120), unit: clip(t.unit, 30), source: clip(t.source, 120),
+      label: clip(t.label, 120), short: clip(t.short, 40), unit: clip(t.unit, 30), source: clip(t.source, 120),
       kind: t.kind === "done" ? "done" : "number",
       baseline: num(t.baseline), target: num(t.target), actual: num(t.actual), done: !!t.done,
+      months: [0, 1, 2].map((i) => num(Array.isArray(t.months) ? t.months[i] : null)),
       amount: money(t.amount),
     })),
   };
 }
+/** The reading that counts: month 3 (the review), or a single review number on older proposals. */
+export const reviewReading = (t) => (t.months && t.months[2] != null ? t.months[2] : t.actual);
 /** Score one target: full when the target is reached, half when it gets at least halfway from the baseline. */
 export function scoreTarget(t) {
   if (t.kind === "done") return t.done ? { level: "met", pay: t.amount } : { level: "open", pay: 0 };
+  t = { ...t, actual: reviewReading(t) };
   if (t.actual == null || t.baseline == null || t.target == null || t.target === t.baseline) return { level: "open", pay: 0 };
   const progress = (t.actual - t.baseline) / (t.target - t.baseline);
   if (progress >= 1) return { level: "met", pay: t.amount };

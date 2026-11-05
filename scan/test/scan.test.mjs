@@ -281,6 +281,8 @@ test("teach one bonus: full at target, half at halfway, both directions", () => 
   assert.equal(scoreTarget(t({ baseline: 0, target: 80, actual: 60 })).pay, 375, "higher is better, past halfway (40)");
   assert.equal(scoreTarget(t({ kind: "done", done: true })).pay, 750);
   assert.equal(scoreTarget(t({ baseline: 0, target: 80 })).level, "open", "no actual yet");
+  assert.equal(scoreTarget(t({ baseline: 6, target: 3, months: [5, 4, 3] })).pay, 750, "month 3 is the review reading");
+  assert.equal(scoreTarget(t({ baseline: 6, target: 3, months: [5, 4] })).level, "open", "not scored before month 3");
   const p = cleanProposal({ discovery: 1000, credit: false, lab: 5000, targets: [{ amount: 750, baseline: 3, target: 1, actual: 1 }, { amount: 750, kind: "done" }] });
   assert.deepEqual(proposalTotals(p), { fixed: 6000, maxBonus: 1500, earned: 750, min: 6000, max: 7500, total: 6750 });
 });

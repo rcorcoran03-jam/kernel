@@ -184,6 +184,26 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 @media (max-width:1100px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:700px){.kpis{grid-template-columns:1fr}.two{grid-template-columns:1fr}.kpi .v{font-size:24px}}
 /* proposal */
+.pz-card{margin:0 0 12px}
+.pz-ch{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.pz-ch .pz-h{margin:0}
+.sc-strip{border:1px solid var(--rule);border-radius:12px;background:var(--cream);padding:10px}
+.sc-strip.ex{background:repeating-linear-gradient(135deg,var(--cream),var(--cream) 10px,#F3EADC 10px,#F3EADC 11px)}
+.sc-note{font-size:11.5px;color:var(--ink2);margin:0 0 8px}
+.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sc-t{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.sc-t .v{font-family:'Bitter',serif;font-size:24px;line-height:1.1}
+.sc-t .s{font-size:11.5px;color:var(--ink2)}
+.sc-t .kt .pz-chip{font-size:10.5px}
+.trend{width:100%;height:auto;display:block;margin-top:4px}
+.trend .tr{fill:none;stroke:var(--ink);stroke-width:2;stroke-linejoin:round}
+.trend .tg{stroke:#256B45;stroke-width:1.5;stroke-dasharray:4 3}
+.trend .hf2{stroke:#A8780A;stroke-width:1;stroke-dasharray:2 3;opacity:.7}
+.trend .tl,.trend .tx{font-size:9.5px;fill:var(--ink2);font-family:'DM Mono',monospace}
+.sc-sum{margin-top:8px;font-size:13px;color:var(--ink2);text-align:right}
+.sc-sum b{color:var(--ink);font-weight:500}
+@media (max-width:700px){.sc-grid{grid-template-columns:1fr}}
+
 .tag.prop{background:#F3E7CC;color:#6B4E12}
 .pz-sum{border:1px solid var(--rule);border-radius:10px;background:var(--paper);padding:10px 12px;margin-bottom:12px}
 .pz-rows{display:grid;gap:3px}
@@ -200,7 +220,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 .pz-t{border:1px solid var(--rule);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#fff}
 .pz-l{width:100%;border:0;border-bottom:1px solid transparent;font-family:'Bitter',serif;font-size:14px;padding:2px 0 4px;background:none;color:var(--ink)}
 .pz-l:focus{outline:none;border-bottom-color:var(--rule)}
-.pz-g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 8px;margin-top:6px}
+.pz-g{display:grid;grid-template-columns:repeat(6,1fr);gap:6px 8px;margin-top:6px}
 .pz-g.d{grid-template-columns:1fr 1fr;align-items:end}
 .pz-g.d .chk{margin:0 0 9px}
 .pz-g label.f input{padding:6px 7px;font-size:13px;width:100%}
@@ -209,7 +229,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 .pz-chip{font-size:11.5px;border-radius:100px;padding:2px 9px;white-space:nowrap}
 .pz-chip.met{background:#E3F1E8;color:#256B45}.pz-chip.half{background:#F3E7CC;color:#6B4E12}.pz-chip.miss{background:#F8E1DC;color:#9B2C2C}.pz-chip.open{background:#EFEAE3;color:var(--ink2)}
 .pz-src{font-size:11px;color:var(--ink2);margin:4px 0 0}
-@media (max-width:700px){.pz-g{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){.pz-g{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:700px){.grid2{grid-template-columns:1fr}.kv{grid-template-columns:1fr}.who{flex-basis:100%;font-size:12px}.top-in{padding:10px 12px}main{padding:12px}}
 </style>
 </head>
@@ -616,7 +636,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
   var tipEl = null;
   document.addEventListener("mousemove", function (e) {
     var t = e.target.closest && e.target.closest("[data-tip]");
-    if (!t || !t.closest(".dash")) { if (tipEl) tipEl.hidden = true; return; }
+    if (!t || !(t.closest(".dash") || t.closest(".drawer"))) { if (tipEl) tipEl.hidden = true; return; }
     if (!tipEl) { tipEl = el("div", "tip"); tipEl.setAttribute("role", "tooltip"); document.body.appendChild(tipEl); }
     tipEl.textContent = t.getAttribute("data-tip"); tipEl.hidden = false;
     var x = Math.min(e.clientX + 14, window.innerWidth - tipEl.offsetWidth - 8), y = e.clientY + 16;
@@ -664,17 +684,24 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 
 
   /* ---------- proposal (Teach one model) ---------- */
-  var TEMPLATE = { status: "draft", discovery: 1000, credit: false, lab: 5000, reviewDays: 60, handoff: "", targets: [
-    { label: "Median first reply to an inquiry", unit: "days", kind: "number", baseline: null, target: null, actual: null, amount: 750, source: "Shared inbox" },
-    { label: "Bookings with a deposit taken at booking", unit: "%", kind: "number", baseline: null, target: null, actual: null, amount: 750, source: "Booking system" },
-    { label: "Weekly hours on reminders, prep, and chasing", unit: "hrs", kind: "number", baseline: null, target: null, actual: null, amount: 750, source: "Owner's time log" },
-    { label: "Teach one: the team makes one change on their own", unit: "", kind: "done", done: false, amount: 750, source: "Shown at the review" }
+  var TEMPLATE = { status: "draft", discovery: 1000, credit: false, lab: 5000, reviewDays: 90, handoff: "", targets: [
+    { label: "Weekly hours on admin (reminders, prep, chasing)", short: "Admin hours", unit: "hrs", kind: "number", baseline: null, target: null, months: [null, null, null], amount: 750, source: "Owner's time log, one sample week a month" },
+    { label: "Balances paid in full before the event", short: "Paid on time", unit: "%", kind: "number", baseline: null, target: null, months: [null, null, null], amount: 750, source: "Booking and payment system" },
+    { label: "Bookings that come through the new system", short: "Through the system", unit: "%", kind: "number", baseline: null, target: null, months: [null, null, null], amount: 750, source: "Booking system vs. inbox and DMs" },
+    { label: "Teach one: the team makes a change on their own", short: "Teach one", unit: "", kind: "done", done: false, amount: 750, source: "Shown at the month-3 review" }
   ] };
   function usd(n) { return "$" + Math.round(n || 0).toLocaleString("en-US"); }
   function kusd(n) { return n >= 1000 ? "$" + (Math.round(n / 100) / 10).toString().replace(/\.0$/, "") + "k" : usd(n); }
   function nnum(v) { return v === "" || v == null || !isFinite(Number(v)) ? null : Number(v); }
+  function reading(t) { return t.months && t.months[2] != null ? t.months[2] : t.actual; }
+  function latest(t) { var m = (t.months || []).filter(function (v) { return v != null; }); return m.length ? m[m.length - 1] : null; }
+  function levelAt(t, v) {
+    if (v == null || t.baseline == null || t.target == null || t.target === t.baseline) return "open";
+    var pr = (v - t.baseline) / (t.target - t.baseline); return pr >= 1 ? "met" : pr >= 0.5 ? "half" : "missed";
+  }
   function score(t) {
     if (t.kind === "done") return t.done ? { level: "met", pay: t.amount } : { level: "open", pay: 0 };
+    t = Object.assign({}, t, { actual: reading(t) });
     if (t.actual == null || t.baseline == null || t.target == null || t.target === t.baseline) return { level: "open", pay: 0 };
     var pr = (t.actual - t.baseline) / (t.target - t.baseline);
     return pr >= 1 ? { level: "met", pay: t.amount } : pr >= 0.5 ? { level: "half", pay: Math.round(t.amount / 2) } : { level: "missed", pay: 0 };
@@ -693,6 +720,73 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
   }
   var LEVEL = { met: ["Met", "met"], half: ["Halfway", "half"], missed: ["Not reached", "miss"], open: ["Not measured yet", "open"] };
 
+
+  var EXAMPLE_PACE = [[0.4, 0.75, 1.05], [0.3, 0.6, 0.85], [0.35, 0.55, 0.7]];
+  function withExample(P) {
+    var Q = JSON.parse(JSON.stringify(P)), n = 0;
+    Q.targets.forEach(function (t) {
+      if (t.kind === "done") { t.done = true; return; }
+      if (t.baseline == null || t.target == null) return;
+      var pace = EXAMPLE_PACE[n++ % 3];
+      t.months = pace.map(function (f) { var v = t.baseline + (t.target - t.baseline) * f; return t.unit === "%" ? Math.round(Math.min(100, Math.max(0, v))) : Math.round(v * 2) / 2; });
+    });
+    return Q;
+  }
+  var LV_COLOR = { met: "#256B45", half: "#A8780A", missed: "#7a6355", open: "#7a6355" };
+  function trendChart(t) {
+    var vals = [t.baseline].concat(t.months || []), pts = vals.map(function (v, i) { return v == null ? null : [i, v]; });
+    var all = vals.filter(function (v) { return v != null; }).concat([t.target]).filter(function (v) { return v != null; });
+    var W = 260, H = 84, pl = 18, pr = 50, pt = 8, pb = 18;
+    var svg = sv("svg", { viewBox: "0 0 " + W + " " + H, class: "trend", role: "img", "aria-label": (t.short || t.label) + ": baseline " + fmtN(t.baseline, t.unit) + ", months " + (t.months || []).map(function (v) { return fmtN(v, t.unit); }).join(", ") + ", target " + fmtN(t.target, t.unit) });
+    if (!all.length) return svg;
+    var lo = Math.min.apply(null, all), hi = Math.max.apply(null, all); if (hi === lo) { hi += 1; lo -= 1; }
+    var pad = (hi - lo) * 0.12; lo -= pad; hi += pad;
+    var x = function (i) { return pl + i * (W - pl - pr) / 3; }, y = function (v) { return pt + (hi - v) / (hi - lo) * (H - pt - pb); };
+    if (t.target != null) {
+      svg.appendChild(sv("line", { x1: pl, x2: W - pr, y1: y(t.target), y2: y(t.target), class: "tg" }));
+      svg.appendChild(sv("text", { x: W - pr + 4, y: y(t.target) + 4, class: "tl" }, "Target"));
+      if (t.baseline != null) { var hv = t.baseline + (t.target - t.baseline) / 2; svg.appendChild(sv("line", { x1: pl, x2: W - pr, y1: y(hv), y2: y(hv), class: "hf2" })); svg.appendChild(sv("text", { x: W - pr + 4, y: y(hv) + 4, class: "tl" }, "Half")); }
+    }
+    var line = pts.filter(Boolean).map(function (p, i) { return (i ? "L" : "M") + x(p[0]).toFixed(1) + "," + y(p[1]).toFixed(1); }).join(" ");
+    if (line) svg.appendChild(sv("path", { d: line, class: "tr" }));
+    pts.forEach(function (p, i) {
+      svg.appendChild(sv("text", { x: x(i), y: H - 4, class: "tx", "text-anchor": "middle" }, ["Start", "Mo 1", "Mo 2", "Mo 3"][i]));
+      if (!p) return;
+      var lv = i === 0 ? "open" : levelAt(t, p[1]);
+      var c = sv("circle", { cx: x(i), cy: y(p[1]), r: i === 3 ? 5 : 4, fill: i === 0 ? "#fff" : LV_COLOR[lv], stroke: i === 0 ? "#7a6355" : "#fff", "stroke-width": 2 });
+      c.setAttribute("data-tip", (i === 0 ? "Start" : "Month " + i) + ": " + fmtN(p[1], t.unit)); svg.appendChild(c);
+    });
+    return svg;
+  }
+  function scorecard(P0, example) {
+    var P = example ? withExample(P0) : P0, wrap = el("div", "sc-strip" + (example ? " ex" : ""));
+    if (example) wrap.appendChild(el("p", "sc-note", "Example months, not real results. Use this to show a client how the scorecard reads."));
+    var grid = el("div", "sc-grid");
+    P.targets.forEach(function (t) {
+      var tile = el("div", "sc-t"), top = el("div", "kt"); top.appendChild(el("span", "kl", t.short || t.label));
+      var s = score(t), now = t.kind === "done" ? null : latest(t), lvNow = t.kind === "done" ? (t.done ? "met" : "open") : levelAt(t, now);
+      var final = t.kind === "done" ? t.done : (t.months && t.months[2] != null);
+      var chipTxt = t.kind === "done" ? (t.done ? "Done · " + usd(t.amount) : "Not yet") : now == null ? "Not measured yet" : final ? LEVEL[s.level][0] + (s.pay ? " · " + usd(s.pay) : "") : (lvNow === "met" ? "On pace for full" : lvNow === "half" ? "On pace for half" : "Below halfway");
+      var chip = el("span", "pz-chip " + LEVEL[lvNow][1], chipTxt); top.appendChild(chip); tile.appendChild(top);
+      if (t.kind === "done") {
+        tile.appendChild(el("div", "v", t.done ? "Done" : "Not yet"));
+        tile.appendChild(el("div", "s", t.label.replace(/^Teach one:\s*/i, "")));
+      } else {
+        var v = el("div", "v", now == null ? "–" : fmtN(now, t.unit)); tile.appendChild(v);
+        var d = now != null && t.baseline != null ? Math.round((now - t.baseline) * 10) / 10 : null;
+        tile.appendChild(el("div", "s", "Started at " + fmtN(t.baseline, t.unit) + " · target " + fmtN(t.target, t.unit) + (d != null && d !== 0 ? " · " + (d > 0 ? "+" : "") + fmtN(d, t.unit) : "")));
+        tile.appendChild(trendChart(t));
+      }
+      grid.appendChild(tile);
+    });
+    wrap.appendChild(grid);
+    var T = totals(P), sumL = el("div", "sc-sum");
+    sumL.appendChild(el("span", null, "Teach one bonus " + (example ? "in this example" : "so far") + ": "));
+    sumL.appendChild(el("b", null, usd(T.earned) + " of " + usd(T.maxBonus)));
+    wrap.appendChild(sumL);
+    return wrap;
+  }
+
   function proposalSection(dr, L) {
     var sec = section(dr, "Proposal");
     if (!L.proposal) {
@@ -706,8 +800,15 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     function drawProposal() {
       var P = L.proposal; sec.innerHTML = ""; sec.appendChild(el("h3", null, "Proposal"));
       var sum = el("div", "pz-sum"); sec.appendChild(sum);
+      // The results scorecard: the KPI strip the client gets, baseline plus months 1 to 3.
+      var cardWrap = el("div", "pz-card"), example = false;
+      var ch = el("div", "pz-ch"); ch.appendChild(el("span", "pz-h", "Results scorecard · what the client sees"));
+      var ex = el("button", "btn q sm", "Show example months"); ex.type = "button"; ch.appendChild(ex);
+      ex.addEventListener("click", function () { example = !example; ex.textContent = example ? "Hide example months" : "Show example months"; paintCard(); });
+      var cardBody = el("div"); cardWrap.appendChild(ch); cardWrap.appendChild(cardBody); sec.appendChild(cardWrap);
+      function paintCard() { cardBody.innerHTML = ""; cardBody.appendChild(scorecard(P, example)); }
       function paintSum() {
-        var T = totals(P); sum.innerHTML = "";
+        var T = totals(P); sum.innerHTML = ""; paintCard();
         var rows = [
           ["Discovery", P.credit ? usd(P.discovery) + ", credited to Lab" : usd(P.discovery)],
           ["Lab", usd(P.lab)],
@@ -730,7 +831,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
       sec.appendChild(g);
       var cr = el("label", "chk"); var cb = el("input"); cb.type = "checkbox"; cb.checked = P.credit; cb.addEventListener("change", function () { P.credit = cb.checked; paintSum(); }); cr.appendChild(cb); cr.appendChild(document.createTextNode(" Credit Discovery toward Lab (they sign on within 30 days)")); sec.appendChild(cr);
       var rv = el("p", "muted pz-rv"); sec.appendChild(rv);
-      function paintReview() { var d = P.handoff ? new Date(P.handoff + "T12:00:00") : null; if (d) d.setDate(d.getDate() + P.reviewDays); rv.textContent = "Bonus targets are measured " + P.reviewDays + " days after hand-off" + (d ? ", on " + d.toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" }) + "." : ". Add the hand-off date to set the review date."); }
+      function paintReview() { var d = P.handoff ? new Date(P.handoff + "T12:00:00") : null; if (d) d.setDate(d.getDate() + P.reviewDays); rv.textContent = "Targets are tracked monthly for three months after hand-off and scored at month 3" + (d ? ", around " + d.toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" }) + "." : ". Add the hand-off date to set the review date."); }
       paintReview();
       // targets
       sec.appendChild(el("div", "pz-h", "Teach one targets"));
@@ -747,9 +848,15 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
           box.appendChild(row);
         } else {
           var row2 = el("div", "pz-g");
-          [["baseline", "Baseline"], ["target", "Target"], ["actual", "At review"]].forEach(function (k) {
-            var ii = input("t" + k[0] + i, t[k[0]] == null ? "" : t[k[0]], "number"); ii.step = "any"; ii.placeholder = t.unit || "";
+          if (!t.months) t.months = [null, null, null];
+          if (t.actual != null && t.months[2] == null) t.months[2] = t.actual;
+          [["baseline", "Baseline"], ["target", "Target"]].forEach(function (k) {
+            var ii = input("t" + k[0] + i, t[k[0]], "number"); ii.step = "any"; ii.placeholder = t.unit || "";
             ii.addEventListener("input", function () { t[k[0]] = nnum(ii.value); paint(); }); row2.appendChild(field(k[1] + (t.unit ? " (" + t.unit + ")" : ""), ii));
+          });
+          [0, 1, 2].forEach(function (m) {
+            var ii = input("tm" + m + i, t.months[m], "number"); ii.step = "any"; ii.placeholder = "–";
+            ii.addEventListener("input", function () { t.months[m] = nnum(ii.value); t.actual = null; paint(); }); row2.appendChild(field("Month " + (m + 1) + (m === 2 ? " (review)" : ""), ii));
           });
           var am2 = input("ta" + i, t.amount, "number"); am2.addEventListener("input", function () { t.amount = Number(am2.value) || 0; paint(); }); row2.appendChild(field("Bonus ($)", am2));
           box.appendChild(row2);
