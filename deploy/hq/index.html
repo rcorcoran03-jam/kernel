@@ -183,6 +183,33 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 .tip{position:fixed;z-index:60;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;padding:6px 9px;border-radius:6px;max-width:260px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
 @media (max-width:1100px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:700px){.kpis{grid-template-columns:1fr}.two{grid-template-columns:1fr}.kpi .v{font-size:24px}}
+/* proposal */
+.tag.prop{background:#F3E7CC;color:#6B4E12}
+.pz-sum{border:1px solid var(--rule);border-radius:10px;background:var(--paper);padding:10px 12px;margin-bottom:12px}
+.pz-rows{display:grid;gap:3px}
+.pz-r{display:flex;justify-content:space-between;font-size:13px;color:var(--ink2)}
+.pz-r.b{color:var(--ink);font-weight:500;border-top:1px solid var(--rule);padding-top:4px;margin-top:2px}
+.pz-sc{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.pz-c{background:#fff;border:1px solid var(--rule);border-radius:8px;padding:7px 9px;display:grid;gap:2px}
+.pz-c .m{font-size:9px;color:var(--ink2)}
+.pz-c b{font-family:'Bitter',serif;font-weight:400;font-size:18px}
+.pz-c.now{border-color:#C49412;box-shadow:0 0 0 1px #C49412 inset}
+.chk{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink2);margin-top:8px}
+.pz-rv{font-size:12px;margin:6px 0 4px}
+.pz-h{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin:12px 0 6px}
+.pz-t{border:1px solid var(--rule);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#fff}
+.pz-l{width:100%;border:0;border-bottom:1px solid transparent;font-family:'Bitter',serif;font-size:14px;padding:2px 0 4px;background:none;color:var(--ink)}
+.pz-l:focus{outline:none;border-bottom-color:var(--rule)}
+.pz-g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 8px;margin-top:6px}
+.pz-g.d{grid-template-columns:1fr 1fr;align-items:end}
+.pz-g.d .chk{margin:0 0 9px}
+.pz-g label.f input{padding:6px 7px;font-size:13px;width:100%}
+.pz-f{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-top:8px}
+.pz-rule{font-size:12px;color:var(--ink2);margin:0}
+.pz-chip{font-size:11.5px;border-radius:100px;padding:2px 9px;white-space:nowrap}
+.pz-chip.met{background:#E3F1E8;color:#256B45}.pz-chip.half{background:#F3E7CC;color:#6B4E12}.pz-chip.miss{background:#F8E1DC;color:#9B2C2C}.pz-chip.open{background:#EFEAE3;color:var(--ink2)}
+.pz-src{font-size:11px;color:var(--ink2);margin:4px 0 0}
+@media (max-width:700px){.pz-g{grid-template-columns:1fr 1fr}}
 @media (max-width:700px){.grid2{grid-template-columns:1fr}.kv{grid-template-columns:1fr}.who{flex-basis:100%;font-size:12px}.top-in{padding:10px 12px}main{padding:12px}}
 </style>
 </head>
@@ -276,6 +303,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     (l.t || []).forEach(function (t) { var k = Object.keys(SRC).find(function (x) { return SRC[x] === t; }); tg.appendChild(el("span", "tag" + (k ? " src-" + LINE[k] : ""), k ? "+ " + t : t)); });
     if (l.bs === "pending") tg.appendChild(el("span", "tag review", "Brief to review"));
     if (l.bs === "sent" && l.s === "new") tg.appendChild(el("span", "tag sentb", "Brief sent"));
+    if (l.p) tg.appendChild(el("span", "tag prop", l.p[2] ? "Earned " + kusd(l.p[0] + l.p[2]) + " of " + kusd(l.p[1]) : "Proposal " + kusd(l.p[0]) + "–" + kusd(l.p[1])));
     if (l.d) tg.appendChild(el("span", "tag" + (due(l) === "late" ? " late" : ""), (due(l) === "late" ? "Overdue " : "Due ") + l.d.slice(5)));
     c.appendChild(tg);
     if (l.nx) c.appendChild(el("div", "s", "Next: " + l.nx));
@@ -630,9 +658,113 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
       current = d; drawer(d);
     });
   }
-  function input(name, val, type) { var i = el("input"); i.name = name; i.value = val || ""; if (type) i.type = type; return i; }
+  function input(name, val, type) { var i = el("input"); i.name = name; i.value = val == null ? "" : String(val); if (type) i.type = type; return i; }
   function field(lbl, node) { var l = el("label", "f"); l.appendChild(document.createTextNode(lbl)); l.appendChild(node); return l; }
   function section(d, title) { var s = el("section", "ds"); s.appendChild(el("h3", null, title)); d.appendChild(s); return s; }
+
+
+  /* ---------- proposal (Teach one model) ---------- */
+  var TEMPLATE = { status: "draft", discovery: 1000, credit: false, lab: 5000, reviewDays: 60, handoff: "", targets: [
+    { label: "Median first reply to an inquiry", unit: "days", kind: "number", baseline: null, target: null, actual: null, amount: 750, source: "Shared inbox" },
+    { label: "Bookings with a deposit taken at booking", unit: "%", kind: "number", baseline: null, target: null, actual: null, amount: 750, source: "Booking system" },
+    { label: "Weekly hours on reminders, prep, and chasing", unit: "hrs", kind: "number", baseline: null, target: null, actual: null, amount: 750, source: "Owner's time log" },
+    { label: "Teach one: the team makes one change on their own", unit: "", kind: "done", done: false, amount: 750, source: "Shown at the review" }
+  ] };
+  function usd(n) { return "$" + Math.round(n || 0).toLocaleString("en-US"); }
+  function kusd(n) { return n >= 1000 ? "$" + (Math.round(n / 100) / 10).toString().replace(/\.0$/, "") + "k" : usd(n); }
+  function nnum(v) { return v === "" || v == null || !isFinite(Number(v)) ? null : Number(v); }
+  function score(t) {
+    if (t.kind === "done") return t.done ? { level: "met", pay: t.amount } : { level: "open", pay: 0 };
+    if (t.actual == null || t.baseline == null || t.target == null || t.target === t.baseline) return { level: "open", pay: 0 };
+    var pr = (t.actual - t.baseline) / (t.target - t.baseline);
+    return pr >= 1 ? { level: "met", pay: t.amount } : pr >= 0.5 ? { level: "half", pay: Math.round(t.amount / 2) } : { level: "missed", pay: 0 };
+  }
+  function totals(p) {
+    var fixed = p.lab + (p.credit ? 0 : p.discovery), max = 0, earned = 0;
+    p.targets.forEach(function (t) { max += t.amount; earned += score(t).pay; });
+    return { fixed: fixed, maxBonus: max, earned: earned };
+  }
+  function fmtN(v, unit) { if (v == null) return "?"; if (unit === "%") return v + "%"; return v + (unit ? " " + (v === 1 && /s$/.test(unit) ? unit.slice(0, -1) : unit) : ""); }
+  function ruleText(t) {
+    if (t.kind === "done") return "Pays " + usd(t.amount) + " when it's done.";
+    if (t.baseline == null || t.target == null) return "Set a baseline and a target to see the rule.";
+    var half = Math.round((t.baseline + (t.target - t.baseline) / 2) * 10) / 10, better = t.target < t.baseline ? "or less" : "or more";
+    return "Full " + usd(t.amount) + " at " + fmtN(t.target, t.unit) + " " + better + ". Half " + usd(Math.round(t.amount / 2)) + " at " + fmtN(half, t.unit) + " " + better + " (halfway from " + fmtN(t.baseline, t.unit) + ").";
+  }
+  var LEVEL = { met: ["Met", "met"], half: ["Halfway", "half"], missed: ["Not reached", "miss"], open: ["Not measured yet", "open"] };
+
+  function proposalSection(dr, L) {
+    var sec = section(dr, "Proposal");
+    if (!L.proposal) {
+      sec.appendChild(el("p", "muted", "Fixed Discovery, a lower fixed Lab fee, and a Teach one bonus paid on targets you agree in Discovery."));
+      var start = el("button", "btn q", "Start a Teach one proposal"); start.type = "button";
+      start.addEventListener("click", function () { L.proposal = JSON.parse(JSON.stringify(TEMPLATE)); drawProposal(); });
+      sec.appendChild(start);
+      return;
+    }
+    drawProposal();
+    function drawProposal() {
+      var P = L.proposal; sec.innerHTML = ""; sec.appendChild(el("h3", null, "Proposal"));
+      var sum = el("div", "pz-sum"); sec.appendChild(sum);
+      function paintSum() {
+        var T = totals(P); sum.innerHTML = "";
+        var rows = [
+          ["Discovery", P.credit ? usd(P.discovery) + ", credited to Lab" : usd(P.discovery)],
+          ["Lab", usd(P.lab)],
+          ["Fixed total", usd(T.fixed)],
+          ["Teach one bonus", "up to " + usd(T.maxBonus)]
+        ];
+        var tb = el("div", "pz-rows"); rows.forEach(function (r, i) { var d = el("div", "pz-r" + (i === 2 ? " b" : "")); d.appendChild(el("span", null, r[0])); d.appendChild(el("span", null, r[1])); tb.appendChild(d); }); sum.appendChild(tb);
+        var sc = el("div", "pz-sc");
+        [["If nothing lands", T.fixed], ["Earned so far", T.fixed + T.earned], ["If everything lands", T.fixed + T.maxBonus]].forEach(function (x, i) { var c = el("div", "pz-c" + (i === 1 ? " now" : "")); c.appendChild(el("span", "m", x[0])); c.appendChild(el("b", null, usd(x[1]))); sc.appendChild(c); });
+        sum.appendChild(sc);
+      }
+      // terms
+      var g = el("div", "grid2");
+      var stSel = el("select"); [["draft", "Draft"], ["sent", "Sent"], ["accepted", "Accepted"], ["reviewed", "Reviewed and paid"]].forEach(function (o) { var op = el("option", null, o[1]); op.value = o[0]; if (P.status === o[0]) op.selected = true; stSel.appendChild(op); });
+      stSel.addEventListener("change", function () { P.status = stSel.value; });
+      g.appendChild(field("Status", stSel));
+      var ho = input("handoff", P.handoff, "date"); ho.addEventListener("input", function () { P.handoff = ho.value; paintReview(); }); g.appendChild(field("Lab hand-off date", ho));
+      var di = input("disc", P.discovery, "number"); di.addEventListener("input", function () { P.discovery = Number(di.value) || 0; paintSum(); }); g.appendChild(field("Discovery fee ($)", di));
+      var li = input("lab", P.lab, "number"); li.addEventListener("input", function () { P.lab = Number(li.value) || 0; paintSum(); }); g.appendChild(field("Lab fee ($)", li));
+      sec.appendChild(g);
+      var cr = el("label", "chk"); var cb = el("input"); cb.type = "checkbox"; cb.checked = P.credit; cb.addEventListener("change", function () { P.credit = cb.checked; paintSum(); }); cr.appendChild(cb); cr.appendChild(document.createTextNode(" Credit Discovery toward Lab (they sign on within 30 days)")); sec.appendChild(cr);
+      var rv = el("p", "muted pz-rv"); sec.appendChild(rv);
+      function paintReview() { var d = P.handoff ? new Date(P.handoff + "T12:00:00") : null; if (d) d.setDate(d.getDate() + P.reviewDays); rv.textContent = "Bonus targets are measured " + P.reviewDays + " days after hand-off" + (d ? ", on " + d.toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" }) + "." : ". Add the hand-off date to set the review date."); }
+      paintReview();
+      // targets
+      sec.appendChild(el("div", "pz-h", "Teach one targets"));
+      P.targets.forEach(function (t, i) {
+        var box = el("div", "pz-t");
+        var lab = input("tl" + i, t.label); lab.className = "pz-l"; lab.addEventListener("input", function () { t.label = lab.value; }); box.appendChild(lab);
+        var chip = el("span", "pz-chip"); var rule = el("p", "pz-rule");
+        function paint() { var s = score(t), lv = LEVEL[s.level]; chip.className = "pz-chip " + lv[1]; chip.textContent = lv[0] + (s.pay ? " · " + usd(s.pay) : ""); rule.textContent = ruleText(t); paintSum(); }
+        if (t.kind === "done") {
+          var row = el("div", "pz-g d");
+          var dn = el("label", "chk"); var dc = el("input"); dc.type = "checkbox"; dc.checked = t.done; dc.addEventListener("change", function () { t.done = dc.checked; paint(); }); dn.appendChild(dc); dn.appendChild(document.createTextNode(" Done"));
+          row.appendChild(dn);
+          var am = input("ta" + i, t.amount, "number"); am.addEventListener("input", function () { t.amount = Number(am.value) || 0; paint(); }); row.appendChild(field("Bonus ($)", am));
+          box.appendChild(row);
+        } else {
+          var row2 = el("div", "pz-g");
+          [["baseline", "Baseline"], ["target", "Target"], ["actual", "At review"]].forEach(function (k) {
+            var ii = input("t" + k[0] + i, t[k[0]] == null ? "" : t[k[0]], "number"); ii.step = "any"; ii.placeholder = t.unit || "";
+            ii.addEventListener("input", function () { t[k[0]] = nnum(ii.value); paint(); }); row2.appendChild(field(k[1] + (t.unit ? " (" + t.unit + ")" : ""), ii));
+          });
+          var am2 = input("ta" + i, t.amount, "number"); am2.addEventListener("input", function () { t.amount = Number(am2.value) || 0; paint(); }); row2.appendChild(field("Bonus ($)", am2));
+          box.appendChild(row2);
+        }
+        var foot = el("div", "pz-f"); foot.appendChild(rule); foot.appendChild(chip); box.appendChild(foot);
+        if (t.source) box.appendChild(el("p", "pz-src", "Measured from: " + t.source));
+        sec.appendChild(box); paint();
+      });
+      var r = el("div", "row"); r.style.marginTop = "10px";
+      var sv = el("button", "btn", "Save proposal"); sv.type = "button";
+      sv.addEventListener("click", function () { sv.disabled = true; api("POST", { action: "update", id: L.id, fields: { proposal: P } }).then(function (res) { sv.disabled = false; if (res.status === "ok") { toast("Proposal saved"); refresh(L.id); } else toast(res.message || "Not saved."); }); });
+      r.appendChild(sv); sec.appendChild(r);
+      paintSum();
+    }
+  }
 
   function drawer(d) {
     closeDrawer();
@@ -656,6 +788,8 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     var nx = input("next", L.nextStep.text); nx.placeholder = "e.g. Book the follow-up call"; s1.appendChild(field("Next step", nx));
     var sv = el("button", "btn", "Save"); sv.type = "button"; sv.style.marginTop = "8px"; s1.appendChild(sv);
     sv.addEventListener("click", function () { save({ stage: st.value, nextStep: { text: nx.value, due: dueI.value } }, sv); });
+
+    proposalSection(dr, L);
 
     // brief
     if (d.brief) {

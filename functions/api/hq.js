@@ -46,8 +46,9 @@ export async function onRequestPost({ request, env }) {
   if (b.action === "update") {
     const f = b.fields || {};
     const before = lead.stage;
-    ["name", "email", "phone", "business", "website", "location", "room", "stuck", "operations", "admire", "tools", "team", "tags", "nextStep", "stage"].forEach((k) => { if (k in f) lead[k] = f[k]; });
+    ["name", "email", "phone", "business", "website", "location", "room", "stuck", "operations", "admire", "tools", "team", "tags", "nextStep", "stage", "proposal"].forEach((k) => { if (k in f) lead[k] = f[k]; });
     const label = (id) => (STAGES.find((s) => s[0] === id) || [id, id])[1];
+    if ("proposal" in f && f.proposal && (!lead.notes.some((n) => n.kind === "system" && /^Proposal started/.test(n.text)))) lead.notes.push({ at: now(), by: user, kind: "system", text: "Proposal started." });
     if (f.stage && f.stage !== before) lead.notes.push({ at: now(), by: user, kind: "stage", text: `Moved from ${label(before)} to ${label(f.stage)}.` });
     return json({ status: "ok", lead: await putLead(env, lead) });
   }

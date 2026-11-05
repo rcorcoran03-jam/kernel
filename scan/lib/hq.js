@@ -25,6 +25,41 @@ const SOURCES = ["scan", "lab-inquiry", "core-inquiry", "contact", "referral", "
 const KEY = (id) => `lead:${id}`;
 const clip = (v, n) => (typeof v === "string" ? v.trim().slice(0, n) : "");
 
+/* ---------- Proposal: fixed Discovery + fixed Lab + a Teach one bonus scored on agreed targets ---------- */
+const num = (v) => (v === "" || v == null || !isFinite(Number(v)) ? null : Math.round(Number(v) * 100) / 100);
+const money = (v) => Math.max(0, Math.min(1e6, Math.round(Number(v) || 0)));
+export function cleanProposal(p) {
+  if (!p || typeof p !== "object") return null;
+  return {
+    status: ["draft", "sent", "accepted", "reviewed"].includes(p.status) ? p.status : "draft",
+    discovery: money(p.discovery), credit: !!p.credit, lab: money(p.lab),
+    reviewDays: Math.max(0, Math.min(365, Math.round(Number(p.reviewDays) || 60))),
+    handoff: /^\d{4}-\d{2}-\d{2}$/.test(p.handoff || "") ? p.handoff : "",
+    targets: (Array.isArray(p.targets) ? p.targets : []).slice(0, 8).map((t) => ({
+      label: clip(t.label, 120), unit: clip(t.unit, 30), source: clip(t.source, 120),
+      kind: t.kind === "done" ? "done" : "number",
+      baseline: num(t.baseline), target: num(t.target), actual: num(t.actual), done: !!t.done,
+      amount: money(t.amount),
+    })),
+  };
+}
+/** Score one target: full when the target is reached, half when it gets at least halfway from the baseline. */
+export function scoreTarget(t) {
+  if (t.kind === "done") return t.done ? { level: "met", pay: t.amount } : { level: "open", pay: 0 };
+  if (t.actual == null || t.baseline == null || t.target == null || t.target === t.baseline) return { level: "open", pay: 0 };
+  const progress = (t.actual - t.baseline) / (t.target - t.baseline);
+  if (progress >= 1) return { level: "met", pay: t.amount };
+  if (progress >= 0.5) return { level: "half", pay: Math.round(t.amount / 2) };
+  return { level: "missed", pay: 0 };
+}
+export function proposalTotals(p) {
+  if (!p) return null;
+  const fixed = p.lab + (p.credit ? 0 : p.discovery);
+  const maxBonus = p.targets.reduce((a, t) => a + t.amount, 0);
+  const earned = p.targets.reduce((a, t) => a + scoreTarget(t).pay, 0);
+  return { fixed, maxBonus, earned, min: fixed, max: fixed + maxBonus, total: fixed + earned };
+}
+
 export function newLead(fields = {}) {
   const now = new Date().toISOString();
   return sanitize({ id: crypto.randomUUID(), createdAt: now, updatedAt: now, stage: "new", notes: [], ...fields });
@@ -46,6 +81,7 @@ export function sanitize(l) {
     briefStatus: ["pending", "sent", ""].includes(l.briefStatus) ? l.briefStatus : "",
     nextStep: { text: clip(l.nextStep && l.nextStep.text, 200), due: /^\d{4}-\d{2}-\d{2}$/.test((l.nextStep && l.nextStep.due) || "") ? l.nextStep.due : "" },
     tags: (Array.isArray(l.tags) ? l.tags : []).map((t) => clip(t, 40)).filter(Boolean).slice(0, 10),
+    proposal: cleanProposal(l.proposal),
     notes: (Array.isArray(l.notes) ? l.notes : []).filter((n) => n && n.text).slice(-200).map((n) => ({ at: n.at || new Date().toISOString(), by: clip(n.by, 120), kind: ["note", "stage", "email", "ai", "system"].includes(n.kind) ? n.kind : "note", text: clip(n.text, 6000) })),
   };
 }
@@ -60,6 +96,8 @@ export async function putLead(env, lead) {
   const clean = sanitize(lead);
   // List metadata lets the board load without reading every lead.
   const meta = { n: clean.name, b: clean.business, s: clean.stage, src: clean.source, u: clean.updatedAt, d: clean.nextStep.due, bs: clean.briefStatus, br: clean.briefId, e: clean.email, nx: clean.nextStep.text.slice(0, 80), c: clean.createdAt, f: clean.furthest, t: clean.tags.slice(0, 4) };
+  const pt = proposalTotals(clean.proposal);
+  if (pt) meta.p = [pt.min, pt.max, pt.earned, clean.proposal.status];
   await env.SCAN_KV.put(KEY(clean.id), JSON.stringify(clean), { metadata: meta });
   return clean;
 }

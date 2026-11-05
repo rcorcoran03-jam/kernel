@@ -12,6 +12,7 @@ import { onRequestGet as approveGet, onRequestPost as approvePost } from "../../
 import { briefEmailHtml } from "../lib/notify.js";
 import { onRequestGet as hqGet, onRequestPost as hqPost } from "../../functions/api/hq.js";
 import { onRequestPost as inquiryPost } from "../../functions/api/inquiry.js";
+import { scoreTarget, proposalTotals, cleanProposal } from "../lib/hq.js";
 
 const SITE = {
   business_name: "Test Studio", summary: "A pottery studio offering classes.", tools_seen: [{ name: "Squarespace", role: "site", url: "https://teststudio.com/" }],
@@ -270,4 +271,16 @@ test("HQ refuses without Access, works with it, and scans become leads", async (
     const ana = list.leads.filter((l) => l.e && l.e.toLowerCase() === "ana@x.co");
     assert.equal(ana.length, 1, "repeat email reuses the lead"); assert.equal(ana[0].src, "core-inquiry"); assert.equal(ana[0].b, "Ana Studio");
   } finally { globalThis.fetch = realFetch; }
+});
+
+test("teach one bonus: full at target, half at halfway, both directions", () => {
+  const t = (o) => cleanProposal({ targets: [{ amount: 750, ...o }] }).targets[0];
+  assert.equal(scoreTarget(t({ baseline: 3, target: 1, actual: 1 })).pay, 750, "lower is better, met");
+  assert.equal(scoreTarget(t({ baseline: 3, target: 1, actual: 1.5 })).pay, 375, "lower is better, past halfway (2)");
+  assert.equal(scoreTarget(t({ baseline: 3, target: 1, actual: 2.5 })).pay, 0, "short of halfway");
+  assert.equal(scoreTarget(t({ baseline: 0, target: 80, actual: 60 })).pay, 375, "higher is better, past halfway (40)");
+  assert.equal(scoreTarget(t({ kind: "done", done: true })).pay, 750);
+  assert.equal(scoreTarget(t({ baseline: 0, target: 80 })).level, "open", "no actual yet");
+  const p = cleanProposal({ discovery: 1000, credit: false, lab: 5000, targets: [{ amount: 750, baseline: 3, target: 1, actual: 1 }, { amount: 750, kind: "done" }] });
+  assert.deepEqual(proposalTotals(p), { fixed: 6000, maxBonus: 1500, earned: 750, min: 6000, max: 7500, total: 6750 });
 });
