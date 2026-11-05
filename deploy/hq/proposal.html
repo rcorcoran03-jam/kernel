@@ -32,6 +32,11 @@ h2 .n{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.16em;color:
 p{margin:0 0 .08in;color:var(--ink2)}
 ul.heard{margin:.06in 0 0;padding-left:18px;color:var(--ink2)}
 ul.heard li{margin-bottom:3px}
+.outs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:.08in}
+.out{background:#fff;border:1px solid var(--rule);border-left:3px solid var(--g2);border-radius:8px;padding:9px 12px;break-inside:avoid}
+.out .eyebrow{color:var(--brass-ink);font-size:8.5px}
+.out b{display:block;font-family:'Bitter',serif;font-weight:400;font-size:15px;color:var(--ink);margin:2px 0 3px;line-height:1.3}
+.out span:last-child:not(.eyebrow){font-size:11.5px;color:var(--ink2);line-height:1.45;display:block}
 .phases{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:.1in}
 .ph{background:#fff;border:1px solid var(--rule);border-top:3px solid var(--brass);border-radius:8px;padding:10px 11px}
 .ph .w{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-ink)}
@@ -67,8 +72,14 @@ ol.terms li{margin-bottom:4px}
   .page{margin:0;box-shadow:none;width:auto;background:#fff}
   .ph,.range,.how,tr,.sign{break-inside:avoid}
   h2{break-after:avoid}
+  section.inv,section.terms-s{break-before:page}
 }
-@media screen and (max-width:860px){.page{width:auto;margin:0}.phases{grid-template-columns:1fr 1fr}.hero,.body,.foot{padding-left:22px;padding-right:22px}}
+@media screen and (max-width:860px){.page{width:auto;margin:0}.outs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:.08in}
+.out{background:#fff;border:1px solid var(--rule);border-left:3px solid var(--g2);border-radius:8px;padding:9px 12px;break-inside:avoid}
+.out .eyebrow{color:var(--brass-ink);font-size:8.5px}
+.out b{display:block;font-family:'Bitter',serif;font-weight:400;font-size:15px;color:var(--ink);margin:2px 0 3px;line-height:1.3}
+.out span:last-child:not(.eyebrow){font-size:11.5px;color:var(--ink2);line-height:1.45;display:block}
+.phases{grid-template-columns:1fr 1fr}.hero,.body,.foot{padding-left:22px;padding-right:22px}}
 </style>
 </head>
 <body>
@@ -90,6 +101,7 @@ ol.terms li{margin-bottom:4px}
     var fixed = P.lab + (P.credit ? 0 : P.discovery), bonus = P.targets.reduce(function (a, t) { return a + t.amount; }, 0);
     var today = new Date(), valid = new Date(); valid.setDate(valid.getDate() + 30);
     var who = L.name && L.name !== L.business ? L.name : "";
+    var num = 0; function n() { num++; return '<span class="n">' + (num < 10 ? '0' : '') + num + '</span>'; }
 
     // What we heard: their own words plus the top ideas from their brief
     var heard = [];
@@ -104,6 +116,13 @@ ol.terms li{margin-bottom:4px}
       return "<tr><td>" + esc(t.label) + "<small>Measured from: " + esc(t.source || "agreed in Discovery") + "</small></td><td>" + (t.baseline != null ? fmt(t.baseline, t.unit) : "Set in Discovery") + "</td><td>" + (t.target != null ? fmt(t.target, t.unit) + (set ? better : "") : "Set in Discovery") + "</td><td>" + (set ? fmt(half, t.unit) + better + "<small>" + usd(t.amount / 2) + "</small>" : "Halfway point") + "</td><td class=r>" + usd(t.amount) + "</td></tr>";
     }).join("");
 
+
+    var outs = P.targets.map(function (t) {
+      var head = t.short || t.label.replace(/^Teach one:\s*/i, "");
+      var move = t.kind === "done" ? (t.short && /teach/i.test(t.short) ? t.label.replace(/^Teach one:\s*/i, "") : "Done by your team, on its own")
+        : (t.baseline != null && t.target != null ? "From " + fmt(t.baseline, t.unit) + " to " + fmt(t.target, t.unit) : "Target set together in Discovery");
+      return '<div class="out"><span class="eyebrow">' + esc(head) + '</span><b>' + esc(move.charAt(0).toUpperCase() + move.slice(1)) + '</b>' + (t.plan ? '<span>' + esc(t.plan) + '</span>' : '') + '</div>';
+    }).join("");
     root.innerHTML =
       '<article class="page">' +
       '<header class="hero"><img src="/assets/kernel-lab-wordmark-brass.svg" alt="Kernel Lab">' +
@@ -111,9 +130,10 @@ ol.terms li{margin-bottom:4px}
         '<div class="meta"><span>Prepared for ' + esc(who || L.business || "") + '</span><span>' + longDate(today) + '</span><span>Valid through ' + longDate(valid) + '</span></div>' +
         '<div class="tag">See one. Do one. Teach one.</div></header>' +
       '<div class="body">' +
-      (heard.length || top.length ? '<section><h2><span class="n">01</span>What we heard</h2>' + heard.map(function (h) { return "<p>" + h + "</p>"; }).join("") +
+      (heard.length || top.length ? '<section><h2>' + n() + 'What we heard</h2>' + heard.map(function (h) { return "<p>" + h + "</p>"; }).join("") +
         (top.length ? "<p>Where we'd start, from your Opportunity Scan:</p><ul class=heard>" + top.map(function (o) { return "<li>" + esc(o.title) + "</li>"; }).join("") + "</ul>" : "") + "</section>" : "") +
-      '<section><h2><span class="n">' + (heard.length || top.length ? "02" : "01") + '</span>How we\'ll work</h2>' +
+      '<section><h2>' + n() + 'What we\'ll work toward</h2><p>Four results that should still be true after we hand off, and what we\'ll build for each. They\'re also how part of our fee is earned (see The Teach one bonus).</p><div class="outs">' + outs + '</div></section>' +
+      '<section><h2>' + n() + 'How we\'ll work</h2>' +
         '<p>One build in two parts, inside the tools you already use. We build the foundation while you watch, then hand you the wheel with us beside you.</p>' +
         '<div class="phases">' +
           '<div class="ph"><span class="w">Discovery</span><b>Discover and scope</b><span>Two working sessions, about 8 hours of your time. We map a real week, record your baseline, and build a first concept to review.</span></div>' +
@@ -121,7 +141,7 @@ ol.terms li{margin-bottom:4px}
           '<div class="ph"><span class="w">Phase 2 · you drive</span><b>Do one</b><span>Your team leads, customizing and connecting what we built. We coach and review.</span></div>' +
           '<div class="ph"><span class="w">Hand-off</span><b>Teach one</b><span>You teach the playbook forward. We track results for three months and review them together.</span></div>' +
         '</div></section>' +
-      '<section class="inv"><h2><span class="n">' + (heard.length || top.length ? "03" : "02") + '</span>Investment</h2>' +
+      '<section class="inv"><h2>' + n() + 'Investment</h2>' +
         '<table><tr><th>Item</th><th class=r>Fee</th></tr>' +
         '<tr><td>Discovery<small>' + (P.credit ? "Credited toward Lab when you begin Lab within 30 days" : "Fixed, due at signing") + '</small></td><td class=r>' + usd(P.discovery) + '</td></tr>' +
         '<tr><td>Kernel Lab, phases 1 and 2<small>Fixed. Half at kickoff, half at hand-off</small></td><td class=r>' + usd(P.lab) + '</td></tr>' +
@@ -129,12 +149,12 @@ ol.terms li{margin-bottom:4px}
         '<tr class=tot><td>Fixed total</td><td class=r>' + usd(fixed) + '</td></tr>' +
         '<tr><td>Teach one bonus<small>Paid only on the results below, scored three months after hand-off</small></td><td class=r>up to ' + usd(bonus) + '</td></tr></table>' +
         '<div class="range"><div><span class="eyebrow">If no targets are reached</span><b>' + usd(fixed) + '</b></div><div><span class="eyebrow">If every target is reached</span><b>' + usd(fixed + bonus) + '</b></div></div></section>' +
-      '<section class="bonus"><h2><span class="n">' + (heard.length || top.length ? "04" : "03") + '</span>The Teach one bonus</h2>' +
+      '<section class="bonus"><h2>' + n() + 'The Teach one bonus</h2>' +
         '<p>Part of our fee rides on what lasts after we leave. We agree these targets together in Discovery, using your own baseline. Each one is scored on its own.</p>' +
         '<table><tr><th>Target</th><th>Starting point</th><th>Full bonus at</th><th>Half bonus at</th><th class=r>Bonus</th></tr>' + rows + '</table>' +
         '<div class="how"><div><b>Full or half.</b> Reach the target and that bonus is paid in full. Get at least halfway from your starting point and half is paid. Less than halfway pays nothing.</div>' +
         '<div><b>Tracked monthly, scored at month 3.</b> You\'ll see each target on your results scorecard for months 1, 2 and 3 after hand-off. Only the month-3 reading counts.</div></div></section>' +
-      '<section><h2><span class="n">' + (heard.length || top.length ? "05" : "04") + '</span>Terms</h2><ol class="terms">' +
+      '<section class="terms-s"><h2>' + n() + 'Terms</h2><ol class="terms">' +
         '<li>Discovery is due at signing. Lab is billed half at kickoff and half at hand-off.</li>' +
         '<li>Any bonus is invoiced within 15 days of the month-3 review.</li>' +
         '<li>Each target is measured from the source named above, agreed by both of us in Discovery.</li>' +

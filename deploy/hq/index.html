@@ -220,6 +220,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 .pz-t{border:1px solid var(--rule);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#fff}
 .pz-l{width:100%;border:0;border-bottom:1px solid transparent;font-family:'Bitter',serif;font-size:14px;padding:2px 0 4px;background:none;color:var(--ink)}
 .pz-l:focus{outline:none;border-bottom-color:var(--rule)}
+.pz-plan{min-height:44px;font-size:12.5px;margin-top:2px}
 .pz-g{display:grid;grid-template-columns:repeat(6,1fr);gap:6px 8px;margin-top:6px}
 .pz-g.d{grid-template-columns:1fr 1fr;align-items:end}
 .pz-g.d .chk{margin:0 0 9px}
@@ -685,7 +686,7 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 
   /* ---------- proposal (Teach one model) ---------- */
   var TEMPLATE = { status: "draft", discovery: 1000, credit: false, lab: 5000, reviewDays: 90, handoff: "", targets: [
-    { label: "Weekly hours on admin (reminders, prep, chasing)", short: "Admin hours", unit: "hrs", kind: "number", baseline: null, target: null, months: [null, null, null], amount: 750, source: "Owner's time log, one sample week a month" },
+    { label: "Weekly hours on admin (reminders, prep, chasing)", short: "Admin hours", plan: "", unit: "hrs", kind: "number", baseline: null, target: null, months: [null, null, null], amount: 750, source: "Owner's time log, one sample week a month" },
     { label: "Balances paid in full before the event", short: "Paid on time", unit: "%", kind: "number", baseline: null, target: null, months: [null, null, null], amount: 750, source: "Booking and payment system" },
     { label: "Bookings that come through the new system", short: "Through the system", unit: "%", kind: "number", baseline: null, target: null, months: [null, null, null], amount: 750, source: "Booking system vs. inbox and DMs" },
     { label: "Teach one: the team makes a change on their own", short: "Teach one", unit: "", kind: "done", done: false, amount: 750, source: "Shown at the month-3 review" }
@@ -838,6 +839,8 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
       P.targets.forEach(function (t, i) {
         var box = el("div", "pz-t");
         var lab = input("tl" + i, t.label); lab.className = "pz-l"; lab.addEventListener("input", function () { t.label = lab.value; }); box.appendChild(lab);
+        var plan = el("textarea", "ta pz-plan"); plan.rows = 2; plan.value = t.plan || ""; plan.placeholder = "What we'll build to move this, in plain words. Shows on the client proposal.";
+        plan.addEventListener("input", function () { t.plan = plan.value; }); box.appendChild(field("What we'll build", plan));
         var chip = el("span", "pz-chip"); var rule = el("p", "pz-rule");
         function paint() { var s = score(t), lv = LEVEL[s.level]; chip.className = "pz-chip " + lv[1]; chip.textContent = lv[0] + (s.pay ? " · " + usd(s.pay) : ""); rule.textContent = ruleText(t); paintSum(); }
         if (t.kind === "done") {
