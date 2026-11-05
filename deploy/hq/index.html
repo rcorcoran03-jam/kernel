@@ -868,7 +868,10 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
       var r = el("div", "row"); r.style.marginTop = "10px";
       var sv = el("button", "btn", "Save proposal"); sv.type = "button";
       sv.addEventListener("click", function () { sv.disabled = true; api("POST", { action: "update", id: L.id, fields: { proposal: P } }).then(function (res) { sv.disabled = false; if (res.status === "ok") { toast("Proposal saved"); refresh(L.id); } else toast(res.message || "Not saved."); }); });
-      r.appendChild(sv); sec.appendChild(r);
+      r.appendChild(sv);
+      var pr = el("a", "btn q", "Print or save as PDF"); pr.href = "/hq/proposal.html?id=" + encodeURIComponent(L.id); pr.target = "_blank"; pr.rel = "noopener";
+      pr.title = "Opens the client version in Kernel Lab branding. Save the proposal first to include recent edits.";
+      r.appendChild(pr); sec.appendChild(r);
       paintSum();
     }
   }

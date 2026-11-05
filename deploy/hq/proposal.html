@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Kernel Lab proposal</title>
+<link rel="icon" type="image/png" href="/assets/kernel-icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--g:#2F3F36;--g2:#3E5045;--brass:#D2AA5A;--brass-t:#D9B872;--brass-ink:#7A5C24;--brass-rule:rgba(210,170,90,.45);--ivory:#FBF8EF;--ivory2:#F4EFE2;--ink:#23302A;--ink2:#4A564E;--rule:rgba(35,48,42,.14)}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:#E9E4D8;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.6;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.bar{position:sticky;top:0;z-index:5;display:flex;gap:10px;align-items:center;justify-content:center;padding:10px;background:rgba(47,63,54,.96);color:#EFEADB;font-size:13px}
+.bar button,.bar a{font:inherit;border-radius:100px;padding:7px 16px;cursor:pointer;text-decoration:none;border:1px solid var(--brass-rule);background:transparent;color:#EFEADB}
+.bar .p{background:var(--brass);border-color:var(--brass);color:var(--g);font-weight:500}
+.bar span{opacity:.75}
+.page{width:8.5in;margin:24px auto;background:var(--ivory);box-shadow:0 10px 40px rgba(0,0,0,.12)}
+.hero{background:var(--g);color:#EFEADB;padding:.45in .7in .38in;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-1.2in;top:-1.2in;width:3.6in;height:3.6in;border-radius:50%;border:1px solid rgba(210,170,90,.25);box-shadow:0 0 0 .35in rgba(210,170,90,.05),0 0 0 .7in rgba(210,170,90,.04)}
+.hero img{height:.5in;display:block;margin-bottom:.16in}
+.eyebrow{font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass-t)}
+.hero h1{font-family:'Bitter',serif;font-weight:300;font-size:34px;line-height:1.15;margin:.08in 0 .1in;color:#F7F1E8}
+.hero .meta{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:12px;color:#C9D1BC}
+.hero .tag{font-family:'Bitter',serif;font-style:italic;color:var(--brass-t);font-size:14px;margin-top:.12in}
+.body{padding:.32in .7in .3in}
+section{margin-bottom:.22in}
+section.inv{break-inside:avoid}
+h2{font-family:'Bitter',serif;font-weight:400;font-size:19px;color:var(--g2);margin:0 0 .08in}
+h2 .n{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--brass-ink);margin-right:10px;vertical-align:3px}
+p{margin:0 0 .08in;color:var(--ink2)}
+ul.heard{margin:.06in 0 0;padding-left:18px;color:var(--ink2)}
+ul.heard li{margin-bottom:3px}
+.phases{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:.1in}
+.ph{background:#fff;border:1px solid var(--rule);border-top:3px solid var(--brass);border-radius:8px;padding:10px 11px}
+.ph .w{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-ink)}
+.ph b{display:block;font-family:'Bitter',serif;font-weight:400;font-size:13.5px;color:var(--ink);margin:3px 0 4px;line-height:1.3}
+.ph span{font-size:11px;color:var(--ink2);line-height:1.4;display:block}
+table{width:100%;border-collapse:collapse;margin-top:.08in}
+th{font-family:'DM Mono',monospace;font-weight:400;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-ink);text-align:left;padding:6px 8px;border-bottom:1px solid var(--brass-rule)}
+td{padding:5px 8px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink)}
+td.r,th.r{text-align:right;white-space:nowrap}
+td small{display:block;color:var(--ink2);font-size:11px}
+tr.tot td{font-weight:500;border-bottom:0;border-top:1px solid var(--g2)}
+.range{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:.1in}
+.range div{background:var(--g);color:#EFEADB;border-radius:8px;padding:8px 12px}
+.range div:last-child{background:#fff;color:var(--ink);border:1px solid var(--brass)}
+.range .eyebrow{font-size:8.5px}
+.range div:last-child .eyebrow{color:var(--brass-ink)}
+.range b{display:block;font-family:'Bitter',serif;font-weight:300;font-size:22px;margin-top:2px}
+.how{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:.1in}
+.how div{background:var(--ivory2);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--ink2)}
+.how b{color:var(--ink);font-weight:500}
+ol.terms{margin:.04in 0 0;padding-left:18px;color:var(--ink2);font-size:12.5px}
+ol.terms li{margin-bottom:4px}
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:.4in;margin-top:.3in}
+.sign div{border-top:1px solid var(--ink);padding-top:6px;font-size:11.5px;color:var(--ink2)}
+.sign b{display:block;color:var(--ink);font-weight:500;font-size:12.5px}
+.foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--brass-rule);padding:.16in .7in;font-size:11px;color:var(--ink2);background:var(--ivory2)}
+.foot .eyebrow{color:var(--brass-ink)}
+.empty{padding:60px;text-align:center;color:var(--ink2)}
+@page{size:letter;margin:.55in 0 .5in}
+@page :first{margin:0 0 .5in}
+@media print{
+  body{background:none}.bar{display:none}
+  .page{margin:0;box-shadow:none;width:auto;background:#fff}
+  .ph,.range,.how,tr,.sign{break-inside:avoid}
+  h2{break-after:avoid}
+}
+@media screen and (max-width:860px){.page{width:auto;margin:0}.phases{grid-template-columns:1fr 1fr}.hero,.body,.foot{padding-left:22px;padding-right:22px}}
+</style>
+</head>
+<body>
+<div class="bar"><button class="p" type="button" onclick="window.print()">Print or save as PDF</button><a href="/hq/">Back to HQ</a><span>Tip: turn on "Background graphics" in the print dialog.</span></div>
+<div id="root"><p class="empty">Loading&hellip;</p></div>
+<script>
+(function () {
+  var id = new URLSearchParams(location.search).get("id") || "";
+  var root = document.getElementById("root");
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function usd(n) { return "$" + Math.round(n || 0).toLocaleString("en-US"); }
+  function fmt(v, unit) { if (v == null) return ""; if (unit === "%") return v + "%"; return v + (unit ? " " + (v === 1 && /s$/.test(unit) ? unit.slice(0, -1) : unit) : ""); }
+  function longDate(d) { return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }); }
+  fetch("/api/hq?id=" + encodeURIComponent(id), { credentials: "same-origin" }).then(function (r) { return r.json(); }).then(function (d) {
+    if (d.status !== "ok") { root.innerHTML = '<p class="empty">' + esc(d.message || "Sign in to Kernel HQ to view this proposal.") + "</p>"; return; }
+    var L = d.lead, P = L.proposal;
+    if (!P) { root.innerHTML = '<p class="empty">This lead doesn\'t have a proposal yet. Start one from the lead in HQ.</p>'; return; }
+    document.title = "Kernel Lab proposal · " + (L.business || L.name);
+    var fixed = P.lab + (P.credit ? 0 : P.discovery), bonus = P.targets.reduce(function (a, t) { return a + t.amount; }, 0);
+    var today = new Date(), valid = new Date(); valid.setDate(valid.getDate() + 30);
+    var who = L.name && L.name !== L.business ? L.name : "";
+
+    // What we heard: their own words plus the top ideas from their brief
+    var heard = [];
+    if (L.room) heard.push("You want more room for " + esc(L.room.charAt(0).toLowerCase() + L.room.slice(1)).replace(/\.$/, "") + ".");
+    if (L.stuck) heard.push(esc(L.stuck));
+    var top = d.brief && d.brief.brief && d.brief.brief.opportunities ? d.brief.brief.opportunities.filter(function (o) { return o.top; }).slice(0, 3) : [];
+
+    var rows = P.targets.map(function (t) {
+      if (t.kind === "done") return "<tr><td>" + esc(t.label) + "<small>Measured from: " + esc(t.source || "the month-3 review") + "</small></td><td>Not yet</td><td>Done</td><td>n/a</td><td class=r>" + usd(t.amount) + "</td></tr>";
+      var set = t.baseline != null && t.target != null, better = set && t.target < t.baseline ? " or less" : " or more";
+      var half = set ? Math.round((t.baseline + (t.target - t.baseline) / 2) * 10) / 10 : null;
+      return "<tr><td>" + esc(t.label) + "<small>Measured from: " + esc(t.source || "agreed in Discovery") + "</small></td><td>" + (t.baseline != null ? fmt(t.baseline, t.unit) : "Set in Discovery") + "</td><td>" + (t.target != null ? fmt(t.target, t.unit) + (set ? better : "") : "Set in Discovery") + "</td><td>" + (set ? fmt(half, t.unit) + better + "<small>" + usd(t.amount / 2) + "</small>" : "Halfway point") + "</td><td class=r>" + usd(t.amount) + "</td></tr>";
+    }).join("");
+
+    root.innerHTML =
+      '<article class="page">' +
+      '<header class="hero"><img src="/assets/kernel-lab-wordmark-brass.svg" alt="Kernel Lab">' +
+        '<div class="eyebrow">Proposal</div><h1>' + esc(L.business || L.name) + '</h1>' +
+        '<div class="meta"><span>Prepared for ' + esc(who || L.business || "") + '</span><span>' + longDate(today) + '</span><span>Valid through ' + longDate(valid) + '</span></div>' +
+        '<div class="tag">See one. Do one. Teach one.</div></header>' +
+      '<div class="body">' +
+      (heard.length || top.length ? '<section><h2><span class="n">01</span>What we heard</h2>' + heard.map(function (h) { return "<p>" + h + "</p>"; }).join("") +
+        (top.length ? "<p>Where we'd start, from your Opportunity Scan:</p><ul class=heard>" + top.map(function (o) { return "<li>" + esc(o.title) + "</li>"; }).join("") + "</ul>" : "") + "</section>" : "") +
+      '<section><h2><span class="n">' + (heard.length || top.length ? "02" : "01") + '</span>How we\'ll work</h2>' +
+        '<p>One build in two parts, inside the tools you already use. We build the foundation while you watch, then hand you the wheel with us beside you.</p>' +
+        '<div class="phases">' +
+          '<div class="ph"><span class="w">Discovery</span><b>Discover and scope</b><span>Two working sessions, about 8 hours of your time. We map a real week, record your baseline, and build a first concept to review.</span></div>' +
+          '<div class="ph"><span class="w">Phase 1 · we drive</span><b>See one</b><span>We build the foundation alongside you. Your results scorecard goes live with it.</span></div>' +
+          '<div class="ph"><span class="w">Phase 2 · you drive</span><b>Do one</b><span>Your team leads, customizing and connecting what we built. We coach and review.</span></div>' +
+          '<div class="ph"><span class="w">Hand-off</span><b>Teach one</b><span>You teach the playbook forward. We track results for three months and review them together.</span></div>' +
+        '</div></section>' +
+      '<section class="inv"><h2><span class="n">' + (heard.length || top.length ? "03" : "02") + '</span>Investment</h2>' +
+        '<table><tr><th>Item</th><th class=r>Fee</th></tr>' +
+        '<tr><td>Discovery<small>' + (P.credit ? "Credited toward Lab when you begin Lab within 30 days" : "Fixed, due at signing") + '</small></td><td class=r>' + usd(P.discovery) + '</td></tr>' +
+        '<tr><td>Kernel Lab, phases 1 and 2<small>Fixed. Half at kickoff, half at hand-off</small></td><td class=r>' + usd(P.lab) + '</td></tr>' +
+        (P.credit ? '<tr><td>Discovery credit</td><td class=r>&minus;' + usd(P.discovery) + '</td></tr>' : '') +
+        '<tr class=tot><td>Fixed total</td><td class=r>' + usd(fixed) + '</td></tr>' +
+        '<tr><td>Teach one bonus<small>Paid only on the results below, scored three months after hand-off</small></td><td class=r>up to ' + usd(bonus) + '</td></tr></table>' +
+        '<div class="range"><div><span class="eyebrow">If no targets are reached</span><b>' + usd(fixed) + '</b></div><div><span class="eyebrow">If every target is reached</span><b>' + usd(fixed + bonus) + '</b></div></div></section>' +
+      '<section class="bonus"><h2><span class="n">' + (heard.length || top.length ? "04" : "03") + '</span>The Teach one bonus</h2>' +
+        '<p>Part of our fee rides on what lasts after we leave. We agree these targets together in Discovery, using your own baseline. Each one is scored on its own.</p>' +
+        '<table><tr><th>Target</th><th>Starting point</th><th>Full bonus at</th><th>Half bonus at</th><th class=r>Bonus</th></tr>' + rows + '</table>' +
+        '<div class="how"><div><b>Full or half.</b> Reach the target and that bonus is paid in full. Get at least halfway from your starting point and half is paid. Less than halfway pays nothing.</div>' +
+        '<div><b>Tracked monthly, scored at month 3.</b> You\'ll see each target on your results scorecard for months 1, 2 and 3 after hand-off. Only the month-3 reading counts.</div></div></section>' +
+      '<section><h2><span class="n">' + (heard.length || top.length ? "05" : "04") + '</span>Terms</h2><ol class="terms">' +
+        '<li>Discovery is due at signing. Lab is billed half at kickoff and half at hand-off.</li>' +
+        '<li>Any bonus is invoiced within 15 days of the month-3 review.</li>' +
+        '<li>Each target is measured from the source named above, agreed by both of us in Discovery.</li>' +
+        '<li>If the scope changes, we agree new targets in writing. If the new system is set aside before the review, its targets are treated as reached.</li>' +
+        '<li>You own everything we build, and the playbook is yours to keep.</li>' +
+      '</ol></section>' +
+      '<section><h2>Accepted</h2><div class="sign"><div><b>' + esc(who || " ") + '</b>' + esc(L.business || "") + ' · Date</div><div><b>Kernel Collective</b>Kernel Lab · Date</div></div></section>' +
+      '</div>' +
+      '<footer class="foot"><span class="eyebrow">Kernel Collective · Kernel Lab</span><span>kernel-collective.com · hello@kernel-collective.com</span></footer>' +
+      '</article>';
+  }).catch(function () { root.innerHTML = '<p class="empty">Couldn\'t load this proposal.</p>'; });
+})();
+</script>
+</body>
+</html>
