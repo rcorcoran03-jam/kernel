@@ -786,3 +786,10 @@
 .field-pair{border:0;padding:0;margin:0 0 18px;min-width:0}
 .field-pair legend{padding:0}
 .sp-by{margin-top:14px;padding-top:10px;border-top:1px dashed rgba(35,48,42,0.18);font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink2);opacity:0.85}
+
+/* Lunisa card: the founder's art and studio under the Studio Desk screens */
+#work .media-lunisa .m-art{display:grid;grid-template-columns:2.574fr 1.499fr;gap:12px;margin-top:6px}
+#work .media-lunisa .m-art figure{padding-bottom:0}
+#work .media-lunisa .m-art img{height:100%;object-fit:cover}
+#work .media-lunisa .m-art .m-founder img{object-position:60% 40%}
+@media (max-width:640px){#work .media-lunisa .m-art{gap:8px}}
