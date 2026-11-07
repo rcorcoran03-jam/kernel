@@ -793,3 +793,23 @@
 #work .media-lunisa .m-art img{height:100%;object-fit:cover}
 #work .media-lunisa .m-art .m-founder img{object-position:60% 40%}
 @media (max-width:640px){#work .media-lunisa .m-art{gap:8px}}
+
+/* Case tabs: the closed tab stays visible, with a cue to open it */
+.work-tabs{scroll-margin-top:96px}
+.work-tabs button{position:relative}
+.work-tabs button[aria-selected="false"]{background:var(--ivory2);border-color:rgba(201,161,90,0.45);color:var(--ink)}
+.work-tabs button[aria-selected="false"]::after{content:"View case \2192";position:absolute;right:20px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--brass-ink);border:1px solid rgba(201,161,90,0.7);border-radius:100px;padding:5px 11px;background:rgba(210,170,90,0.1);transition:background 200ms ease}
+.work-tabs button[aria-selected="false"]:hover{background:#FFFDF7;border-color:rgba(201,161,90,0.85)}
+.work-tabs button[aria-selected="false"]:hover::after{background:rgba(210,170,90,0.24)}
+.work-next{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;width:100%;margin-top:14px;padding:18px 22px;border:1px solid rgba(201,161,90,0.7);border-radius:12px;background:#FFFDF7;cursor:pointer;font:inherit;text-align:left;color:var(--ink);transition:background 200ms ease,box-shadow 200ms ease}
+.work-next:hover{background:#fff;box-shadow:0 8px 22px -14px rgba(35,48,42,0.35)}
+.work-next:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.wn-k{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--brass-ink)}
+.wn-n{font-family:'Bitter',serif;font-size:20px;line-height:1.25}
+.wn-d{font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink2)}
+.wn-a{margin-left:auto;font-size:20px;color:var(--brass-ink)}
+.work-next:hover .wn-a{transform:translateX(3px)}
+@media (max-width:640px){
+  .work-tabs button[aria-selected="false"]::after{display:none}
+  .work-next{padding:14px 16px;gap:8px 12px}.wn-n{font-size:17px}.wn-d{display:none}
+}

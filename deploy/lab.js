@@ -821,6 +821,7 @@ var SAMPLE_BRIEF = {
   if (!sec) return;
   var list = sec.querySelector(".work-tabs");
   var tabs = list ? Array.prototype.slice.call(list.querySelectorAll("[role=tab]")) : [];
+  var nextBar = null;
   if (tabs.length) {
     list.hidden = false;
     document.documentElement.classList.add("js-work");
@@ -832,6 +833,7 @@ var SAMPLE_BRIEF = {
         if (p) p.hidden = !on;
       });
       if (focus) t.focus();
+      if (nextBar) paintNext(t);
     }
     tabs.forEach(function (t, i) {
       t.addEventListener("click", function () { select(t); });
@@ -844,6 +846,17 @@ var SAMPLE_BRIEF = {
         if (n) { e.preventDefault(); select(n, true); }
       });
     });
+    // A "next case" bar under the open case, so someone scrolling through one case finds the other.
+    nextBar = document.createElement("button");
+    nextBar.type = "button"; nextBar.className = "work-next";
+    var lastPanel = document.getElementById(tabs[tabs.length - 1].getAttribute("aria-controls"));
+    if (lastPanel) lastPanel.parentNode.insertBefore(nextBar, lastPanel.nextSibling);
+    function paintNext(cur) {
+      var i = tabs.indexOf(cur), nx = tabs[(i + 1) % tabs.length];
+      var name = nx.querySelector(".wt-name"), kind = nx.querySelector(".wt-kind"), num = nx.querySelector(".wt-num");
+      nextBar.innerHTML = '<span class="wn-k">' + (i + 1 < tabs.length ? "Next case" : "Back to") + '</span><span class="wn-n">' + (num ? num.textContent + " &middot; " : "") + (name ? name.textContent : "") + '</span>' + (kind ? '<span class="wn-d">' + kind.textContent + '</span>' : "") + '<span class="wn-a" aria-hidden="true">&rarr;</span>';
+      nextBar.onclick = function () { select(nx); list.scrollIntoView({ behavior: "smooth", block: "start" }); };
+    }
     select(tabs[0]);
   }
   // detail is open on wide screens, collapsed on small ones
