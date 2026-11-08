@@ -477,7 +477,7 @@
 /* inverted: the top of the labyrinth, so the frame's corners sit along the top
    edge and the circle arches down like a dome over the section */
 .echo-top{top:0;left:50%;width:1500px;height:1500px;transform:translate(-50%,-8%)}
-.g-band .echo-top{opacity:0.4;
+.g-band .echo-top{opacity:0.1;
   -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 22%,rgba(0,0,0,0.55) 32%,transparent 46%),radial-gradient(closest-side,transparent 0 30%,#000 44%);
   -webkit-mask-composite:source-in;
           mask-image:linear-gradient(to bottom,#000 0%,#000 22%,rgba(0,0,0,0.55) 32%,transparent 46%),radial-gradient(closest-side,transparent 0 30%,#000 44%);
@@ -813,3 +813,6 @@
   .work-tabs button[aria-selected="false"]::after{display:none}
   .work-next{padding:14px 16px;gap:8px 12px}.wn-n{font-size:17px}.wn-d{display:none}
 }
+
+/* footnote under the Turnstile check */
+.scan-verify-note{margin:8px 0 0;font-size:12.5px;line-height:1.5;color:var(--ink2)}
