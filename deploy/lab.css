@@ -815,4 +815,5 @@
 }
 
 /* footnote under the Turnstile check */
-.scan-verify-note{margin:8px 0 0;font-size:12.5px;line-height:1.5;color:var(--ink2)}
+.verify-row{align-items:center;margin-top:14px;margin-bottom:16px}
+.scan-verify-note{margin:0;max-width:34ch;font-size:12.5px;line-height:1.55;color:var(--ink2);text-align:left}

@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
-<link rel="stylesheet" href="lab.css?v=20261108a">
+<link rel="stylesheet" href="lab.css?v=20261108b">
 <link rel="stylesheet" href="brief.css?v=20261103">
 <script src="site.js" defer></script>
 <script src="brief-render.js?v=20261103" defer></script>
@@ -327,8 +327,10 @@
               <input id="scan-consent" name="consent" type="checkbox">
               <label for="scan-consent">Kernel Opportunity Scan may review my public website and research the businesses I named to prepare this brief.</label>
             </div>
-            <div id="scan-turnstile"></div>
-            <p class="scan-verify-note">Human verification lets the Scan run on Kernel&rsquo;s built-in Anthropic API, at no cost to you.</p>
+            <div class="row2 verify-row">
+              <div id="scan-turnstile"></div>
+              <p class="scan-verify-note">Human verification lets the Scan run on Kernel&rsquo;s built-in Anthropic API, at no cost to you.</p>
+            </div>
           </div>
 
           <div class="scan-actions">
