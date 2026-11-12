@@ -908,7 +908,7 @@ var SAMPLE_BRIEF = {
   if (mq.addEventListener) mq.addEventListener("change", sync); else if (mq.addListener) mq.addListener(sync);
 })();
 
-/* ---------- How we use AI: explanations open on wide screens, tucked away on phones ---------- */
+/* ---------- How we build (principles): explanations open on wide screens, tucked away on phones ---------- */
 (function () {
   var ds = Array.prototype.slice.call(document.querySelectorAll("#principles details[data-desktop-open]"));
   if (!ds.length) return;
