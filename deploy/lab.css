@@ -817,3 +817,18 @@
 /* footnote under the Turnstile check */
 .verify-row{align-items:center;margin-top:14px;margin-bottom:16px}
 .scan-verify-note{margin:0;max-width:34ch;font-size:12.5px;line-height:1.55;color:var(--ink2);text-align:left}
+
+/* What we build: move-in ready home (2026-11-12) */
+.home-parts{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;margin:4px 0 0}
+.home-parts li{padding:20px 18px 18px;border-top:2px solid var(--brass);background:#FFFDF7;border-radius:0 0 10px 10px;display:flex;flex-direction:column;gap:8px}
+.hp-num{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;color:var(--brass-ink)}
+.home-parts h3{font-size:18px;line-height:1.25;color:var(--ink)}
+.home-parts p{font-size:13.5px;line-height:1.6;color:var(--ink2);text-wrap:pretty}
+.home-keys{margin:22px 0 0;font-family:'Bitter',serif;font-style:italic;font-size:19px;color:var(--g2)}
+.practice-title{margin:44px 0 16px;font-family:'DM Mono',monospace;font-weight:400;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--brass-ink)}
+#build .cat-tag{grid-column:1/-1;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--brass-ink);border:0;padding:0;margin:0}
+#build .cat-link{grid-column:1/-1;font-size:13.5px;color:var(--g2);text-decoration:underline;text-underline-offset:3px}
+@media (max-width:1100px){.home-parts{grid-template-columns:repeat(2,minmax(0,1fr))}.home-parts li:last-child{grid-column:1/-1}}
+@media (max-width:640px){.home-parts{grid-template-columns:1fr;gap:10px}.home-parts li:last-child{grid-column:auto}.home-parts li{padding:14px 16px}.practice-title{margin-top:32px}}
+#build .cat>p{border-bottom:0;padding-bottom:0}
+#build .cat-link{margin-top:auto;padding-top:12px;border-top:1px solid var(--rule)}
