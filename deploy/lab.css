@@ -846,3 +846,7 @@
 .vid-fill::after{content:"";position:absolute;right:-5px;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:#F7F1E8;box-shadow:0 1px 3px rgba(0,0,0,0.35)}
 .vid-ch{position:absolute;top:-1px;width:2px;height:5px;background:rgba(20,26,23,0.55)}
 @media (max-width:640px){.vid-play{width:36px;height:36px}.vid-play svg{width:16px;height:16px}.vid-tag{font-size:7.5px;left:6px;top:6px;padding:2px 5px}.vid-bar{left:6px;right:6px;bottom:5px;font-size:7.5px;gap:5px}}
+/* Lunisa: camp-day snapshot fills the media column */
+#work .media-lunisa .m-camp{margin:18px 0 0}
+#work .media-lunisa .m-camp img{display:block;width:100%;height:auto;border-radius:8px;box-shadow:0 14px 30px -12px rgba(35,48,42,0.3)}
+#work .media-lunisa .m-camp .m-cap{margin-top:10px}
