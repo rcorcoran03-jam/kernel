@@ -113,3 +113,13 @@
   .kb-hd,.kb-ft,.kb-strip,.kb-card,.kb .ev,.kb-dots i.on,.kb-chip{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .kb-s{break-inside:avoid}.kb-sel{display:none}
 }
+/* fold for the sample brief (2026-11-12) */
+.kb-more{border-bottom:1px solid var(--rule)}
+.kb-more-sum{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 24px;background:var(--iv2);color:var(--g2);font-family:'Bitter',serif;font-size:15px}
+.kb-more-sum::-webkit-details-marker{display:none}
+.kb-more-sum::after{content:"+";font-family:'DM Mono',monospace;font-size:16px;color:var(--bi);margin-left:auto}
+.kb-more[open]>.kb-more-sum::after{content:"\2212"}
+.kb-more-sum .kb-m{color:var(--bi)}
+.kb-more-sum:hover{background:#EDE5D2}
+.kb-more>.kb-s:last-child{border-bottom:0}
+@media (max-width:640px){.kb-more-sum{flex-wrap:wrap;padding:12px 16px}.kb-more-sum .kb-m{order:3;width:100%}}

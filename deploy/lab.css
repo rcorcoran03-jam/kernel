@@ -832,3 +832,4 @@
 @media (max-width:640px){.home-parts{grid-template-columns:1fr;gap:10px}.home-parts li:last-child{grid-column:auto}.home-parts li{padding:14px 16px}.practice-title{margin-top:32px}}
 #build .cat>p{border-bottom:0;padding-bottom:0}
 #build .cat-link{margin-top:auto;padding-top:12px;border-top:1px solid var(--rule)}
+.ex-panel-solo{border-radius:12px}

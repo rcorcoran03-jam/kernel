@@ -69,7 +69,8 @@
     if (opts.date) st.appendChild(el("span", null, opts.date));
     root.appendChild(st);
 
-    function section(title, note) { var s = el("section", "kb-s"); var sh = el("div", "kb-sh"); sh.appendChild(el("h4", null, title)); if (note) sh.appendChild(el("span", "kb-m", note)); s.appendChild(sh); root.appendChild(s); return s; }
+    var host = root;
+    function section(title, note) { var s = el("section", "kb-s"); var sh = el("div", "kb-sh"); sh.appendChild(el("h4", null, title)); if (note) sh.appendChild(el("span", "kb-m", note)); s.appendChild(sh); host.appendChild(s); return s; }
 
     // a good place to start
     if (top.length) {
@@ -86,6 +87,15 @@
         g.appendChild(c);
       });
       s1.appendChild(g);
+    }
+
+    // optional fold: everything after the starting three sits behind "see more"
+    if (opts.more) {
+      var more = el("details", "kb-more");
+      var ms = el("summary", "kb-more-sum");
+      ms.appendChild(el("span", null, opts.more[0]));
+      ms.appendChild(el("span", "kb-m", opts.more[1] || ""));
+      more.appendChild(ms); root.appendChild(more); host = more;
     }
 
     // all opportunities, condensed

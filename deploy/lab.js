@@ -18,34 +18,34 @@ var SAMPLE_BRIEF = {
  "version": 2,
  "sample": true,
  "business": "Juniper & Clay",
- "summary": "A two-person ceramics studio with classes, private parties, and a small online shop. The clearest wins are in how inquiries, bookings, and payments arrive, not in the making itself.",
+ "summary": "A two-person ceramics studio with classes, private parties and a small online shop. The clearest wins are in how customers arrive, book and pay, and in one place to see the week, not in the making itself.",
  "notes": "",
  "opportunities": [
   {
    "id": "intake",
    "top": true,
    "category": "Programs & Workflows",
-   "title": "One intake path for every class and party inquiry",
-   "why": "Inquiries arrive in three places, so some go unanswered and the rest take time to track.",
+   "title": "One front door, one record for every customer",
+   "why": "Class questions, party requests and shop messages arrive in three places, so replies slip and no one sees the full history.",
    "prompted": [
     [
      "site",
-     "The contact page offers email, an Instagram DM link, and a separate party form."
+     "The contact page offers email, an Instagram DM link and a separate party form."
     ],
     [
      "told",
      "Class questions arrive by email and get lost between sessions."
     ]
    ],
-   "build": "A single inquiry form that feeds one simple tracker, sends an instant reply, and reminds the studio to follow up.",
-   "experiment": "For two weeks, point every contact link at one form and note reply times.",
+   "build": "One inquiry form for classes, parties and commissions that creates a customer record, sends an instant reply and lands on a simple board: new, replied, booked.",
+   "experiment": "For two weeks, point every contact link at one form and track how long replies take.",
    "value": [
     3,
     "Touches every new customer, and you named it directly."
    ],
    "complexity": [
-    1,
-    "Uses tools the studio already has."
+    2,
+    "A small build on tools you already use."
    ],
    "tools": [
     [
@@ -53,29 +53,128 @@ var SAMPLE_BRIEF = {
      "have"
     ],
     [
-     "Google Sheets",
-     "have"
+     "Customer record",
+     "build"
     ],
     [
      "Reply templates",
-     "build"
+     "write"
     ]
    ],
    "needs": [
     "One channel chosen as official"
    ],
    "obstacles": [
-    "Old links and DMs will keep arriving for a while"
+    "Old links and DMs keep arriving for a while"
    ],
    "sources": [],
    "validate": [
     "Inquiries per week",
-    "Which channel customers prefer"
+    "Time to first reply"
+   ]
+  },
+  {
+   "id": "pay",
+   "top": true,
+   "category": "Programs & Workflows",
+   "title": "Book and pay in one step, deposits included",
+   "why": "Chasing party deposits costs time and goodwill. The fix starts with a clear policy, not AI.",
+   "prompted": [
+    [
+     "site",
+     "The parties page says to email to book, with no deposit step."
+    ],
+    [
+     "told",
+     "Chasing party deposits is a recurring drain."
+    ]
+   ],
+   "build": "Booking that takes a deposit or full payment at the moment someone books, applies your own discounts, and keeps every payment, refund and balance in one ledger.",
+   "experiment": "Send a deposit link with the next five party bookings and see how many confirm without a reminder.",
+   "value": [
+    3,
+    "Money arrives sooner and no one has to ask."
+   ],
+   "complexity": [
+    2,
+    "Payment setup plus a written policy."
+   ],
+   "tools": [
+    [
+     "Square",
+     "have"
+    ],
+    [
+     "Online checkout",
+     "add"
+    ],
+    [
+     "Deposit and refund policy",
+     "write"
+    ]
+   ],
+   "needs": [
+    "A written deposit and cancellation policy"
+   ],
+   "obstacles": [
+    "Some regulars will still want to pay in person"
+   ],
+   "sources": [],
+   "validate": [
+    "Days from booking to deposit",
+    "Late cancellations"
+   ]
+  },
+  {
+   "id": "today",
+   "top": true,
+   "category": "Admin & Operations",
+   "title": "A Today view: who needs a reply, what's due, what's running low",
+   "why": "The week lives in memory: deposits outstanding, class rosters, clay and glaze running low.",
+   "prompted": [
+    [
+     "told",
+     "Remembering to restock the shop slips during busy weeks."
+    ],
+    [
+     "hyp",
+     "With inquiries and payments in one record, the daily list can assemble itself."
+    ]
+   ],
+   "build": "One screen each morning with unanswered inquiries, balances due, this week's rosters and stock below a level you set. You work down it; nothing goes out without you.",
+   "experiment": "For two weeks, write the list by hand each Monday and note what you wish it had caught.",
+   "value": [
+    3,
+    "Fewer dropped balls and more headspace."
+   ],
+   "complexity": [
+    2,
+    "Builds on the customer record above."
+   ],
+   "tools": [
+    [
+     "Today view",
+     "build"
+    ],
+    [
+     "Google Sheets",
+     "have"
+    ]
+   ],
+   "needs": [
+    "Inquiries and payments in one place first"
+   ],
+   "obstacles": [
+    "Only as good as the records behind it"
+   ],
+   "sources": [],
+   "validate": [
+    "Missed follow-ups per week"
    ]
   },
   {
    "id": "choose",
-   "top": true,
+   "top": false,
    "category": "Products & Offerings",
    "title": "Help visitors choose the right class before they email",
    "why": "The same questions repeat because the site doesn't answer them yet.",
@@ -89,7 +188,7 @@ var SAMPLE_BRIEF = {
      "You answer the same class questions again and again."
     ]
    ],
-   "build": "A short comparison or quiz, written from real customer questions, that points each visitor to the right class.",
+   "build": "A short class guide, written from real customer questions, that points each visitor to the right class and answers the rest up front.",
    "experiment": "Turn the five most-asked questions into a comparison table on the classes page.",
    "value": [
     3,
@@ -105,8 +204,8 @@ var SAMPLE_BRIEF = {
      "build"
     ],
     [
-     "AI-drafted FAQ",
-     "build"
+     "Answers from real questions",
+     "write"
     ]
    ],
    "needs": [
@@ -117,271 +216,213 @@ var SAMPLE_BRIEF = {
    ],
    "sources": [],
    "validate": [
-    "Which questions come up most",
-    "Where visitors drop off"
+    "Which questions come up most"
    ]
   },
   {
-   "id": "deposit",
-   "top": true,
+   "id": "forms",
+   "top": false,
    "category": "Programs & Workflows",
-   "title": "Take party deposits at booking, not after",
-   "why": "Chasing payments costs time and goodwill. A process fix first; no AI needed.",
+   "title": "Forms and waivers signed once and kept on file",
+   "why": "Clay, kilns and kids' parties usually call for signed waivers, and paper copies are hard to find later.",
    "prompted": [
     [
-     "site",
-     "The parties page says to email to book, with no deposit step."
-    ],
-    [
-     "told",
-     "Chasing party deposits is a recurring drain."
+     "hyp",
+     "Private parties likely need a signed waiver from each guest's adult."
     ]
    ],
-   "build": "A booking request with a deposit link and a confirmation template that spells out the policy.",
-   "experiment": "Add a deposit link to the next five party confirmations.",
+   "build": "Online forms with e-signature, attached to each booking, with a reminder for anything still unsigned. The exact text signed is saved with the date.",
+   "experiment": "Move the current waiver to an online form for one month of parties.",
    "value": [
     2,
-    "Saves follow-up and reduces late cancellations."
+    "Less paper and a clear record if something happens."
    ],
    "complexity": [
     1,
-    "A payment link and a template."
+    "Simple setup once the waiver text is final."
    ],
    "tools": [
     [
-     "Square",
+     "E-signature forms",
      "add"
     ],
     [
-     "Deposit policy",
+     "Waiver text",
      "write"
     ]
    ],
    "needs": [
-    "A written deposit and cancellation policy"
+    "Final waiver text, ideally reviewed"
    ],
    "obstacles": [
-    "Regular customers may push back at first"
+    "Walk-in guests who skip the form"
    ],
    "sources": [],
    "validate": [
-    "Current payment tool",
-    "Refund policy"
+    "Unsigned forms on party day"
    ]
   },
   {
-   "id": "connect",
+   "id": "sources",
    "top": false,
-   "category": "Programs & Workflows",
-   "title": "Connect registration, reminders, and class-day prep",
-   "why": "Typing the same details in several places is where errors creep in.",
+   "category": "Products & Offerings",
+   "title": "Know which posts, flyers and partners fill classes",
+   "why": "Promotion happens on Instagram, flyers and the newsletter, with no way to see which one leads to a booking.",
    "prompted": [
     [
+     "site",
+     "Instagram and a newsletter signup are linked from every page."
+    ],
+    [
      "hyp",
-     "Registrations may be copied by hand into a roster and a materials list."
+     "No booking form asks how people heard about the studio."
     ]
    ],
-   "build": "Registration that fills the roster, sends reminders, and produces a prep checklist for each class.",
-   "experiment": "Map one class from sign-up to clean-up and mark every place details are retyped.",
+   "build": "Tagged links and QR codes per channel, plus a 'how did you hear about us' question, feeding the customer record and a simple monthly report.",
+   "experiment": "Add the question to the booking form for one month and tally the answers.",
    "value": [
     2,
-    "Fewer errors and less evening admin."
+    "Puts promotion time where it pays off."
    ],
    "complexity": [
-    2,
-    "Depends on how the booking tool connects."
+    1,
+    "Small changes to forms and links."
    ],
    "tools": [
     [
-     "Acuity Scheduling",
-     "add"
+     "Tagged links and QR codes",
+     "build"
     ],
     [
-     "Zapier",
-     "add"
+     "Newsletter tool",
+     "have"
+    ]
+   ],
+   "needs": [
+    "A short list of channels you actually use"
+   ],
+   "obstacles": [
+    "People forget where they first heard"
+   ],
+   "sources": [],
+   "validate": [
+    "Bookings by channel"
+   ]
+  },
+  {
+   "id": "shop",
+   "top": false,
+   "category": "Admin & Operations",
+   "title": "Connect the shop so sales and stock sit with everything else",
+   "why": "Shop sales and class bookings live in separate systems, so customer history and restocking are guesswork.",
+   "prompted": [
+    [
+     "site",
+     "The online shop runs separately from class booking."
+    ],
+    [
+     "told",
+     "Remembering to restock the shop slips during busy weeks."
+    ]
+   ],
+   "build": "Connect the existing shop to the studio record so purchases join each customer's history and low stock shows up on the Today view. The shop keeps handling checkout.",
+   "experiment": "Export last quarter's shop orders and match them to class customers by email.",
+   "value": [
+    2,
+    "Shows who your regulars really are."
+   ],
+   "complexity": [
+    2,
+    "Depends on what the shop can export or connect."
+   ],
+   "tools": [
+    [
+     "Shop platform",
+     "have"
+    ],
+    [
+     "Shop connection",
+     "build"
     ]
    ],
    "needs": [
     "One booking tool as the source of truth"
    ],
    "obstacles": [
-    "Re-entry may not happen as often as it seems"
+    "Customers using different emails in each place"
    ],
    "sources": [],
    "validate": [
-    "Whether re-entry happens",
-    "Which booking tool is in use"
+    "Repeat customers across shop and classes"
    ]
   },
   {
-   "id": "promo",
-   "top": false,
-   "category": "Products & Offerings",
-   "title": "Plan the busy season as a promotion calendar",
-   "why": "Planned promotions take less effort than last-minute ones and protect time for making.",
-   "prompted": [
-    [
-     "peer",
-     "Both studios you admire run a gift-card push every November."
-    ],
-    [
-     "told",
-     "You want more room for creative work."
-    ]
-   ],
-   "build": "A twelve-month calendar with posts and emails drafted in the studio's own voice.",
-   "experiment": "Plan the November to December gift-card push in one session.",
-   "value": [
-    2,
-    "Depends on seasonal demand."
-   ],
-   "complexity": [
-    1,
-    "One planning session, then light upkeep."
-   ],
-   "tools": [
-    [
-     "Mailchimp",
-     "add"
-    ],
-    [
-     "AI drafts in your voice",
-     "build"
-    ]
-   ],
-   "needs": [
-    "Last year's sales by month",
-    "Product photos"
-   ],
-   "obstacles": [
-    "Busy season leaves little time to plan"
-   ],
-   "sources": [],
-   "validate": [
-    "Sales by month",
-    "Whether gift cards are offered"
-   ]
-  },
-  {
-   "id": "monday",
+   "id": "playbook",
    "top": false,
    "category": "Admin & Operations",
-   "title": "A Monday brief: deposits due, stock to reorder",
-   "why": "Restocking and follow-ups slip when they live only in your head.",
+   "title": "A studio playbook a new helper can learn in an afternoon",
+   "why": "Class-day setup and party hosting live in the founders' heads, which makes it hard to bring on help.",
    "prompted": [
-    [
-     "told",
-     "Remembering to restock the shop keeps slipping."
-    ],
     [
      "hyp",
-     "Commitments are spread across inbox, bookings, and shop."
+     "A two-person studio taking more parties will need helpers who can run setup alone."
     ]
    ],
-   "build": "A short weekly summary pulled from the inbox, bookings, and shop inventory.",
-   "experiment": "Keep it by hand for four Mondays before automating.",
+   "build": "Short how-to guides and screen walkthroughs for class-day setup, party hosting and the studio tools, written as each piece is built.",
+   "experiment": "Record one class-day setup on your phone and turn it into a one-page checklist.",
    "value": [
     2,
-    "Fewer dropped balls; calmer weeks."
-   ],
-   "complexity": [
-    3,
-    "Needs access to three systems."
-   ],
-   "tools": [
-    [
-     "Gmail",
-     "add"
-    ],
-    [
-     "Square",
-     "add"
-    ],
-    [
-     "Google Sheets",
-     "have"
-    ]
-   ],
-   "needs": [
-    "A simple stock list",
-    "Access to each system"
-   ],
-   "obstacles": [
-    "Two people share the inbox"
-   ],
-   "sources": [],
-   "validate": [
-    "Where the information lives",
-    "What you check each week today"
-   ]
-  },
-  {
-   "id": "answers",
-   "top": false,
-   "category": "Admin & Operations",
-   "title": "Turn repeat questions into a reusable answer library",
-   "why": "Good answers written once work in email, on the site, and later for an assistant.",
-   "prompted": [
-    [
-     "told",
-     "The same class questions repeat."
-    ]
-   ],
-   "build": "Saved replies and an FAQ page, in your own voice.",
-   "experiment": "Collect the last twenty customer questions and group them.",
-   "value": [
-    2,
-    "Overlaps with the class guide; best done together."
+    "Makes it possible to step away."
    ],
    "complexity": [
     1,
-    "Pairs naturally with the class guide."
+    "Writing and short recordings."
    ],
    "tools": [
     [
-     "Gmail templates",
-     "add"
+     "Playbook",
+     "write"
     ],
     [
-     "FAQ page",
+     "Walkthrough videos",
      "build"
     ]
    ],
    "needs": [
-    "Your 20 most common questions"
+    "An hour of your time per guide"
    ],
    "obstacles": [
-    "Answers go stale if nobody owns them"
+    "Guides go stale if no one owns them"
    ],
    "sources": [],
    "validate": [
-    "Tone you want in replies"
+    "Questions from new helpers"
    ]
   }
  ],
  "foundations": [
   {
    "item": "A written deposit and cancellation policy",
-   "for": "deposits"
+   "for": "booking and payment"
   },
   {
    "item": "Your 20 most common customer questions",
-   "for": "class guide, answer library"
+   "for": "class guide"
   },
   {
    "item": "One booking tool as the source of truth",
-   "for": "registration, Monday brief"
+   "for": "customer record, Today view"
   },
   {
-   "item": "Product photos and a simple stock list",
-   "for": "promotions, restocking"
+   "item": "A simple stock list with reorder levels",
+   "for": "Today view, shop"
   }
  ],
  "pitfalls": [
   "Switching every contact channel at once; move one, then the next.",
-  "Automating reminders before the class process is written down.",
+  "Connecting the shop before the customer record is settled.",
   "Letting AI send replies unreviewed in the first month.",
-  "Planning promotions inside the busy season instead of before it."
+  "Automating reminders before the class process is written down."
  ],
  "inspiration": {
   "themes": [
@@ -400,7 +441,7 @@ var SAMPLE_BRIEF = {
     "peers": [
      "Moss Street Pottery"
     ],
-    "opportunity": "promo"
+    "opportunity": "sources"
    },
    {
     "theme": "Choosing is easy",
@@ -682,7 +723,7 @@ var SAMPLE_BRIEF = {
     var root = document.getElementById("sb-root");
     if (!root || !window.KernelBrief) return;
     window.KernelBrief.render(root, SAMPLE_BRIEF, {
-      sample: true, idPrefix: "sb", cta: ["Run your own scan", "#scan-form"],
+      sample: true, idPrefix: "sb", cta: ["Run your own scan", "#scan-form"], more: ["See the full sample brief", "5 more ideas \u00b7 peers \u00b7 before you build"],
       input: { website: "juniperandclay.example (fictional)", room: "Creative work", stuck: "Answering the same class questions, chasing party deposits, remembering to restock the shop." }
     });
   }
