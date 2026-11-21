@@ -917,3 +917,15 @@ var SAMPLE_BRIEF = {
   sync();
   if (mq.addEventListener) mq.addEventListener("change", sync); else if (mq.addListener) mq.addListener(sync);
 })();
+
+/* ---------- The class: "Hear about the next class" prefills the inquiry ---------- */
+(function () {
+  var a = document.querySelector("[data-class-interest]");
+  if (!a) return;
+  a.addEventListener("click", function () {
+    var form = document.querySelector("#inquiry form"); if (!form) return;
+    var msg = form.querySelector("[name=message]");
+    if (msg && !msg.value.trim()) msg.value = "I'd like to hear about the next Your Friendly Neighborhood AI Guy class.";
+    if (!form.querySelector("[name=interest]")) { var h = document.createElement("input"); h.type = "hidden"; h.name = "interest"; h.value = "Class"; form.appendChild(h); }
+  });
+})();

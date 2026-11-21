@@ -11,6 +11,10 @@ Who it's for: founder-led and owner-operated small businesses, often creative, l
 
 Contact: hello@kernel-collective.com
 
+## Community class
+
+"Your Friendly Neighborhood AI Guy" is a four-evening community class taught by Ryan Corcoran, being offered to Twin Cities community education and library programs. Students set up an AI project workspace, build a first working version of an idea, publish it to the web in accounts they own, and learn the costs, privacy limits and lock-in traps. No coding experience required. Details: https://kernel-collective.com/Lab#class
+
 ## Pages
 
 - [Home](https://kernel-collective.com/): what Kernel is and the two ways to work together

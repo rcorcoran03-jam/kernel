@@ -23,14 +23,16 @@ export async function onRequestPost({ request, env }) {
   const form = FORMS[d.form] ? d.form : "contact";
   const business = String(d.business || d.company || "").trim();
   const carried = String(d.opportunity_scan || "").trim();
-  const known = ["form", "name", "email", "message", "business", "company", "website", "phone", "opportunity_scan", "company_site"];
+  const known = ["form", "name", "email", "message", "business", "company", "website", "phone", "opportunity_scan", "company_site", "interest"];
   const extra = Object.keys(d).filter((k) => !known.includes(k) && d[k]).map((k) => `${k}: ${d[k]}`).join("\n");
-  const message = [String(d.message || ""), carried ? "From the Opportunity Scan:\n" + carried : "", extra].filter(Boolean).join("\n\n");
+  const interest = /^class$/i.test(String(d.interest || "")) ? "Class" : "";
+  const message = [interest ? "Interested in the community class." : "", String(d.message || ""), carried ? "From the Opportunity Scan:\n" + carried : "", extra].filter(Boolean).join("\n\n");
 
   let saved = false;
   if (env.SCAN_KV) {
     const found = await findOpenLead(env, email);
     const lead = found || newLead({ source: form, name, email, business, website: d.website, phone: d.phone, message });
+    if (interest) lead.tags = Array.from(new Set((lead.tags || []).concat(interest)));
     if (found) {
       if (!lead.business && business) lead.business = business;
       if (!lead.phone && d.phone) lead.phone = d.phone;
