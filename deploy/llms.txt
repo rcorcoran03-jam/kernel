@@ -1,0 +1,24 @@
+# Kernel Collective
+
+> Kernel Collective is a Minneapolis consulting practice for founders and small businesses across the Twin Cities and Minnesota. It is run by Kate Kepple Corcoran and Ryan Corcoran. Tagline: "Built to flourish."
+
+Kernel works in two ways:
+
+- **Kernel Lab** builds the tools, business systems and AI behind a small business, alongside the owner, then hands over the keys. The method is "See one. Do one. Teach one": Kernel builds while the owner watches, the owner's team leads while Kernel coaches, then the team teaches the playbook forward. Work stays inside tools the business already uses where possible. Lab starts with a short Discovery step and a free Opportunity Scan.
+- **Kernel Suite** is an embedded partnership for founder-led businesses: strategy, design, operations and execution over a longer stretch, rooted in what is essential to the business.
+
+Who it's for: founder-led and owner-operated small businesses, often creative, lifestyle, service and social ventures, in Minneapolis, Saint Paul and greater Minnesota.
+
+Contact: hello@kernel-collective.com
+
+## Pages
+
+- [Home](https://kernel-collective.com/): what Kernel is and the two ways to work together
+- [Kernel Lab](https://kernel-collective.com/Lab): business systems and AI for small businesses, client work (Lunisa Arts, French Detours), how Kernel uses AI, FAQ, and the free Opportunity Scan
+- [Kernel Suite](https://kernel-collective.com/Suite): the embedded partnership
+- [About](https://kernel-collective.com/About): Kate Kepple Corcoran and Ryan Corcoran
+
+## Client work
+
+- [Lunisa Arts](https://lunisaarts.com): a founder-led summer art camp in Minneapolis. Kernel shaped its offerings and pricing, built its website, and built Studio Desk, a back office for registration, families, forms and the camp day.
+- [French Detours](https://frenchdetours.com): a custom travel company. Kernel worked on the product, positioning, website and a travel companion app prototype.

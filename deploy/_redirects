@@ -1,3 +1,8 @@
 # Services was split into Kernel Suite (embedded partnership) and Kernel Lab (Oct 2026).
 /Services.html  /Suite.html  301
 /Services       /Suite       301
+
+# Lowercase and short addresses people type or print
+/lab    /Lab    301
+/suite  /Suite  301
+/about  /About  301

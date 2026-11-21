@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>About · Kernel Collective, Minneapolis</title>
 <meta name="description" content="Meet Kate Kepple Corcoran and Ryan Corcoran, the Minneapolis pair behind Kernel Collective, a consulting practice for founders and small businesses.">
-<link rel="canonical" href="https://kernel-collective.com/About.html">
+<link rel="canonical" href="https://kernel-collective.com/About">
 <link rel="icon" type="image/svg+xml" href="assets/kernel-mark-maroon.svg">
 <link rel="icon" type="image/png" href="assets/kernel-icon-192.png">
 <link rel="apple-touch-icon" href="assets/kernel-apple-touch-180.png">
@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Kernel Collective">
 <meta property="og:title" content="About — Kernel Collective">
 <meta property="og:description" content="Meet Kate Kepple Corcoran and Ryan Corcoran, the Minneapolis pair behind Kernel Collective, a consulting practice for founders and small businesses.">
-<meta property="og:url" content="https://kernel-collective.com/About.html">
+<meta property="og:url" content="https://kernel-collective.com/About">
 <meta property="og:image" content="https://kernel-collective.com/og-image.jpg?v=6">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -28,19 +28,66 @@
 <link rel="stylesheet" href="site.css">
 <link rel="stylesheet" href="about.css">
 <script src="site.js" defer></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "AboutPage",
+ "url": "https://kernel-collective.com/About",
+ "name": "About Kernel Collective",
+ "about": {
+  "@id": "https://kernel-collective.com/#business"
+ },
+ "mainEntity": [
+  {
+   "@type": "Person",
+   "@id": "https://kernel-collective.com/About#kate",
+   "name": "Kate Kepple Corcoran",
+   "worksFor": {
+    "@id": "https://kernel-collective.com/#business"
+   },
+   "image": "https://kernel-collective.com/assets/kate-corcoran.jpg",
+   "knowsAbout": [
+    "Business strategy",
+    "Clarity and identity",
+    "Strategic orientation",
+    "Healthcare strategy"
+   ]
+  },
+  {
+   "@type": "Person",
+   "@id": "https://kernel-collective.com/About#ryan",
+   "name": "Ryan Corcoran",
+   "jobTitle": "AI Implementation and Training",
+   "worksFor": {
+    "@id": "https://kernel-collective.com/#business"
+   },
+   "image": "https://kernel-collective.com/assets/ryan-corcoran.jpg",
+   "sameAs": [
+    "https://www.linkedin.com/in/ryancorcoran1"
+   ],
+   "knowsAbout": [
+    "AI implementation",
+    "AI training",
+    "Product strategy",
+    "Business systems"
+   ]
+  }
+ ]
+}
+</script>
 </head>
 <body>
 <div style="background:#F7F1E8;min-height:100vh">
   <header style="position:sticky;top:0;z-index:50;background:rgba(253,249,243,0.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(58,42,34,0.09)">
     <div style="max-width:1180px;margin:0 auto;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;gap:32px">
-      <a href="index.html" style="display:flex;align-items:center;gap:12px;color:#3A2A22" aria-label="Kernel Collective home">
+      <a href="/" style="display:flex;align-items:center;gap:12px;color:#3A2A22" aria-label="Kernel Collective home">
         <img src="assets/kernel-wordmark-maroon.svg" alt="" width="119" height="40" style="display:block;height:40px;width:auto">
       </a>
       <nav style="display:flex;align-items:center;gap:4px" aria-label="Main">
-        <a class="kh9fef70" href="About.html" aria-current="page" style="padding:10px 16px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:#9B2C2C">About</a>
-        <a class="kh9fef70 nav-suite" href="Suite.html" style="padding:10px 16px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:#4A1A22">Suite</a>
-        <a class="nav-lab" href="Lab.html" style="padding:10px 16px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:#2F3F36">Lab</a>
-        <a href="index.html#contact" class="nav-contact khb38602" style="margin-left:12px;padding:11px 22px;border-radius:100px;background:#9B2C2C;color:#FDF9F3;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;font-weight:500">Contact</a>
+        <a class="kh9fef70" href="/About" aria-current="page" style="padding:10px 16px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:#9B2C2C">About</a>
+        <a class="kh9fef70 nav-suite" href="/Suite" style="padding:10px 16px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:#4A1A22">Suite</a>
+        <a class="nav-lab" href="/Lab" style="padding:10px 16px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:#2F3F36">Lab</a>
+        <a href="/#contact" class="nav-contact khb38602" style="margin-left:12px;padding:11px 22px;border-radius:100px;background:#9B2C2C;color:#FDF9F3;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;font-weight:500">Contact</a>
       </nav>
     </div>
   </header>
@@ -138,20 +185,20 @@
         <h2 style="font-family:'Bitter',serif;font-weight:400;font-size:40px;line-height:1.18;letter-spacing:-0.015em;color:#F7F1E8;text-wrap:pretty;margin-bottom:18px">You do not have to figure it all out alone.</h2>
         <p style="font-size:16px;line-height:1.85;color:rgba(247,241,232,0.62);text-wrap:pretty">Bring what you are building, what feels stuck, or what keeps taking up space. We will look for the signal together.</p>
       </div>
-      <a class="kh581f31" href="index.html#contact" style="padding:16px 32px;border-radius:100px;background:#C97B5A;color:#2F211B;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;white-space:nowrap">Start a conversation →</a>
+      <a class="kh581f31" href="/#contact" style="padding:16px 32px;border-radius:100px;background:#C97B5A;color:#2F211B;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;white-space:nowrap">Start a conversation →</a>
     </div>
   </section>
 
   <footer style="background:#2A1D17;border-top:1px solid rgba(247,241,232,0.1);color:rgba(247,241,232,0.4);padding:24px 40px">
     <div style="max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
-      <a href="index.html" style="display:flex;align-items:center;gap:11px">
+      <a href="/" style="display:flex;align-items:center;gap:11px">
         <img src="assets/kernel-wordmark-cream.svg" alt="Kernel" width="71" height="24" style="display:block;height:24px;width:auto;opacity:0.8">
       </a>
       <nav style="display:flex;gap:22px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase" aria-label="Footer">
-        <a class="kh6edb60" href="About.html" style="color:rgba(247,241,232,0.55)">About</a>
-        <a class="kh6edb60" href="Suite.html" style="color:rgba(247,241,232,0.55)">Suite</a>
-        <a class="kh6edb60" href="Lab.html" style="color:rgba(247,241,232,0.55)">Lab</a>
-        <a class="kh6edb60" href="index.html#contact" style="color:rgba(247,241,232,0.55)">Contact</a>
+        <a class="kh6edb60" href="/About" style="color:rgba(247,241,232,0.55)">About</a>
+        <a class="kh6edb60" href="/Suite" style="color:rgba(247,241,232,0.55)">Suite</a>
+        <a class="kh6edb60" href="/Lab" style="color:rgba(247,241,232,0.55)">Lab</a>
+        <a class="kh6edb60" href="/#contact" style="color:rgba(247,241,232,0.55)">Contact</a>
       </nav>
       <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase">Built to flourish. · Minneapolis, MN · © 2026</span>
     </div>
