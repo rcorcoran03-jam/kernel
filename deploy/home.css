@@ -137,7 +137,7 @@
 .hh-lede{font-family:'Bitter',serif;font-weight:400;font-size:21px;line-height:1.5;color:#3A2A22;max-width:500px;text-wrap:pretty;margin-bottom:18px}
 .hh-body{font-size:16.5px;line-height:1.8;color:#5b453a;max-width:470px;text-wrap:pretty;margin-bottom:40px}
 .hh-actions{display:flex;gap:14px;flex-wrap:wrap}
-.hh-btn{padding:15px 30px;border-radius:100px;background:#9B2C2C;color:#FDF9F3;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500}
+.hh-btn{padding:15px 30px;border-radius:100px;background:#4A1A22;color:#FDF9F3;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500}
 @media (max-width:1020px){
   .hh-terrain,.hh-emblem{left:84%}
   .hh-terrain{opacity:0.4}
@@ -156,4 +156,81 @@
   .hh-emblem{top:96px;left:auto;right:56px;width:58px;transform:translate(50%,-58%)}
   .hh-lab-bl{display:none}
   .hh-lab-tr{width:700px;height:700px;opacity:0.4}
+}
+
+/* ============ hero refresh (Nov 22): "kernel" types out above the pomegranate,
+   copy fades in after it, and the header waits until you scroll past the hero ============ */
+.typed{display:block;width:min(100%,420px);height:auto;overflow:visible;margin:0 0 14px}
+.hh-title{font-size:clamp(32px,4vw,49px)}
+.hh-inner{padding-block:72px}
+.caret{opacity:0}
+@media(max-width:720px){.hh-inner{padding-top:120px}.typed{width:min(82%,340px)}}
+@media(prefers-reduced-motion:no-preference){
+.typed > g path{animation:letter-in .01s var(--delay) step-end backwards}
+@keyframes letter-in{from{opacity:0}to{opacity:1}}
+.caret{animation:blink .6s steps(1,end) 3, travel 1.35s 1.8s steps(1,end) forwards}
+@keyframes blink{0%{opacity:1}50%,100%{opacity:0}}
+@keyframes travel{0%{transform:translateX(0)}0.8%{opacity:1;transform:translateX(190px)}12%{transform:translateX(345px)}23%{transform:translateX(481px)}35%{transform:translateX(670px)}46%{transform:translateX(819px)}57%,99%{opacity:1;transform:translateX(938px)}100%{opacity:0;transform:translateX(938px)}}
+}
+
+.hh-emblem .typed{position:absolute;bottom:calc(100% + 26px);left:50%;transform:translateX(-50%);width:clamp(240px,32vw,470px);max-width:none;margin:0;pointer-events:none}
+.hh-copy{max-width:min(47vw,600px)}
+.hh-title{font-size:clamp(44px,4.6vw,64px)}
+@media(min-width:721px) and (max-width:1020px){.hh-emblem,.hh-terrain{left:74%}}
+@media(max-width:720px){
+.hh-emblem{left:50%;right:auto;top:161px;transform:translate(-50%,-50%);width:50px}
+.hh-terrain{top:161px;left:50%;right:auto;transform:translate(-52.08%,-35.33%) rotate(-4deg)}
+.hh-emblem .typed{width:min(58vw,240px);bottom:calc(100% + 14px)}
+.hh-inner{padding-top:224px}.hh-copy{max-width:100%}.hh-title{font-size:44px}
+}
+@media(prefers-reduced-motion:no-preference){
+.hh-copy{animation:hero-copy-in .8s 2.55s cubic-bezier(.22,.7,.25,1) backwards}
+.hh-copy:focus-within{animation:none}
+@keyframes hero-copy-in{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+}
+#main-header{transition:transform .24s ease-out,opacity .2s ease-out}
+#main-header[inert]{opacity:0;transform:translateY(-100%);visibility:hidden}
+@media(prefers-reduced-motion:reduce){#main-header{transition:none}}
+
+/* ============ Kernel homepage motion (Nov 2026) ============
+   Hero sequence: the pomegranate presses into the page, the contours radiate
+   out from it, one soft ripple travels outward, and the labyrinth corners
+   surface. The typed "kernel" wordmark and the copy follow on their existing
+   timing. After that, the contours drift very slowly, and sections below the
+   hero rise in gently as they scroll into view. Everything here is off for
+   visitors who ask their device for reduced motion. */
+@property --hh-r{syntax:'<number>';inherits:false;initial-value:1}
+@media(prefers-reduced-motion:no-preference){
+  .hh-terrain{
+    -webkit-mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 calc(8% * var(--hh-r)), #000 calc(34% * var(--hh-r)), rgba(0,0,0,0) calc(62% * var(--hh-r)));
+            mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 calc(8% * var(--hh-r)), #000 calc(34% * var(--hh-r)), rgba(0,0,0,0) calc(62% * var(--hh-r)));
+    animation:hh-radiate 1.9s .15s cubic-bezier(.2,.65,.25,1) both, hh-drift 38s 2.1s ease-in-out infinite alternate}
+  @keyframes hh-radiate{from{--hh-r:.04;opacity:0}18%{opacity:.55}to{--hh-r:1}}
+  @keyframes hh-drift{from{rotate:0deg;scale:1}to{rotate:2.2deg;scale:1.015}}
+
+  .hh-emblem img{animation:hh-press 1.05s .1s cubic-bezier(.3,.7,.2,1) backwards}
+  @keyframes hh-press{
+    from{opacity:0;transform:translateY(-7px) scale(1.16);filter:drop-shadow(0 10px 14px rgba(110,28,34,0.10))}
+    60%{opacity:.9;transform:translateY(1px) scale(.985)}
+    to{opacity:.9;transform:none}}
+
+  .hh-emblem::after{content:"";position:absolute;left:50%;top:58%;width:210px;height:116px;margin:-58px 0 0 -105px;z-index:-1;
+    border:1px solid rgba(155,44,44,0.5);border-radius:50%;pointer-events:none;opacity:0;
+    transform:rotate(-4deg) scale(.3);animation:hh-ripple 2.2s .55s cubic-bezier(.15,.6,.3,1) forwards}
+  @keyframes hh-ripple{0%{opacity:0;transform:rotate(-4deg) scale(.3)}12%{opacity:.75}100%{opacity:0;transform:rotate(-4deg) scale(3.4)}}
+
+  .hh-lab{animation:hh-lab-in 1.6s .9s ease-out backwards}
+  @keyframes hh-lab-in{from{opacity:0;translate:0 -10px}}
+  .hh-lab-bl{animation-name:hh-lab-in-bl}
+  @keyframes hh-lab-in-bl{from{opacity:0;translate:0 10px}}
+
+  /* sections below the hero: added by the script only when motion is allowed */
+  .rv{opacity:0;translate:0 16px;transition:opacity .75s cubic-bezier(.22,.7,.25,1),translate .75s cubic-bezier(.22,.7,.25,1);transition-delay:var(--rv-d,0s)}
+  .rv.in{opacity:1;translate:0 0}
+}
+@media(max-width:720px) and (prefers-reduced-motion:no-preference){
+  .hh-terrain{
+    -webkit-mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 calc(6% * var(--hh-r)), rgba(0,0,0,0.6) calc(22% * var(--hh-r)), rgba(0,0,0,0) calc(46% * var(--hh-r)));
+            mask-image:radial-gradient(closest-side at 52.08% 35.33%, rgba(0,0,0,0.55) 0%, #000 calc(6% * var(--hh-r)), rgba(0,0,0,0.6) calc(22% * var(--hh-r)), rgba(0,0,0,0) calc(46% * var(--hh-r)))}
+  .hh-emblem::after{width:150px;height:82px;margin:-41px 0 0 -75px}
 }

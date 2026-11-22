@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Kernel HQ</title>
+<title>Lab Bench · Kernel HQ</title>
 <link rel="icon" type="image/png" href="/assets/kernel-icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@300;400;500&family=DM+Sans:wght@400;500&family=DM+Mono&display=swap" rel="stylesheet">
@@ -233,20 +233,26 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
 @media (max-width:700px){.pz-g{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:700px){.grid2{grid-template-columns:1fr}.kv{grid-template-columns:1fr}.who{flex-basis:100%;font-size:12px}.top-in{padding:10px 12px}main{padding:12px}}
 </style>
+<link rel="stylesheet" href="/hq/bench.css">
 </head>
 <body>
 <header class="top">
   <div class="top-in">
-    <a class="brand" href="/hq/"><img src="/assets/kernel-wordmark-maroon.svg" alt="kernel"><b>HQ</b></a>
-    <label class="sr" for="q">Search leads</label><input id="q" class="search" type="search" placeholder="Search name, business, email">
-    <div class="seg" role="group" aria-label="View"><button type="button" id="v-board" aria-pressed="true">Board</button><button type="button" id="v-list" aria-pressed="false">List</button></div>
-    <button type="button" class="btn" id="add">+ Add lead</button>
-    <button type="button" class="btn q" id="csv">Export CSV</button>
+    <a class="brand" href="/hq/"><img src="/assets/kernel-lab-mark.png" alt=""><span>Kernel HQ<small>BACK OFFICE</small></span></a>
+    <label class="sr" for="q">Search leads</label><input id="q" class="search" type="search" disabled placeholder="Search name, business, email">
+    <div class="seg" role="group" aria-label="View"><button type="button" id="v-board" disabled aria-pressed="true">Board</button><button type="button" id="v-list" disabled aria-pressed="false">List</button></div>
+    <button type="button" class="btn" id="add" disabled>+ Add lead</button>
+    <button type="button" class="btn q" id="csv" disabled>Export CSV</button>
     <span class="who" id="who" hidden><span id="who-e"></span> &middot; <a href="/cdn-cgi/access/logout">Sign out</a></span>
   </div>
   <div class="today" id="today" hidden></div>
 </header>
-<main id="main"><p class="empty">Loading&hellip;</p></main>
+<main>
+  <header class="bench-head">
+    <div><h1>Lab Bench<span>.</span></h1><p>Lead intake, client work, and what needs your attention.</p></div>
+  </header>
+  <div id="main"><p class="empty" role="status">Loading HQ&hellip;</p></div>
+</main>
 
 <dialog id="dlg-add" aria-labelledby="add-t">
   <form method="dialog" id="add-form">
@@ -286,7 +292,9 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
   function load() {
     return api("GET").then(function (d) {
       if (d.status !== "ok") { gate(d); return; }
-      S.leads = d.leads; S.stages = d.stages; S.user = d.user; $("#who-e").textContent = "Signed in as " + d.user; $("#who").hidden = false; render();
+      S.leads = d.leads; S.stages = d.stages; S.user = d.user; $("#who-e").textContent = "Signed in as " + d.user; $("#who").hidden = false;
+      setControls(true);
+      render();
     }).catch(function () { gate({ message: "Couldn't reach Kernel HQ." }); });
   }
   var WHY = {
@@ -297,9 +305,18 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     expired: "Your sign-in expired. Sign out and sign in again.",
     bad_token: "Your sign-in couldn't be verified. Sign out and sign in again."
   };
+  function setControls(enabled) {
+    ["#q", "#v-board", "#v-list", "#add", "#csv"].forEach(function (selector) { $(selector).disabled = !enabled; });
+  }
   function gate(d) {
+    setControls(false);
+    $("#today").hidden = true;
+    $("#today").replaceChildren();
+    $("#who").hidden = true;
+    closeDrawer();
+    if ($("#dlg-add").open) $("#dlg-add").close();
     var m = $("#main"); m.innerHTML = "";
-    var g = el("div", "gate"); g.appendChild(el("h1", null, "Kernel HQ"));
+    var g = el("div", "gate"); g.appendChild(el("h2", null, "Kernel HQ"));
     var msg = d._code === 401 ? (WHY[d.reason] || WHY.no_signin) : (d.message || "Something went wrong.");
     g.appendChild(el("p", "muted", msg));
     if (d.seen) g.appendChild(el("p", "muted", "Signed in as " + d.seen + "."));
@@ -489,11 +506,15 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
   function dayKey(iso) { return (iso || "").slice(0, 10); }
   function daysAgo(n) { return new Date(Date.now() - n * 864e5).toISOString().slice(0, 10); }
 
-  function weekly() {
+  function leadWeeks(count) {
     var weeks = [], now = new Date(); now.setHours(0, 0, 0, 0);
     var start = new Date(now); start.setDate(start.getDate() - ((start.getDay() + 6) % 7)); // this Monday
-    for (var i = 11; i >= 0; i--) { var a = new Date(start); a.setDate(a.getDate() - i * 7); var b = new Date(a); b.setDate(b.getDate() + 7); weeks.push({ a: a, b: b, n: 0 }); }
+    for (var i = count - 1; i >= 0; i--) { var a = new Date(start); a.setDate(a.getDate() - i * 7); var b = new Date(a); b.setDate(b.getDate() + 7); weeks.push({ a: a, b: b, n: 0 }); }
     S.leads.forEach(function (l) { var c = new Date(l.c || l.u); weeks.forEach(function (w) { if (c >= w.a && c < w.b) w.n++; }); });
+    return weeks;
+  }
+
+  function weekly(weeks) {
     var max = Math.max.apply(null, weeks.map(function (w) { return w.n; }).concat([1]));
     var box = el("div", "wk"); box.setAttribute("role", "img"); box.setAttribute("aria-label", "New leads per week, last 12 weeks: " + weeks.map(function (w) { return w.n; }).join(", "));
     weeks.forEach(function (w, i) {
@@ -543,17 +564,57 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     if (pill) top.appendChild(el("span", "pillx " + pill.k, pill.t));
     t.appendChild(top); t.appendChild(el("div", "v", value)); if (sub) t.appendChild(el("div", "s", sub)); return t;
   }
-  function spark() {
-    var weeks = [], start = new Date(); start.setHours(0, 0, 0, 0); start.setDate(start.getDate() - ((start.getDay() + 6) % 7));
-    for (var i = 11; i >= 0; i--) { var a = new Date(start); a.setDate(a.getDate() - i * 7); var b = new Date(a); b.setDate(b.getDate() + 7); weeks.push({ a: a, b: b, n: 0 }); }
-    S.leads.forEach(function (l) { var c = new Date(l.c || l.u); weeks.forEach(function (w) { if (c >= w.a && c < w.b) w.n++; }); });
-    var max = Math.max.apply(null, weeks.map(function (w) { return w.n; }).concat([1])), W = 200, H = 36;
-    var pts = weeks.map(function (w, i) { return [i / 11 * (W - 4) + 2, H - 3 - w.n / max * (H - 8)]; });
-    var svg = sv("svg", { viewBox: "0 0 " + W + " " + H, class: "spark", preserveAspectRatio: "none", "aria-hidden": "true" });
-    var line = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ");
-    svg.appendChild(sv("path", { d: line + " L" + (W - 2) + "," + H + " L2," + H + " Z", class: "sa" }));
-    svg.appendChild(sv("path", { d: line, class: "sl" }));
-    return svg;
+  function leadTubes(weeks) {
+    var max = Math.max.apply(null, weeks.map(function (w) { return w.n; }).concat([1]));
+    var group = el("div", "lead-tubes");
+    group.setAttribute("role", "img");
+    group.setAttribute("aria-label", "New leads in the last six weeks: " + weeks.map(function (w) {
+      return w.a.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + ", " + plural(w.n, "lead");
+    }).join("; "));
+    weeks.forEach(function (week, i) {
+      var tube = el("div", "lead-tube");
+      var date = week.a.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      tube.dataset.tip = date + " · " + plural(week.n, "new lead");
+      tube.appendChild(el("span", null, String(week.n)));
+      var vial = el("span", "lead-vial");
+      if (week.n) {
+        var fill = el("i");
+        fill.style.height = (week.n / max * 92) + "%";
+        vial.appendChild(fill);
+      }
+      tube.appendChild(vial);
+      tube.appendChild(el("small", null, i === weeks.length - 1 ? "Now" : "−" + (weeks.length - 1 - i) + "w"));
+      group.appendChild(tube);
+    });
+    return group;
+  }
+
+  function contractDial(rate, hasLeads) {
+    var gauge = sv("svg", { viewBox: "0 -13 192 139", class: "contract-dial", "aria-hidden": "true" });
+    function point(r, angle) {
+      var radians = angle * Math.PI / 180;
+      return [96 + r * Math.cos(radians), 66 + r * Math.sin(radians)];
+    }
+    function arc(r, end) {
+      return "M" + point(r, 145).join(",") + " A" + r + "," + r + " 0 " + (end > 325 ? 1 : 0) + " 1 " + point(r, end).join(",");
+    }
+    gauge.appendChild(sv("path", { d: arc(63, 395), class: "dial-rim" }));
+    gauge.appendChild(sv("path", { d: arc(56, 395), class: "dial-track" }));
+    if (hasLeads && rate > 0) {
+      var end = 145 + rate * 2.5, marker = point(56, end);
+      gauge.appendChild(sv("path", { d: arc(56, end), class: "dial-reading" }));
+      gauge.appendChild(sv("circle", { cx: marker[0], cy: marker[1], r: 3, class: "dial-marker" }));
+    }
+    for (var i = 0; i <= 20; i++) {
+      var angle = 145 + i * 12.5, major = i % 5 === 0, p1 = point(major ? 43 : 46, angle), p2 = point(49, angle);
+      gauge.appendChild(sv("line", { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], class: major ? "dial-tick major" : "dial-tick" }));
+    }
+    [[0, 141], [50, 270], [100, 399]].forEach(function (label) {
+      var p = point(74, label[1]);
+      gauge.appendChild(sv("text", { x: p[0], y: p[1] + 3, class: "dial-scale", "text-anchor": "middle" }, String(label[0])));
+    });
+    gauge.appendChild(sv("text", { x: 96, y: 77, class: "dial-value", "text-anchor": "middle" }, hasLeads ? rate + "%" : "–"));
+    return gauge;
   }
   var FOCUS = { due: "Follow-ups due", review: "Briefs to review", quiet: "Going quiet" };
   function focusMatch(l) {
@@ -575,14 +636,15 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
   function setFocus(f) { S.focus = f; render(); if (f) { var h = $(".list-h"); if (h) h.scrollIntoView({ behavior: "smooth", block: "start" }); } }
 
   function dashboard() {
-    var wrap = el("section", "dash"); wrap.setAttribute("aria-label", "Dashboard");
-    var hd = el("div", "dash-h"); hd.appendChild(el("h2", null, "Pipeline"));
+    var wrap = el("section", "dash"); wrap.setAttribute("aria-label", "Pipeline dashboard");
+    var hd = el("div", "dash-h"); hd.appendChild(el("h2", null, "Instrument panel"));
     var tg = el("button", "btn q sm", S.dash ? "Hide dashboard" : "Show dashboard"); tg.type = "button";
+    tg.setAttribute("aria-expanded", String(S.dash));
     tg.addEventListener("click", function () { S.dash = !S.dash; try { localStorage.setItem("hq_dash", S.dash ? "1" : "0"); } catch (e) {} render(); });
     hd.appendChild(tg); wrap.appendChild(hd);
     if (!S.dash) return wrap;
 
-    var L = S.leads, open = L.filter(isOpen), t = today();
+    var L = S.leads, open = L.filter(isOpen), t = today(), weeks = leadWeeks(12);
     var n30 = L.filter(function (l) { return dayKey(l.c || l.u) >= daysAgo(30); }).length;
     var p30 = L.filter(function (l) { var d = dayKey(l.c || l.u); return d >= daysAgo(60) && d < daysAgo(30); }).length;
     var signed = L.filter(function (l) { return gIndex(furthest(l)) >= 2; }).length;
@@ -599,20 +661,23 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
     c1.appendChild(bar);
     var lg = el("div", "lg"); split.forEach(function (x) { var it = el("button", "lgi"); it.type = "button"; var dot = el("i"); dot.style.background = x.g.c; it.appendChild(dot); it.appendChild(document.createTextNode(x.g.label.replace("Work in progress", "In progress").replace("Active leads", "Active").replace("Contract signed", "Signed").replace("In negotiation", "Negotiating") + " " + x.n)); it.addEventListener("click", function () { setFocus(x.g.id); }); lg.appendChild(it); });
     c1.appendChild(lg); k.appendChild(c1);
-    // 2. New leads, with change and a 12-week sparkline
+    // 2. New leads and six weekly readings
     var delta = p30 ? Math.round((n30 - p30) / p30 * 100) : null;
     var c2 = card4("New leads · 30 days", String(n30), null, delta === null ? (n30 ? { t: "first month", k: "flat" } : null) : { t: (delta > 0 ? "+" : "") + delta + "%", k: delta > 0 ? "up" : delta < 0 ? "down" : "flat" });
     c2.appendChild(el("div", "s", "vs " + p30 + " the 30 days before"));
-    c2.appendChild(spark()); k.appendChild(c2);
+    c2.appendChild(leadTubes(weeks.slice(-6))); k.appendChild(c2);
     // 3. Lead to contract
     var rate = L.length ? Math.round(signed / L.length * 100) : 0;
     var c3 = card4("Lead to contract", L.length ? rate + "%" : "–", signed + " of " + plural(L.length, "lead") + " signed");
-    var mt = el("div", "meter"); var mf = el("span"); mf.style.width = rate + "%"; mf.style.background = GROUPS[2].c; mt.appendChild(mf); c3.appendChild(mt);
+    c3.classList.add("dial-card");
+    c3.appendChild(contractDial(rate, L.length > 0));
     if (decided) c3.appendChild(el("div", "s", Math.round(signed / decided * 100) + "% of leads that reached a decision"));
     k.appendChild(c3);
     // 4. Needs you
-    var need = dueN + review + quiet;
-    var c4 = card4("Needs you", String(need), need ? null : "all clear");
+    var need = L.filter(function (l) {
+      return l.bs === "pending" || (isOpen(l) && ((l.d && l.d <= t) || dayKey(l.u) < daysAgo(14)));
+    }).length;
+    var c4 = card4("Needs you", String(need), need ? (need === 1 ? "lead needs attention" : "leads need attention") : "All clear");
     var nl = el("div", "need");
     [["due", "Follow-ups due", dueN, late ? late + " overdue" : ""], ["review", "Briefs to review", review, ""], ["quiet", "Going quiet (14+ days)", quiet, ""]].forEach(function (r) {
       var b = el("button", "nr" + (r[2] ? " has" : "") + (S.focus === r[0] ? " on" : "")); b.type = "button"; b.disabled = !r[2];
@@ -620,14 +685,14 @@ dialog form{padding:18px;display:flex;flex-direction:column;gap:10px}
       b.addEventListener("click", function () { setFocus(S.focus === r[0] ? "" : r[0]); }); nl.appendChild(b);
     });
     c4.appendChild(nl); k.appendChild(c4);
-    wrap.appendChild(k);
+    var instruments = el("div", "instrument-tray"); instruments.appendChild(k); wrap.appendChild(instruments);
 
     var sk = el("div", "panel"); sk.appendChild(el("h3", null, "Where deals stop"));
     sk.appendChild(el("p", "muted cap", "The number is who's in that stage now. Each bar is everyone who got that far, and grey ribbons are leads that stopped (not a fit or paused). Click a stage to filter the list."));
     var sc = el("div", "sk-scroll"); sc.appendChild(sankey()); sk.appendChild(sc); wrap.appendChild(sk);
 
     var two = el("div", "two");
-    var a = el("div", "panel"); a.appendChild(el("h3", null, "New leads per week")); a.appendChild(weekly()); two.appendChild(a);
+    var a = el("div", "panel"); a.appendChild(el("h3", null, "New leads per week")); a.appendChild(weekly(weeks)); two.appendChild(a);
     var b = el("div", "panel"); b.appendChild(el("h3", null, "Where leads come from")); b.appendChild(sources()); two.appendChild(b);
     wrap.appendChild(two);
     return wrap;
